@@ -21,8 +21,6 @@ var DoubleAgent;
             });
         }
         function load(namespace) {
-            // _.each(namespaces, (namespace) => {
-            //_.each(namespace, (klass, key) => {
             if (_.has(namespace, 'formats')) {
                 loadFormats(namespace.formats);
             }
@@ -32,10 +30,24 @@ var DoubleAgent;
             if (_.has(namespace, 'schemas')) {
                 loadSchemas(namespace.schemas);
             }
-            //});
-            // });
         }
         JsonSchemaValidator.load = load;
+        function loadMultiple(namespaces) {
+            _.each(namespaces, function (namespace) {
+                _.each(namespace, function (klass, key) {
+                    if (_.has(klass, 'formats')) {
+                        loadFormats(klass.formats);
+                    }
+                    if (_.has(klass, 'keywords')) {
+                        loadKeywords(klass.keywords);
+                    }
+                    if (_.has(klass, 'schemas')) {
+                        loadSchemas(klass.schemas);
+                    }
+                });
+            });
+        }
+        JsonSchemaValidator.loadMultiple = loadMultiple;
         function validate(schemaName, value) {
             var validate = ajv.compile({
                 "$ref": schemaName

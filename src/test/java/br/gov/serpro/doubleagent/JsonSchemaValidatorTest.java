@@ -21,28 +21,28 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(UnitTest.class)
 public class JsonSchemaValidatorTest {
 
-    @Cut
+    @Cut // Class Under Test
     JsonSchemaValidator cut;
-    @Test
-    public void testJoinList() {
-        List<String> namespaces = new ArrayList<String>(
-                Arrays.asList("PERDCOMP.JsonSchemaValidator", "PERDCOMP.JsonSchemaValidator.Common", "PERDCOMP.JsonSchemaValidator.Documento")
-        );
-
-        String result = StringUtils.join(namespaces, ",\n");
-
-        assertThat(result).isEqualTo("PERDCOMP.JsonSchemaValidator,\n" +
-                "PERDCOMP.JsonSchemaValidator.Common,\n" +
-                "PERDCOMP.JsonSchemaValidator.Documento");
-    }
 
     @Test
     public void testAddSchema() throws Exception {
         InputStreamReader is = new InputStreamReader(this.getClass().getResourceAsStream("/validators/js/pessoa.js"));
-        cut.loadSchemaData("DoubleAgent.JsonSchemaValidator", is);
+        cut.loadSchemaData(is, "DoubleAgent.JsonSchemaValidator");
 
         ValidationResult result = cut.validate("pessoa-v1", "{name: 'John', age: 1}");
 
         assertThat(result.hasErrors()).isFalse();
+    }
+
+    @Test
+    public void testLoadSchemasFromMultipleNamespaces() throws Exception {
+        InputStreamReader is = new InputStreamReader(this.getClass().getResourceAsStream("/validators/js/rfb.js"));
+        cut.loadSchemaData(is, "RFB.JsonSchemaValidator", "RFB.JsonSchemaValidator.Common", "RFB.JsonSchemaValidator.Documento");
+
+        ValidationResult result1 = cut.validate("tipoCredito-v1", "{ id: 1, descricao: \"some description\"}");
+        ValidationResult result2 = cut.validate("tipoDeclaracao-v1", "{ id: 1, descricao: \"some description\"}");
+
+        assertThat(result1.hasErrors()).isFalse();
+        assertThat(result2.hasErrors()).isFalse();
     }
 }

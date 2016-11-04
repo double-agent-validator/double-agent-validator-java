@@ -29,8 +29,20 @@ namespace DoubleAgent.JsonSchemaValidator {
     }
 
     export function load(namespace: any) {
-        // _.each(namespaces, (namespace) => {
-             //_.each(namespace, (klass, key) => {
+        if (_.has(namespace, 'formats')) {
+            loadFormats(namespace.formats);
+        }
+        if (_.has(namespace, 'keywords')) {
+            loadKeywords(namespace.keywords);
+        }
+        if (_.has(namespace, 'schemas')) {
+            loadSchemas(namespace.schemas);
+        }
+    }
+
+    export function loadMultiple(namespaces: any) {
+        _.each(namespaces, (namespace) => {
+            _.each(namespace, (klass, key) => {
                 if (_.has(namespace, 'formats')) {
                     loadFormats(namespace.formats);
                 }
@@ -40,8 +52,8 @@ namespace DoubleAgent.JsonSchemaValidator {
                 if (_.has(namespace, 'schemas')) {
                     loadSchemas(namespace.schemas);
                 }
-             //});
-        // });
+            });
+         });
     }
 
     export function validate(schemaName, value) {

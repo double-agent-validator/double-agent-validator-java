@@ -13,12 +13,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 /**
  * This class validates using nashorn (Java 8 Script Engine) and ajv (json validator javascript library)
- * Created by abner.oliveira on 03/11/16.
+ * @author abner.oliveira on 03/11/16.
  */
 public class JsonSchemaValidator {
 
@@ -33,9 +34,7 @@ public class JsonSchemaValidator {
 
     private ObjectMapper mapper = new ObjectMapper();
 
-    private boolean initialized = false;
-
-    private List<String> namespaces = new ArrayList<String>();
+    private List<String> namespaces = new ArrayList<>();
 
     private ScriptEngine nashorn = (ScriptEngine) new ScriptEngineManager()
             .getEngineByName("nashorn");
@@ -45,32 +44,33 @@ public class JsonSchemaValidator {
      */
     public JsonSchemaValidator() throws ScriptException {
         System.out.println("[JsonSchemaValidator] => Constructor Called");
-        this.namespaces = namespaces;
 
-        // CARREGA SCRIPTS do AJV e do LODASH
+        // Load the lodash and ajv libraries into the nashorn environment
         loadVendorScripts(LODASH_SCRIPT_NAME);
         loadVendorScripts(AJV_SCRIPT_NAME);
 
-        // INICIALIZA o AJV
+        // Initializes the ajv engine
         nashorn.eval("var ajv = new Ajv({ allErrors: true, verbose: false });");
 
-        // CARREGA O SCRIPT DE SCHEMA E CUSTOM VALIDATORS A PARTIR DO SCHEMA
+        // Loads the double-agent-validators base script
         loadJsScripts(DOUBLE_AGENT_VALIDATORS_SCRIPT_NAME);
 
-//        nashorn.eval("DoubleAgent.JsonSchemaValidator.init([" +
-//                StringUtils.join(this.namespaces.iterator(), ",\n") +
-//                "]);");
     }
 
-    public void loadSchemaData(String namespaceName, InputStreamReader namespaceCode) throws ScriptException {
-        this.nashorn.eval(namespaceCode);
-        this.nashorn.eval("DoubleAgent.JsonSchemaValidator.load(" + namespaceName + ");");
-        this.namespaces.add(namespaceName);
+    public void loadSchemaData(InputStreamReader namespaceCode, String... namespaceName) throws ScriptException {
+        if (namespaceName.length == 1) {
+            this.nashorn.eval(namespaceCode);
+            this.nashorn.eval("DoubleAgent.JsonSchemaValidator.load(" + namespaceName[0] + ");");
+            this.namespaces.add(namespaceName[0]);
+        } else {
+            this.nashorn.eval(namespaceCode);
+            this.nashorn.eval("DoubleAgent.JsonSchemaValidator.loadMultiple(" + Arrays.toString(namespaceName) + ");");
+            this.namespaces.addAll(Arrays.asList(namespaceName));
+        }
     }
 
 
     public synchronized ValidationResult validate(String schemaName, Object target) throws Exception {
-
         return this.validate(schemaName, mapper.writeValueAsString(target));
 
     }
@@ -82,20 +82,23 @@ public class JsonSchemaValidator {
 
         nashorn.put("mapper", mapper);
 
-
         // ugly but necessary to the object behaves like a common anonymous
         // javascript Object
         // and so, works as it should in the browser
         nashorn.eval("var value = " + jsonTarget + ";");
 
+        // calls the validation function
         nashorn.eval("var result = DoubleAgent.JsonSchemaValidator.validate('" + schemaName + "', value);");
-        // obtem o resultado da execuçao do script
+
+        // get the result from the nashorn environment
         Object jsObjResult = nashorn.getBindings(ScriptContext.ENGINE_SCOPE).get("result");
 
+        // if the value is true, so get a result indicating "no error"
         if (jsObjResult.equals(true)) {
             return new ValidationResult();
         }
 
+        // otherwise builds a ValidationResult object containing the errors
         return buildValidationResultWithErrors(jsObjResult);
     }
 
