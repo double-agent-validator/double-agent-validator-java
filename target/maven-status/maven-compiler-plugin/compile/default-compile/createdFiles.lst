@@ -1,0 +1,5 @@
+br/gov/serpro/doubleagent/Greeting.class
+br/gov/serpro/doubleagent/model/ValidationResult.class
+br/gov/serpro/doubleagent/Greeter.class
+br/gov/serpro/doubleagent/model/ItemValidationResult.class
+br/gov/serpro/doubleagent/JsonSchemaValidator.class

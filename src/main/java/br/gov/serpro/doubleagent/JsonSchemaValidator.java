@@ -12,6 +12,7 @@ import javax.script.ScriptException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -34,7 +35,7 @@ public class JsonSchemaValidator {
 
     private boolean initialized = false;
 
-    private List<String> namespaces;
+    private List<String> namespaces = new ArrayList<String>();
 
     private ScriptEngine nashorn = (ScriptEngine) new ScriptEngineManager()
             .getEngineByName("nashorn");

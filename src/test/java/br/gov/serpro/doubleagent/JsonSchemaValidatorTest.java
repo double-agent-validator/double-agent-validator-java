@@ -1,11 +1,14 @@
 package br.gov.serpro.doubleagent;
 
+import br.gov.serpro.doubleagent.model.ValidationResult;
 import com.fitbur.testify.Cut;
 import com.fitbur.testify.junit.UnitTest;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import javax.script.ScriptException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -31,5 +34,15 @@ public class JsonSchemaValidatorTest {
         assertThat(result).isEqualTo("PERDCOMP.JsonSchemaValidator,\n" +
                 "PERDCOMP.JsonSchemaValidator.Common,\n" +
                 "PERDCOMP.JsonSchemaValidator.Documento");
+    }
+
+    @Test
+    public void testAddSchema() throws Exception {
+        InputStreamReader is = new InputStreamReader(this.getClass().getResourceAsStream("/validators/js/pessoa.js"));
+        cut.loadSchemaData("DoubleAgent.JsonSchemaValidator", is);
+
+        ValidationResult result = cut.validate("pessoa-v1", "{name: 'John', age: 1}");
+
+        assertThat(result.hasErrors()).isFalse();
     }
 }
