@@ -32,6 +32,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <version.plugin.surefire>2.19.1</version.plugin.surefire>
         <version.plugin.compiler>3.5.1</version.plugin.compiler>
+        <version.plugin.jacoco>0.7.7.201606060606</version.plugin.jacoco>
         <version.jackson>1.9.9</version.jackson>
         <version.commons-lang3>3.5</version.commons-lang3>
         <version.frontend-maven-plugin>1.1</version.frontend-maven-plugin>
@@ -85,6 +86,26 @@
                         <configuration>
                             <arguments>install</arguments>
                         </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${version.plugin.jacoco}</version>
+                <executions>
+                    <execution>
+                        <id>pre-unit-test</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>post-unit-test</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
                     </execution>
                 </executions>
             </plugin>

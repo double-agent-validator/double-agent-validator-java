@@ -43,14 +43,14 @@ namespace DoubleAgent.JsonSchemaValidator {
     export function loadMultiple(namespaces: any) {
         _.each(namespaces, (namespace) => {
             _.each(namespace, (klass, key) => {
-                if (_.has(namespace, 'formats')) {
-                    loadFormats(namespace.formats);
+                if (_.has(klass, 'formats')) {
+                    loadFormats(klass.formats);
                 }
-                if (_.has(namespace, 'keywords')) {
-                    loadKeywords(namespace.keywords);
+                if (_.has(klass, 'keywords')) {
+                    loadKeywords(klass.keywords);
                 }
-                if (_.has(namespace, 'schemas')) {
-                    loadSchemas(namespace.schemas);
+                if (_.has(klass, 'schemas')) {
+                    loadSchemas(klass.schemas);
                 }
             });
          });
