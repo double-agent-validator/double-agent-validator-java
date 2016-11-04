@@ -20,7 +20,7 @@ import java.util.Map;
 /**
  * This class validates using nashorn (Java 8 Script Engine) and ajv (json validator javascript library)
  * @author abner.oliveira on 03/11/16.
- */
+  */
 public class JsonSchemaValidator {
 
     private final static String AJV_SCRIPT_NAME = "ajv.min.js";

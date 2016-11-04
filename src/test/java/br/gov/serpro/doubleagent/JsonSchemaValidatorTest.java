@@ -4,6 +4,7 @@ import br.gov.serpro.doubleagent.model.ValidationResult;
 import com.fitbur.testify.Cut;
 import com.fitbur.testify.junit.UnitTest;
 import org.apache.commons.lang3.StringUtils;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -45,4 +46,11 @@ public class JsonSchemaValidatorTest {
         assertThat(result1.hasErrors()).isFalse();
         assertThat(result2.hasErrors()).isFalse();
     }
+
+    @Test
+    @Ignore
+    public void getValidatorJavascript() {
+    }
+
+
 }
