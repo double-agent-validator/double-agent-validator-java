@@ -19,26 +19,11 @@ public class ItemValidationResult implements Serializable {
     private String schemaPath;
     private Map<String, String> params;
     private String message;
-    private boolean hasError = true;
 
     public ItemValidationResult() {
     }
 
-    public ItemValidationResult withoutError() {
-        this.hasError = false;
-        return this;
-
-    }
-
-    public void setError(boolean hasError) {
-        this.hasError = hasError;
-    }
-
-    public boolean hasError() {
-        return this.hasError;
-    }
-
-    public String getKeyword() {
+   public String getKeyword() {
         return keyword;
     }
 

@@ -2,6 +2,7 @@ package br.gov.serpro.doubleagent;
 
 import br.gov.serpro.doubleagent.model.ItemValidationResult;
 import br.gov.serpro.doubleagent.model.ValidationResult;
+import org.apache.commons.io.IOUtils;
 import org.codehaus.jackson.map.ObjectMapper;
 import org.codehaus.jackson.map.type.MapLikeType;
 
@@ -9,18 +10,15 @@ import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
+import java.io.*;
+import java.nio.charset.Charset;
+import java.util.*;
 
 /**
  * This class validates using nashorn (Java 8 Script Engine) and ajv (json validator javascript library)
+ *
  * @author abner.oliveira on 03/11/16.
-  */
+ */
 public class JsonSchemaValidator {
 
     private final static String AJV_SCRIPT_NAME = "ajv.min.js";
@@ -39,10 +37,14 @@ public class JsonSchemaValidator {
     private ScriptEngine nashorn = (ScriptEngine) new ScriptEngineManager()
             .getEngineByName("nashorn");
 
+    StringBuilder scriptsLoaded = new StringBuilder();
+
+    private Charset encondig = Charset.forName("UTF-8");
+
     /***
      *
      */
-    public JsonSchemaValidator() throws ScriptException {
+    public JsonSchemaValidator() throws ScriptException, IOException {
         System.out.println("[JsonSchemaValidator] => Constructor Called");
 
         // Load the lodash and ajv libraries into the nashorn environment
@@ -57,13 +59,15 @@ public class JsonSchemaValidator {
 
     }
 
-    public void loadSchemaData(InputStreamReader namespaceCode, String... namespaceName) throws ScriptException {
+    public void loadSchemaData(InputStream namespaceCode, String... namespaceName) throws ScriptException, IOException {
+        String script = IOUtils.toString(namespaceCode, encondig);
+        this.scriptsLoaded.append(script);
         if (namespaceName.length == 1) {
-            this.nashorn.eval(namespaceCode);
+            this.nashorn.eval(script);
             this.nashorn.eval("DoubleAgent.JsonSchemaValidator.load(" + namespaceName[0] + ");");
             this.namespaces.add(namespaceName[0]);
         } else {
-            this.nashorn.eval(namespaceCode);
+            this.nashorn.eval(script);
             this.nashorn.eval("DoubleAgent.JsonSchemaValidator.loadMultiple(" + Arrays.toString(namespaceName) + ");");
             this.namespaces.addAll(Arrays.asList(namespaceName));
         }
@@ -112,30 +116,36 @@ public class JsonSchemaValidator {
         return validationResult;
     }
 
-    private void loadJsScripts(String scriptName) throws ScriptException {
-        loadScripts(JAVASCRIPT_ROOT_FOLDER, scriptName);
+    private void loadJsScripts(String scriptName) throws ScriptException, IOException {
+        loadScripts(JAVASCRIPT_ROOT_FOLDER, scriptName, true);
     }
 
-    private void loadVendorScripts(String scriptName) throws ScriptException {
+
+    private void loadVendorScripts(String scriptName) throws ScriptException, IOException {
         loadScripts(VENDOR_FOLDER, scriptName);
     }
 
-    private void loadScripts(String folder, String scriptPath) throws ScriptException {
+    private void loadScripts(String folder, String scriptPath) throws ScriptException, IOException {
+        loadScripts(folder, scriptPath, false);
+    }
+
+    private void loadScripts(String folder, String scriptPath, boolean saveOnList) throws ScriptException, IOException {
         String scriptFilePath = folder + "/" + scriptPath;
-        InputStreamReader is = new InputStreamReader(getClass()
-                .getResourceAsStream(scriptFilePath));
+        InputStream is = getClass().getResourceAsStream(scriptFilePath);
         System.out.println("LOADING SCRIPT FILE: " + scriptFilePath);
-        nashorn.eval(is);
+
+        String script = IOUtils.toString(is, encondig);
+
+        if (saveOnList) {
+            this.scriptsLoaded.append(script);
+        }
+
+        nashorn.eval(script);
 
     }
 
-    private String buildSchemaFilePath(String schemaName) {
-        return SCHEMA_PATH + "/" + schemaName + ".js";
-    }
-
-    public InputStream getScriptFile() {
-        String scriptFilePath = JAVASCRIPT_ROOT_FOLDER + "/" + DOUBLE_AGENT_VALIDATORS_SCRIPT_NAME;
-        return getClass().getResourceAsStream(scriptFilePath);
+    public String getScriptFile() {
+        return this.scriptsLoaded.toString();
     }
 
 }
