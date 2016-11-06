@@ -53,7 +53,7 @@ Podemos utilizar a classe JsonSchemaValidator da seguinte forma:
 JsonSchemaValidator jsonSchemaValidator = new JsonSchemaValidator();
 InputStreamReader is = new InputStreamReader(this.getClass().getResourceAsStream("js/pessoa.js"));
 jsonSchemaValidator.loadSchemaData(is, "DoubleAgent.JsonSchemaValidator");
-ValidationResult result = cut.validate("pessoa-v1", "{name: 'John', age: 1}");
+ValidationResult result = jsonSchemaValidator.validate("pessoa-v1", "{name: 'John', age: 1}");
 ```
 
 
