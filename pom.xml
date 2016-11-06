@@ -33,6 +33,7 @@
         <version.plugin.surefire>2.19.1</version.plugin.surefire>
         <version.plugin.compiler>3.5.1</version.plugin.compiler>
         <version.plugin.jacoco>0.7.7.201606060606</version.plugin.jacoco>
+        <version.plugin.exec>1.5.0</version.plugin.exec>
         <version.jackson>1.9.9</version.jackson>
         <version.commons-lang3>3.5</version.commons-lang3>
         <version.commons-io>2.5</version.commons-io>
@@ -58,6 +59,21 @@
                 <configuration>
                     <parallel>classes</parallel>
                     <threadCountClasses>4</threadCountClasses>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>${version.plugin.exec}</version>
+                <goals>
+                    <goal>java</goal>
+                </goals>
+                <configuration>
+                    <executable>jaava</executable>
+                    <mainClass>ExecDump</mainClass>
+                    <arguments>
+                        <argument>br/gov/serpro</argument>
+                    </arguments>
                 </configuration>
             </plugin>
             <plugin>
@@ -94,12 +110,18 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>${version.plugin.jacoco}</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**/ExecDump*</exclude>
+                    </excludes>
+                </configuration>
                 <executions>
                     <execution>
                         <id>pre-unit-test</id>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
+
                     </execution>
                     <execution>
                         <id>post-unit-test</id>
@@ -148,6 +170,13 @@
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>${version.commons-io}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.jacoco/org.jacoco.core -->
+        <dependency>
+            <groupId>org.jacoco</groupId>
+            <artifactId>org.jacoco.core</artifactId>
+            <version>0.7.7.201606060606</version>
         </dependency>
 
         <!-- Test Deps -->
