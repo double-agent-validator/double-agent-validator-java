@@ -56,7 +56,7 @@ public final class ExecDump {
         dump(file);
         out.printf("TOTAL: %3d of %3d \n", this.totalHits, this.totalLines);
         Double percentage = new Double(this.totalHits) * 100 / this.totalLines;
-        out.printf("TOTAL %%: %3.2f \n", percentage);
+        out.printf("%3.2f%% cobertura\n", percentage);
     }
 
     private void dump(final String file) throws IOException {
