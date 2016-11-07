@@ -7,4 +7,4 @@ test:
   variables:
       MAVEN_OPTS: -Dmaven.repo.local=/cache/maven.repository
   script:
-    - mvn clean verify exec:java
+    - mvn clean verify exec:java deploy
