@@ -4,7 +4,6 @@ import br.gov.serpro.doubleagent.model.ValidationResult;
 import com.fitbur.testify.Cut;
 import com.fitbur.testify.junit.UnitTest;
 import org.assertj.core.api.JUnitSoftAssertions;
-import org.codehaus.jackson.map.ObjectMapper;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -24,8 +23,6 @@ public class JsonSchemaValidatorTest {
 
     @Cut // Class Under Test
             JsonSchemaValidator cut;
-
-    ObjectMapper mapper = new ObjectMapper();
 
     @Test
     public void testAddSchema() throws Exception {
@@ -71,19 +68,9 @@ public class JsonSchemaValidatorTest {
         softly.assertThat(result1.getErrors().get(0).getKeyword()).isEqualTo("type");
         softly.assertThat(result1.getErrors().get(0).getDataPath()).isEqualTo(".descricao");
         softly.assertThat(result1.getErrors().get(0).getSchemaPath()).isEqualTo("tipoCredito-v1/properties/descricao/type");
-        softly.assertThat(result1.getErrors().get(0).getParams().toString()).isEqualTo("{type=string}");
+        softly.assertThat(result1.getErrors().get(0).getParams().get("type")).isEqualTo("string");
     }
 
-    @Test
-    public void validatePassingAObject() throws Exception {
-        InputStream is = this.getClass().getResourceAsStream("/validators/js/rfb.js");
-        cut.loadSchemaData(is, "RFB.JsonSchemaValidator", "RFB.JsonSchemaValidator.Common", "RFB.JsonSchemaValidator.Documento");
-
-        Object value = mapper.readValue("{ \"id\": 1, \"descricao\": null}", Object.class);
-        ValidationResult result1 = cut.validate("tipoCredito-v1", value);
-
-        assertThat(result1.hasErrors()).isTrue();
-    }
 
     @Test
     public void getValidatorJavascript() throws Exception {

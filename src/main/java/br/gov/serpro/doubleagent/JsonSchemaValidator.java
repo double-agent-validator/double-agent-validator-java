@@ -3,16 +3,18 @@ package br.gov.serpro.doubleagent;
 import br.gov.serpro.doubleagent.model.ItemValidationResult;
 import br.gov.serpro.doubleagent.model.ValidationResult;
 import org.apache.commons.io.IOUtils;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.codehaus.jackson.map.type.MapLikeType;
 
 import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
 import java.nio.charset.Charset;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
 
 /**
  * This class validates using nashorn (Java 8 Script Engine) and ajv (json validator javascript library)
@@ -30,8 +32,6 @@ public class JsonSchemaValidator {
     private final static String VENDOR_FOLDER = "/validators/vendor";
     private final static String JAVASCRIPT_ROOT_FOLDER = "/validators/js";
 
-    private ObjectMapper mapper = new ObjectMapper();
-
     private List<String> namespaces = new ArrayList<>();
 
     private ScriptEngine nashorn = (ScriptEngine) new ScriptEngineManager()
@@ -39,7 +39,7 @@ public class JsonSchemaValidator {
 
     StringBuilder scriptsLoaded = new StringBuilder();
 
-    private Charset encondig = Charset.forName("UTF-8");
+    private Charset encoding = Charset.forName("UTF-8");
 
     /***
      *
@@ -60,7 +60,7 @@ public class JsonSchemaValidator {
     }
 
     public void loadSchemaData(InputStream namespaceCode, String... namespaceName) throws ScriptException, IOException {
-        String script = IOUtils.toString(namespaceCode, encondig);
+        String script = IOUtils.toString(namespaceCode, encoding);
         this.scriptsLoaded.append(script);
         if (namespaceName.length == 1) {
             this.nashorn.eval(script);
@@ -73,18 +73,10 @@ public class JsonSchemaValidator {
         }
     }
 
-
-    public synchronized ValidationResult validate(String schemaName, Object target) throws Exception {
-        return this.validate(schemaName, mapper.writeValueAsString(target));
-
-    }
-
     public synchronized ValidationResult validate(String schemaName, String jsonTarget)
             throws Exception {
 
         nashorn.put("schemaName", schemaName);
-
-        nashorn.put("mapper", mapper);
 
         // ugly but necessary to the object behaves like a common anonymous
         // javascript Object
@@ -102,17 +94,46 @@ public class JsonSchemaValidator {
             return new ValidationResult();
         }
 
+        Map<String, Map<String, Object>> resultMap = (Map<String, Map<String, Object>>)jsObjResult;
+
         // otherwise builds a ValidationResult object containing the errors
-        return buildValidationResultWithErrors(jsObjResult);
+        return buildValidationResultWithErrors(resultMap);
     }
 
-    private ValidationResult buildValidationResultWithErrors(Object resultData) throws IOException {
-        String json = mapper.writeValueAsString(resultData);
-        MapLikeType javaType = mapper.getTypeFactory().constructMapLikeType(Map.class, Long.class, ItemValidationResult.class);
-        Map<Long, ItemValidationResult> map = mapper.readValue(json, javaType);
+    private ValidationResult buildValidationResultWithErrors(Map<String, Map<String, Object>> resultData) throws IOException {
+        // TODO - Implement the build of a ValidationResult instance using Javascript/Nashorn so we will not need Jackson here
+        List<ItemValidationResult> results = new ArrayList<ItemValidationResult>();
+
+
+        for (Object key :
+                resultData.keySet()
+             ) {
+            ItemValidationResult itemResult = new ItemValidationResult();
+            for (String propKey : resultData.get(key).keySet()) {
+                switch (propKey) {
+                    case "keyword":
+                        itemResult.setKeyword((String)resultData.get(key).get(propKey));
+                        break;
+                    case "dataPath":
+                        itemResult.setDataPath((String)resultData.get(key).get(propKey));
+                        break;
+                    case "schemaPath":
+                        itemResult.setSchemaPath((String)resultData.get(key).get(propKey));
+                        break;
+                    case "params":
+                        itemResult.setParams((Map<String, String>) resultData.get(key).get(propKey));
+                        break;
+                    case "message":
+                        itemResult.setMessage((String)resultData.get(key).get(propKey));
+                        break;
+                }
+            }
+            results.add(itemResult);
+
+        }
 
         ValidationResult validationResult = new ValidationResult();
-        validationResult.setErrors(map.values());
+        validationResult.setErrors(results);
         return validationResult;
     }
 
@@ -134,7 +155,7 @@ public class JsonSchemaValidator {
         InputStream is = getClass().getResourceAsStream(scriptFilePath);
         System.out.println("LOADING SCRIPT FILE: " + scriptFilePath);
 
-        String script = IOUtils.toString(is, encondig);
+        String script = IOUtils.toString(is, encoding);
 
         if (saveOnList) {
             this.scriptsLoaded.append(script);

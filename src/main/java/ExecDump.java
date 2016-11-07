@@ -29,7 +29,6 @@ public final class ExecDump {
 
     private final PrintStream out;
 
-    Double percentage;
     Long totalHits = 0L;
     Long totalLines = 0L;
 
@@ -54,9 +53,9 @@ public final class ExecDump {
         String file = "target/jacoco.exec";
         this.filter = args.length > 0 ? args[0] : null;
         dump(file);
-        out.printf("TOTAL: %3d of %3d \n", this.totalHits, this.totalLines);
-        Double percentage = new Double(this.totalHits) * 100 / this.totalLines;
-        out.printf("%3.2f%% cobertura\n", percentage);
+        out.printf("TOTAL: %3d of %3d %n", this.totalHits, this.totalLines);
+        Double percentage = this.totalHits * 100.0 / this.totalLines;
+        out.printf("%3.2f%% cobertura %n", percentage);
     }
 
     private void dump(final String file) throws IOException {
