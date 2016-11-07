@@ -37,6 +37,13 @@
         <version.commons-lang3>3.5</version.commons-lang3>
         <version.commons-io>2.5</version.commons-io>
         <version.frontend-maven-plugin>1.1</version.frontend-maven-plugin>
+        
+        <repository.id>nexus</repository.id>
+        <repository.name>releases</repository.name>
+        <repository.url>http://nexus.aic.serpro/content/repositories/releases</repository.url>
+        <repository.snapshot.id>nexus-snapshot</repository.snapshot.id>
+        <repository.snapshot.name>snapshots</repository.snapshot.name>
+        <repository.snapshot.url>http://nexus.aic.serpro/content/repositories/snapshots</repository.snapshot.url>
     </properties>
 
     <build>
@@ -68,7 +75,7 @@
                     <goal>java</goal>
                 </goals>
                 <configuration>
-                    <executable>jaava</executable>
+                    <executable>java</executable>
                     <mainClass>ExecDump</mainClass>
                     <arguments>
                         <argument>br/gov/serpro</argument>
@@ -183,4 +190,17 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+    
+    <distributionManagement>
+		<repository>
+			<id>${repository.id}</id>
+			<name>${repository.name}</name>
+			<url>${repository.url}</url>
+		</repository>
+		<snapshotRepository>
+			<id>${repository.snapshot.id}</id>
+			<name>${repository.snapshot.name}</name>
+			<url>${repository.snapshot.url}</url>
+		</snapshotRepository>
+	</distributionManagement>
 </project>
