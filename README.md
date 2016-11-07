@@ -1,8 +1,10 @@
 Double Agent Validator
 ======================
 
-[![build status](https://gitlab.com/nerdland/doubleagent-validator/badges/master/build.svg)](https://gitlab.com/nerdland/doubleagent-validator/commits/master)
-[![coverage report](https://gitlab.com/nerdland/doubleagent-validator/badges/master/coverage.svg)](https://gitlab.com/nerdland/doubleagent-validator/commits/master)
+[![build status](https://git.serpro/desdr/doubleagent-validator/badges/master/build.svg)](https://git.serpro/desdr/doubleagent-validator/commits/master)
+[![coverage report](https://git.serpro/desdr/doubleagent-validator/badges/master/coverage.svg)](https://git.serpro/desdr/doubleagent-validator/commits/master)
+
+
 
 Este projeto tem por objetivo permitir a execução de validações de forma isomórfica, ou seja: o mesmo código utilizado para 
 validar os dados no servidor é utilizado para validar os dados no frontend.
