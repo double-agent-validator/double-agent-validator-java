@@ -160,7 +160,7 @@ public class JsonSchemaValidator {
         String script = IOUtils.toString(is, encoding);
 
         if (saveOnList) {
-            this.scriptsLoaded.append(script);
+            this.scriptsLoaded.append(script + NEW_LINE);
         }
 
         nashorn.eval(script);
