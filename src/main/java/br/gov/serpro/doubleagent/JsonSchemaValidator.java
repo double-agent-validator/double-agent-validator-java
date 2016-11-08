@@ -23,6 +23,8 @@ import java.util.Map;
  */
 public class JsonSchemaValidator {
 
+    private final static String NEW_LINE = "\r\n";
+
     private final static String AJV_SCRIPT_NAME = "ajv.min.js";
     private final static String LODASH_SCRIPT_NAME = "lodash.min.js";
     private final static String DOUBLE_AGENT_VALIDATORS_SCRIPT_NAME = "validators.js";
@@ -61,7 +63,7 @@ public class JsonSchemaValidator {
 
     public void loadSchemaData(InputStream namespaceCode, String... namespaceName) throws ScriptException, IOException {
         String script = IOUtils.toString(namespaceCode, encoding);
-        this.scriptsLoaded.append(script);
+        this.scriptsLoaded.append(script + NEW_LINE);
         if (namespaceName.length == 1) {
             this.nashorn.eval(script);
             this.nashorn.eval("DoubleAgent.JsonSchemaValidator.load(" + namespaceName[0] + ");");
