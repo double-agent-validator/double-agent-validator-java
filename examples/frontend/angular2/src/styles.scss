@@ -1,0 +1,18 @@
+/* You can add global styles to this file, and also import other style files */
+$icon-font-path: '../node_modules/bootstrap-sass/assets/fonts/bootstrap/';
+
+// @import "~bootstrap-sass/assets/stylesheets/bootstrap/variables";
+@import "~bootswatch-scss/spacelab/_variables";
+@import "~bootstrap-sass/assets/stylesheets/_bootstrap";
+@import "~bootswatch-scss/spacelab/_bootswatch";
+
+h1 {
+  color: red;
+  font-size: 4em;
+  text-shadow: 2px 3px gray;
+}
+
+.container-pad {
+  @extend .container;
+  margin-top: 70px;
+}
