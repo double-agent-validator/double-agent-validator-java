@@ -53,14 +53,12 @@ export class ValidatorService {
   }
 
   loadValidatorsData() {
-    // if (window['PERDCOMP'] && window['PERDCOMP']['JsonSchemaValidator'] && window['PERDCOMP']['JsonSchemaValidator']['init']) {
+
       _.each(this.namespaces, (namespace) => {
         DoubleAgent.JsonSchemaValidator.load(namespace);
       });
       this.initialized = true;
-    // } else {
-    //  console.log('NOT INITIALIZED: Validation Script not loaded from the backend service');
-    // }
+    
   }
 
   /**
@@ -158,6 +156,44 @@ export class ValidatorService {
     let jsonSchema: JsonSchema = this.schemaByNameAndVersion(schemaName, version);
     let formGroup: FormGroup;
     let formGroupConfig = {};
+
+    // TODO construir validador do FormGroup (keywords do objeto)
+
+    // // 
+    // let contribuinte = {
+    //   cnpj: '00000000000191',
+    //   nome: 'BB',
+    //   _externalChecks: {
+    //     niAtivoBaseRFB: enum[null, 'S', 'N']
+    //   }
+    // }
+
+    // let schema = {
+    //   type: 'object',
+    //   id: 'contribuinte-v1',
+    //   checarBaseRFB: true,
+    //   properties: {
+    //     id: {
+    //       type: 'number'
+    //     },
+    //     ni: {
+    //       type: 'strig',
+    //       format: 'cnpj'
+    //     }
+    //   }
+    // }
+
+    // let keywords = [{
+    //   checarBaseRFB: function(sch, data) {
+    //     if (data._externalChecks && data._externalChecks['niAtivoBaseRFB'] == 'S') {
+
+    //     }
+    //   }
+    // }]
+
+    
+
+
 
     // percorre os atributos definidos no jsonSchema, adicionando um FormControl com os respectivos
     // validadores para cada campo no objeto formGroupConfig
