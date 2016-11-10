@@ -270,9 +270,9 @@
                                 <classpath/>
                                 <argument>io.vertx.core.Launcher</argument>
                                 <argument>run</argument>
-                                <argument>--redeploy=src/main/**/*.java</argument>
+                                <argument>--redeploy=src/main/**/*.java,src/main/**/*.ts</argument>
                                 <argument>--launcher-class=${main.verticle}</argument>
-                                <argument>--on-redeploy=mvn package -DskipTests=true</argument>
+                                <argument>--on-redeploy=mvn compile -DskipTests=true</argument>
                             </arguments>
                         </configuration>
                     </execution>

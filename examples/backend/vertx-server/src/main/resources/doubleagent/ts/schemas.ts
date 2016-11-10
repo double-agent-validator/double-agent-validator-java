@@ -1,4 +1,4 @@
-
+declare var ajv: any;
 
 namespace DoubleAgent.Example.JsonSchemaValidator {
         export var formats = [
@@ -11,7 +11,21 @@ namespace DoubleAgent.Example.JsonSchemaValidator {
                 format: /^[0-9]{2}\.?[0-9]{3}\.?[0-9]{3}\/?[0-9]{4}\-?[0-9]{2}$/
             },
         ];
-        export var keywords = [];
+        export var keywords = [
+             {
+                name: 'nacionalidadeLegal',
+                fn: function(sch, parentSchema) {
+                    var nacionalidadeLegal = function(data) {
+                        if(data && data["nacionalidade"]  && data["nacionalidade"].toLowerCase() === 'brasileiro') {
+                            return true;
+                        } else {
+                            (<any>nacionalidadeLegal).errors = [{ keyword: 'nacionalidadeLegal', message: 'Legal é ser brasileiro".' }];
+                        }
+                    };
+                    return nacionalidadeLegal;
+                }
+             }
+        ];
         export var schemas = [
             {
                 id: 'identificacao-v2017',
@@ -32,8 +46,8 @@ namespace DoubleAgent.Example.JsonSchemaValidator {
             {
                id: 'contribuinte-v1',
                type: 'object',
-               checarHabilitacaoContribuinte: true,
-               required: ['id', 'ni', 'nome'],
+               nacionalidadeLegal: true,
+               required: ['id', 'ni', 'nome']
                properties: {
                    id: {
                        type: 'number'
@@ -49,6 +63,10 @@ namespace DoubleAgent.Example.JsonSchemaValidator {
                                format: 'cnpj'
                            }
                        ]
+                   },
+                   nacionalidade: {
+                       type: "string",
+                       enum: ["brasileiro", "argentino"]
                    },
                    nome: {
                        type: 'string'

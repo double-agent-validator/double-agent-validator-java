@@ -3,7 +3,10 @@ declare namespace DoubleAgent.Example.JsonSchemaValidator {
         name: string;
         format: RegExp;
     }[];
-    var keywords: any[];
+    var keywords: {
+        name: string;
+        fn: (sch: any, parentSchema: any) => (data: any) => boolean;
+    }[];
     var schemas: ({
         id: string;
         type: string;
@@ -22,7 +25,7 @@ declare namespace DoubleAgent.Example.JsonSchemaValidator {
     } | {
         id: string;
         type: string;
-        checarHabilitacaoContribuinte: boolean;
+        nacionalidadeLegal: boolean;
         required: string[];
         properties: {
             id: {
@@ -33,6 +36,10 @@ declare namespace DoubleAgent.Example.JsonSchemaValidator {
                     type: string;
                     format: string;
                 }[];
+            };
+            nacionalidade: {
+                type: string;
+                enum: string[];
             };
             nome: {
                 type: string;

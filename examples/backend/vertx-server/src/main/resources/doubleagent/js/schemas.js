@@ -14,7 +14,22 @@ var DoubleAgent;
                     format: /^[0-9]{2}\.?[0-9]{3}\.?[0-9]{3}\/?[0-9]{4}\-?[0-9]{2}$/
                 },
             ];
-            JsonSchemaValidator.keywords = [];
+            JsonSchemaValidator.keywords = [
+                {
+                    name: 'nacionalidadeLegal',
+                    fn: function (sch, parentSchema) {
+                        var nacionalidadeLegal = function (data) {
+                            if (data && data["nacionalidade"] && data["nacionalidade"].toLowerCase() === 'brasileiro') {
+                                return true;
+                            }
+                            else {
+                                nacionalidadeLegal.errors = [{ keyword: 'nacionalidadeLegal', message: 'Legal é ser brasileiro".' }];
+                            }
+                        };
+                        return nacionalidadeLegal;
+                    }
+                }
+            ];
             JsonSchemaValidator.schemas = [
                 {
                     id: 'identificacao-v2017',
@@ -35,7 +50,7 @@ var DoubleAgent;
                 {
                     id: 'contribuinte-v1',
                     type: 'object',
-                    checarHabilitacaoContribuinte: true,
+                    nacionalidadeLegal: true,
                     required: ['id', 'ni', 'nome'],
                     properties: {
                         id: {
@@ -52,6 +67,10 @@ var DoubleAgent;
                                     format: 'cnpj'
                                 }
                             ]
+                        },
+                        nacionalidade: {
+                            type: "string",
+                            enum: ["brasileiro", "argentino"]
                         },
                         nome: {
                             type: 'string'
