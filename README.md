@@ -5,12 +5,39 @@ Double Agent Validator
 [![coverage report](https://git.serpro/desdr/doubleagent-validator/badges/master/coverage.svg)](https://git.serpro/desdr/doubleagent-validator/commits/master)
 
 
+### Requisitos:
+
+* Maven 3 ( a partir do 3.3 )
+* Java 8 101 ou superior
+* npm (para executar a aplicação frontend Angular 2)
+
 
 Este projeto tem por objetivo permitir a execução de validações de forma isomórfica, ou seja: o mesmo código utilizado para 
 validar os dados no servidor é utilizado para validar os dados no frontend.
 
-Para tanto levou-se em conta a capacidade de executar javascript no servidor Java utilizando o Nashorn (uma script engine Javascript) disponível no Java 8,
+Para tanto levou-se ### em conta a capacidade de executar javascript no servidor Java utilizando o Nashorn (uma script engine Javascript) disponível no Java 8,
 que tem uma vantagem considerável em relação à script engine anterior (Rhino) que lenta.
+
+
+### Compilando e Instalando o componente double-agent-validator no maven
+
+```
+mvn install
+```
+
+### Executando
+
+##### Executar backend Vertx
+
+```bash
+./start-vertx-server.sh
+```
+
+##### Executar frontend Angular 2
+
+```bash
+./start-angular2.sh
+```
 
 Exemplo de Uso
 --------------
