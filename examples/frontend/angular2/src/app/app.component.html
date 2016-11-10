@@ -12,11 +12,16 @@
         </div>
         <div class="form-group">
           <label for="ni">NI:</label>
-          <input type="text" class="form-control" id="ni" placeholder="Digite o NI" formControlName="ni">
+          <input type="text" class="form-control" id="ni" placeholder="Digite o NI ( CPF ou CNPJ )" formControlName="ni">
         </div>
         <div class="form-group">
           <label for="nome">Nome:</label>
           <input type="text" class="form-control" id="nome" placeholder="Digite o Nome" formControlName="nome">
+        </div>
+
+        <div class="form-group">
+          <label for="nome">Nacionalidade:</label>
+          <input type="text" class="form-control" id="nome" placeholder="Digite a nacionalidade" formControlName="nacionalidade">
         </div>
         <button [disabled]="formContribuinte.invalid" type="submit" class="btn btn-primary">Salvar</button>
       </form>
@@ -29,6 +34,8 @@
       <h3 class="panel-title">Validation Status</h3>
     </div>
     <div class="panel-body">
+      <h3>FORM</h3>
+      <pre><pre *ngIf="formContribuinte.errors">{{formContribuinte.errors | json }}</pre></pre>
       <h3>ID</h3>
       <pre *ngIf="formContribuinte.controls['id'].errors">{{formContribuinte.controls['id'].errors | json }}</pre>
       <hr />
@@ -37,6 +44,9 @@
       <hr />
       <h3>Nome</h3>
       <pre *ngIf="formContribuinte.controls['nome'].errors">{{formContribuinte.controls['nome'].errors | json }}</pre>
+
+      <h3>Nacionalidade</h3>
+      <pre *ngIf="formContribuinte.controls['nacionalidade'].errors">{{formContribuinte.controls['nacionalidade'].errors | json }}</pre>
     </div>
   </div>
 </div>

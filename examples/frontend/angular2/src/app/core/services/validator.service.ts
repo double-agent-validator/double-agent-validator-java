@@ -54,11 +54,11 @@ export class ValidatorService {
 
   loadValidatorsData() {
 
-      _.each(this.namespaces, (namespace) => {
-        DoubleAgent.JsonSchemaValidator.load(namespace);
-      });
-      this.initialized = true;
-    
+    _.each(this.namespaces, (namespace) => {
+      DoubleAgent.JsonSchemaValidator.load(namespace);
+    });
+    this.initialized = true;
+
   }
 
   /**
@@ -98,7 +98,7 @@ export class ValidatorService {
             });
             if (errorsOfProperty.length > 0) {
               validationResult.jsonSchema = {
-                errors:  errorsOfProperty
+                errors: errorsOfProperty
               };
               return validationResult;
             }
@@ -157,9 +157,8 @@ export class ValidatorService {
     let formGroup: FormGroup;
     let formGroupConfig = {};
 
-    // TODO construir validador do FormGroup (keywords do objeto)
 
-    // // 
+    // //
     // let contribuinte = {
     //   cnpj: '00000000000191',
     //   nome: 'BB',
@@ -191,7 +190,7 @@ export class ValidatorService {
     //   }
     // }]
 
-    
+
 
 
 
@@ -209,13 +208,17 @@ export class ValidatorService {
 
     console.log('formGroup', formGroup);
 
+     // construir validador do FormGroup (keywords do objeto)
+    this.addKeywordsValidator(jsonSchema, formGroup);
+
+
     // retorna o Form Group
     return formGroup;
   }
 
- /**
-   * Constrói a composição de validadores para o jsonSchema passado
-   */
+  /**
+    * Constrói a composição de validadores para o jsonSchema passado
+    */
   private buildValidatorsFor(schema: JsonSchema, property: string) {
     let validators: ValidatorFn[] = [];
     console.log('SCHEMA and property', schema, property);
@@ -226,4 +229,56 @@ export class ValidatorService {
     validators.push(this.buildAngularValidator(schema.id, property));
     return Validators.compose(validators);
   }
+
+  private addKeywordsValidator(schema: JsonSchema, formGroup: FormGroup) {
+    let keywords = this.getCustomKeywords(schema);
+
+    let validator = this.buildAngularFormGroupValidator(schema.id, keywords, formGroup);
+
+    formGroup.setValidators(Validators.compose([validator]));
+  }
+
+  buildAngularFormGroupValidator(schemaName: string, keywords: string[], formGroup: FormGroup): ValidatorFn {
+    return (control: AbstractControl) => {
+      let validationResult = {
+        jsonSchema: null
+      };
+
+      if (this.initialized) {
+        let data = formGroup.value;
+        console.log('Validating data', data);
+        // executa a validação
+        let result = this.validate(schemaName, data);
+
+        if (result.hasErrors) {
+          // se o nome de uma propriedade foi passada, só retorna erro se houver erros referentes a esta propriedade
+            let errorsOfKeyword = result.errors.filter((error) => {
+              return _.includes(keywords, error.keyword);
+            });
+            if (errorsOfKeyword.length > 0) {
+              validationResult.jsonSchema = {
+                errors: errorsOfKeyword
+              };
+              return validationResult;
+            }
+          }
+        // retorna null no caso de não ter erros de validacao
+        return null;
+      }
+
+      return validationResult;
+    };
+  }
+
+  private getCustomKeywords(schema: JsonSchema): string[] {
+    let ajvDefaultKeywords = [
+      'type', 'additionalProperties', 'patternProperties', 'maximum',
+      'minimum', 'multipleOf', 'maxLength', 'minLength', 'pattern',
+      'format', 'maxItems', 'minItems', 'uniqueItems', 'items', 'maxProperties',
+      'minProperties', 'required', 'dependencies', 'properties', '$ref', 'enum',
+      'not', 'anyOf', 'oneOf', 'allOf', 'additionalItems', '$schema', 'id', 'title',
+      'description', 'default'];
+    return _.keys(_.omit(schema, ajvDefaultKeywords));
+  }
+
 }
