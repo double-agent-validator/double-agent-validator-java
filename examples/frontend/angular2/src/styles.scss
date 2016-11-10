@@ -16,3 +16,14 @@ h1 {
   @extend .container;
   margin-top: 70px;
 }
+
+div.validation pre {
+  font-size: 10px;
+}
+
+
+input.ng-invalid, input.ng-invalid:focus {
+  border-right: 4px inset red;
+
+}
+

@@ -66,11 +66,9 @@ public class JsonSchemaValidator {
         this.scriptsLoaded.append(script + NEW_LINE);
         if (namespaceName.length == 1) {
             this.nashorn.eval(script);
-            this.nashorn.eval("DoubleAgent.JsonSchemaValidator.load(" + namespaceName[0] + ");");
             this.namespaces.add(namespaceName[0]);
         } else {
             this.nashorn.eval(script);
-            this.nashorn.eval("DoubleAgent.JsonSchemaValidator.loadMultiple(" + Arrays.toString(namespaceName) + ");");
             this.namespaces.addAll(Arrays.asList(namespaceName));
         }
     }

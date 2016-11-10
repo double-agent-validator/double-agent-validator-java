@@ -1,20 +1,42 @@
-<form [formGroup]="formContribuinte" role="form" (submit)="submterContribuinte($event.value)">
-      <legend>Contribuinte</legend>
-
-      <div class="form-group">
-        <label for="id">Identificador:</label>
-        <input type="number" class="form-control" id="id" placeholder="Digite o identificador" formControlName="id">
-      </div>
-
-      <div class="form-group">
-        <label for="ni">NI:</label>
-        <input type="text" class="form-control" id="ni" placeholder="Digite o NI"  formControlName="ni">
-      </div>
-
-      <div class="form-group">
-        <label for="nome">Nome:</label>
-        <input type="text" class="form-control" id="nome" placeholder="Digite o Nome"  formControlName="nome">
-      </div>
-
-      <button [disabled]="formContribuinte.invalid" type="submit" class="btn btn-primary">Salvar</button>
-    </form>
+<div class="col-md-6">
+  <div class="panel panel-info">
+    <div class="panel-heading">
+      <h3 class="panel-title">Formulário</h3>
+    </div>
+    <div class="panel-body">
+      <form [formGroup]="formContribuinte" role="form" (submit)="submterContribuinte($event.value)">
+        <legend>Contribuinte</legend>
+        <div class="form-group">
+          <label for="id">Identificador:</label>
+          <input type="number" class="form-control" id="id" placeholder="Digite o identificador" formControlName="id">
+        </div>
+        <div class="form-group">
+          <label for="ni">NI:</label>
+          <input type="text" class="form-control" id="ni" placeholder="Digite o NI" formControlName="ni">
+        </div>
+        <div class="form-group">
+          <label for="nome">Nome:</label>
+          <input type="text" class="form-control" id="nome" placeholder="Digite o Nome" formControlName="nome">
+        </div>
+        <button [disabled]="formContribuinte.invalid" type="submit" class="btn btn-primary">Salvar</button>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="col-md-6 validation">
+  <div class="panel panel-info">
+    <div class="panel-heading">
+      <h3 class="panel-title">Validation Status</h3>
+    </div>
+    <div class="panel-body">
+      <h3>ID</h3>
+      <pre *ngIf="formContribuinte.controls['id'].errors">{{formContribuinte.controls['id'].errors | json }}</pre>
+      <hr />
+      <h3>NI</h3>
+      <pre *ngIf="formContribuinte.controls['ni'].errors">{{formContribuinte.controls['ni'].errors | json }}</pre>
+      <hr />
+      <h3>Nome</h3>
+      <pre *ngIf="formContribuinte.controls['nome'].errors">{{formContribuinte.controls['nome'].errors | json }}</pre>
+    </div>
+  </div>
+</div>
