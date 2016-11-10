@@ -1,0 +1,343 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>br.gov.serpro.double-agent</groupId>
+    <artifactId>vertx-server</artifactId>
+    <version>0.0.1</version>
+
+    <name>DoubleAgent Validator Vertx Example</name>
+    <description>Aplicaçao Java utilizando o DoubleAgent Validator</description>
+
+    <properties>
+        <version.vertx>3.3.3</version.vertx>
+        <version.jackson>2.8.4</version.jackson>
+        <version.doubleagent>0.0.4</version.doubleagent>
+        <version.frontend-maven-plugin>1.1</version.frontend-maven-plugin>
+        <version.sl4j>1.6.1</version.sl4j>
+        <main.verticle>br.gov.serpro.doubleagent.vertx.VertxServer</main.verticle>
+
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.testSource>1.8</maven.compiler.testSource>
+        <maven.compiler.testTarget>1.8</maven.compiler.testTarget>
+
+        <sonar.host.url>http://sonar.serpro</sonar.host.url>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <watchForChange>target/classes/**/*.class</watchForChange>
+        <doOnChange>mvn package</doOnChange>
+    </properties>
+
+
+    <dependencies>
+
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-core</artifactId>
+            <version>${version.vertx}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-web</artifactId>
+            <version>${version.vertx}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${version.sl4j}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.8.4</version>
+        </dependency>
+
+        <!-- test dependencies -->
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-unit</artifactId>
+            <version>${version.vertx}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>br.gov.serpro.double-agent</groupId>
+            <artifactId>double-agent-validator</artifactId>
+            <version>${version.doubleagent}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Oleaster Matchers -->
+        <dependency>
+            <groupId>com.mscharhag.oleaster</groupId>
+            <artifactId>oleaster-matcher</artifactId>
+            <version>0.1.2</version>
+        </dependency>
+
+        <!-- Oleaster JUnit runner -->
+        <dependency>
+            <groupId>com.mscharhag.oleaster</groupId>
+            <artifactId>oleaster-runner</artifactId>
+            <version>0.1.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>3.0.1</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.assertj/assertj-core -->
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>3.5.2</version>
+            <scope>test</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>io.rest-assured</groupId>
+            <artifactId>json-path</artifactId>
+            <version>3.0.1</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>3.5</version>
+        </dependency>
+
+    </dependencies>
+
+    <build>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.1</version>
+                    <configuration>
+                        <source>1.8</source>
+                        <target>1.8</target>
+                    </configuration>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        <plugins>
+
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>0.7.7.201606060606</version>
+                <executions>
+                    <execution>
+                        <id>pre-unit-test</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>post-unit-test</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>2.7.1</version>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.3</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                            <transformers>
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <manifestEntries>
+                                        <Main-Class>io.vertx.core.Launcher</Main-Class>
+                                        <Main-Verticle>${main.verticle}</Main-Verticle>
+                                    </manifestEntries>
+                                </transformer>
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
+                                    <resource>META-INF/services/io.vertx.core.spi.VerticleFactory</resource>
+                                </transformer>
+                            </transformers>
+                            <artifactSet>
+                            </artifactSet>
+                            <outputFile>${project.build.directory}/${project.artifactId}-${project.version}-fat.jar
+                            </outputFile>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>1.4.0</version>
+                <executions>
+                    <execution>
+                        <id>run</id>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>io.vertx.core.Launcher</mainClass>
+                            <arguments>
+                                <argument>run</argument>
+                                <argument>${main.verticle}</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>run-app</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>java</executable>
+                            <arguments>
+                                <argument>-jar</argument>
+                                <argument>target/${project.artifactId}-${project.version}-fat.jar</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>dev-eclipse</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>java</executable>
+                            <arguments>
+                                <argument>-cp</argument>
+                                <classpath/>
+                                <argument>io.vertx.core.Launcher</argument>
+                                <argument>run</argument>
+                                <argument>--redeploy=src/main/**/*.java</argument>
+                                <argument>--launcher-class=${main.verticle}</argument>
+                                <!-- eclipse já recompila o projeto quando salva -->
+                            </arguments>
+                        </configuration>
+                    </execution>
+
+                    <execution>
+                        <id>dev-intellij</id>
+                        <goals>
+                            <goal>exec</goal>
+                        </goals>
+                        <configuration>
+                            <executable>java</executable>
+                            <arguments>
+                                <argument>-cp</argument>
+                                <classpath/>
+                                <argument>io.vertx.core.Launcher</argument>
+                                <argument>run</argument>
+                                <argument>--redeploy=src/main/**/*.java</argument>
+                                <argument>--launcher-class=${main.verticle}</argument>
+                                <argument>--on-redeploy=mvn package -DskipTests=true</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>com.github.eirslett</groupId>
+                <artifactId>frontend-maven-plugin</artifactId>
+                <version>${version.frontend-maven-plugin}</version>
+                <configuration>
+                    <installDirectory>${user.home}/maven</installDirectory>
+                    <workingDirectory>src/main/resources/doubleagent</workingDirectory>
+                    <nodeVersion>v6.9.1</nodeVersion>
+                    <npmVersion>3.10.8</npmVersion>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>install node and npm</id>
+                        <goals>
+                            <goal>install-node-and-npm</goal>
+                        </goals>
+                        <phase>generate-resources</phase>
+                    </execution>
+                    <execution>
+                        <id>npm install</id>
+                        <phase>generate-resources</phase>
+                        <goals>
+                            <goal>npm</goal>
+                        </goals>
+                        <configuration>
+                            <arguments>install</arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+    <repositories>
+        <repository>
+            <id>maven-central</id>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </releases>
+            <url>http://repo1.maven.org/maven2</url>
+        </repository>
+        <repository>
+            <id>nexus-serpro-releases</id>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </releases>
+            <url>http://nexus.aic.serpro/content/repositories/releases/</url>
+        </repository>
+        <repository>
+            <id>nexus-serpro-snapshots</id>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
+            <url>http://nexus.aic.serpro/content/repositories/snapshots/</url>
+        </repository>
+
+    </repositories>
+
+</project>
