@@ -55,3 +55,8 @@ modules.xml
 
 target
 node_modules
+
+javac-services.*.log*
+
+.project
+.settings
