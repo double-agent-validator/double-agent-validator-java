@@ -47,7 +47,7 @@ namespace DoubleAgent.Example.JsonSchemaValidator {
                id: 'contribuinte-v1',
                type: 'object',
                nacionalidadeLegal: true,
-               required: ['id', 'ni', 'nome']
+               required: ['id', 'ni', 'nome'],
                properties: {
                    id: {
                        type: 'number'
