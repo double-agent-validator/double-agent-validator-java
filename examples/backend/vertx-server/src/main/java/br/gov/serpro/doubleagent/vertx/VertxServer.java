@@ -35,6 +35,7 @@ public class VertxServer extends AbstractVerticle {
         super.start();
 
         router = Router.router(vertx);
+        SERVER_OPTIONS.setPort(config().getInteger("http.port", SERVER_OPTIONS.getPort()));
         vertx.createHttpServer(SERVER_OPTIONS).requestHandler(router::accept).listen(
                 result -> {
                     if (result.succeeded()) {
