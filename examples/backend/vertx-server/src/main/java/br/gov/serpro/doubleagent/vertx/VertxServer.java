@@ -19,15 +19,19 @@ import java.io.IOException;
 public class VertxServer extends AbstractVerticle {
 
     private Router router;
+    private JsonSchemaValidator jsonSchemaValidator;
 
+    public VertxServer(JsonSchemaValidator jsonSchemaValidator) {
+        this.jsonSchemaValidator = jsonSchemaValidator;    
+    }
 
     private static final HttpServerOptions SERVER_OPTIONS = new HttpServerOptions()
             .setPort(8080)
             .setHost("localhost");
+    
 
     @Override
     public void start(Future<Void> future) throws Exception {
-
         super.start();
 
         router = Router.router(vertx);
@@ -50,21 +54,19 @@ public class VertxServer extends AbstractVerticle {
     }
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, ScriptException {
+
+        JsonSchemaValidator jsonSchemaValidator = new JsonSchemaValidator();
+        jsonSchemaValidator.loadSchemaData(VertxServer.class.getResourceAsStream("/doubleagent/js/schemas.js"), "DoubleAgent.Example.JsonSchemaValidator");
 
         DeploymentOptions options = new DeploymentOptions().setConfig(new JsonObject().put("http.port", SERVER_OPTIONS.getPort()));
         Vertx vertx = Vertx.vertx();
-        vertx.deployVerticle(new VertxServer(), options);
+        vertx.deployVerticle(new VertxServer(jsonSchemaValidator), options);
     }
 
-    public void configureRoutes() throws ScriptException, IOException {
-
+    public void configureRoutes()  throws ScriptException, IOException {
         router.route().handler(BodyHandler.create());
-
-
-        JsonSchemaValidator jsonSchemaValidator = new JsonSchemaValidator();
-        jsonSchemaValidator.loadSchemaData(getClass().getResourceAsStream("/doubleagent/js/schemas.js"), "DoubleAgent.Example.JsonSchemaValidator");
-        ValidacaoHandler validacaoHandler = new ValidacaoHandler(jsonSchemaValidator);
+        ValidacaoHandler validacaoHandler = new ValidacaoHandler(this.jsonSchemaValidator);
         router.route(HttpMethod.GET, "/validacao").handler(validacaoHandler);
         router.route(HttpMethod.POST, "/validacao").handler(validacaoHandler);
     }

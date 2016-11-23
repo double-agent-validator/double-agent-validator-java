@@ -23,10 +23,12 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
         <module name="double-agent-validator" />
+        <module name="irpfonline" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="double-agent-validator" target="1.8" />
+      <module name="irpfonline" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

@@ -1,7 +1,7 @@
 {
-  "name": "irpfonline-validator",
+  "name": "doubleagent-validator",
   "version": "1.0.0",
-  "description": "Validators schemas for IRPFONLINE",
+  "description": "Validators schemas",
   "devDependencies": {
     "@types/lodash": "4.14.37",
     "typescript": "~2.0.3"
