@@ -5,10 +5,38 @@ import { ValidatorDefinitionsLoader } from './definitions-loader.service';
 import { Injectable } from '@angular/core';
 import * as ajvNsAndConstructor from 'ajv';
 
+/**
+ *
+ * This classs load the script with the schemas, formats and keywords from
+ * a remote url, parses it in an isolated environment ('iframe') and
+ * loads to the ajv object
+ * @export
+ * @class DoubleAgentValidatorNg2Factory
+ */
+
 @Injectable()
 export class DoubleAgentValidatorNg2Factory {
+
+  /**
+   * Creates an instance of DoubleAgentValidatorNg2Factory.
+   *
+   * @param {Http} http
+   * @param {DoubleAgentValidator} doubleAgentValidator
+   *
+   * @memberOf DoubleAgentValidatorNg2Factory
+   */
   constructor(private http: Http, private doubleAgentValidator: DoubleAgentValidator) {
   }
+
+  /**
+   * loads a script from a url, parses it and load into the ajv object
+   *
+   * @param {string} url
+   * @param {string[]} namespaces
+   * @returns {Promise<void>}
+   *
+   * @memberOf DoubleAgentValidatorNg2Factory
+   */
   load(url: string, namespaces: string[]): Promise<void> {
     let remoteLoader = new Angular2RemoteLoader(this.http);
     let validationsLoader = new ValidatorDefinitionsLoader(remoteLoader);

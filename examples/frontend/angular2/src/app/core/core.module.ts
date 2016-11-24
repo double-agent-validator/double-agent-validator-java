@@ -8,11 +8,11 @@ import { ValidatorService, VALIDATORS_NS } from './services/validator.service';
   ],
   providers: [
     ValidatorService,
-    {
+    /*{
       provide: VALIDATORS_NS, useValue: [
         'DoubleAgent.Example.JsonSchemaValidator'
       ]
-    }
+    }*/
   ],
   exports: [
   ],

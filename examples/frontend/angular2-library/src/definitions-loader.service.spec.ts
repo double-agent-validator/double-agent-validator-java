@@ -5,6 +5,8 @@ import { NodeRemoteLoader } from './remote-loaders/node-remote-loader';
 
 import * as jsdomNS from 'jsdom';
 
+import { expect } from 'chai';
+
 describe('ValidatorDefinitionsLoader', () => {
   let doubleAgentValidator: DoubleAgentValidator;
   let loader: ValidatorDefinitionsLoader;
@@ -19,12 +21,13 @@ describe('ValidatorDefinitionsLoader', () => {
   it('loads script from remote module', (done) => {
     loader.load(window, 'http://localhost:8080/validacao', ['DoubleAgent.Example.JsonSchemaValidator']).then((ajv) => {
       doubleAgentValidator = new DoubleAgentValidator(ajv);
-      doubleAgentValidator.validate('contribuinte-v1', {
+      let result = doubleAgentValidator.validate('contribuinte-v1', {
         id: 1,
         nome: 'John',
         ni: '00000000000191',
         nacionalidade: 'brasileiro'
       });
+      expect(result.hasErrors).to.be.equal(false);
       done();
     });
   });

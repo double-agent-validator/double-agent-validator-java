@@ -6,9 +6,8 @@ import * as _ from 'lodash';
 @Injectable()
 export class DoubleAgentValidator {
   private noErrorResult: ValidationResult = { hasErrors: false, errors: null };
-  private _ajv: ajvNsAndConstructor.Ajv;
 
-  constructor(/*@Optional() private _ajv: ajvNsAndConstructor.Ajv*/) {
+  constructor(@Optional() private _ajv: ajvNsAndConstructor.Ajv) {
   }
 
   get ajv(): ajvNsAndConstructor.Ajv {
