@@ -1,29 +1,15 @@
 import { Injectable } from '@angular/core';
 import { ValidationResult } from './models';
-import * as ajv from 'ajv';
+import * as ajvNsAndConstructor from 'ajv';
+import * as lodash from 'lodash';
 
 @Injectable()
 export class DoubleAgentValidator {
-  private ajv: ajv.Ajv;
   private noErrorResult: ValidationResult = { hasErrors: false, errors: null };
-  constructor() {
-    this.ajv = new ajv({ allErrors: true, v5: true });
-  }
+  public ajv: ajvNsAndConstructor.Ajv = new ajvNsAndConstructor({ allErrors: true, v5: true});
+  public _: lodash.LoDashStatic = lodash;
 
-  loadSchema(schemaName: string, schemaObj: any) {
-    this.ajv.addSchema(schemaObj, schemaName);
-  }
-
-  loadKeyword(keywordName: string, metadata: any, fn: (schema: Object, parentSchema: Object) => ajv.ValidateFunction) {
-    this.ajv.addKeyword(keywordName, {
-      schema: metadata,
-      compile: fn
-    });
-  }
-
-  loadFormat(formatName: string, format: ajv.FormatDefinition) {
-    this.ajv.addFormat(formatName, format);
-  }
+  constructor() { }
 
   validate(schemaName: string, data: any): ValidationResult {
     let result: boolean = this.ajv.validate(schemaName, data);

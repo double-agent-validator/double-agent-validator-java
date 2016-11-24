@@ -1,19 +1,24 @@
-import { inject } from '@angular/core/testing';
 import { ValidatorDefinitionsLoader } from './validator-definitions-loader.service';
-import { Http } from '@angular/http';
 import { DoubleAgentValidator } from './double-agent-validator.service';
 
-describe('ValidatorDefinitionsLoader', () => {
-  let loader: ValidatorDefinitionsLoader;
-  let doubleAgentValidator: DoubleAgentValidator;
+import { NodeRemoteLoader } from './remote-loaders/node-remote-loader';
+import * as jsdomNS from 'jsdom';
+import * as jsdom from 'jsdom';
 
-  beforeEach(inject([Http, DoubleAgentValidator], (http: Http, _doubleAgentValidator: DoubleAgentValidator) => {
-    loader = new ValidatorDefinitionsLoader(http, _doubleAgentValidator);
-    doubleAgentValidator = _doubleAgentValidator;
-  }));
+describe('ValidatorDefinitionsLoader', () => {
+  let doubleAgentValidator: DoubleAgentValidator;
+  let loader: ValidatorDefinitionsLoader;
+  let remoteLoader: NodeRemoteLoader = new NodeRemoteLoader();
+  let jsdom = jsdomNS.jsdom;
+  let window: Window;
+  beforeEach(() => {
+    doubleAgentValidator = new DoubleAgentValidator();
+    loader = new ValidatorDefinitionsLoader(remoteLoader, doubleAgentValidator);
+    window = jsdom('<html><body>Página de Teste</body></html>').defaultView;
+  });
 
   it('loads script from remote module', (done) => {
-    loader.load('http://localhost:8080/validacao', ['DoubleAgent.Example.JsonSchemaValidator']).then(() => {
+    loader.load(window, 'http://localhost:8080/validacao', ['DoubleAgent.Example.JsonSchemaValidator']).then(() => {
       doubleAgentValidator.validate('contribuinte-v1', {
         id: 1,
         nome: 'John',
@@ -24,3 +29,4 @@ describe('ValidatorDefinitionsLoader', () => {
     });
   });
 });
+

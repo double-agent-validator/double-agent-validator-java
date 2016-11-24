@@ -1,0 +1,1 @@
+--compilers ts-node/register --full-trace --bail ./src/**/*.spec.ts
