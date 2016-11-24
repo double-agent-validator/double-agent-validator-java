@@ -1,5 +1,3 @@
---watch
---watch-extensions ts,tsx
 --compilers ts-node/register
 --full-trace
 --bail

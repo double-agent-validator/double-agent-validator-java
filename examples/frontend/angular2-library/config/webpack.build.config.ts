@@ -9,7 +9,7 @@ export function getBuildConfig(outputFileName: string, libraryName: string) {
     target: 'node',
     externals: [nodeExternals()],
     output: {
-      path: path.join(__dirname, '..'),
+      path: path.join(__dirname, '../dist'),
       filename: outputFileName,
       library: libraryName,
       libraryTarget: 'umd',

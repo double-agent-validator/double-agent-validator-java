@@ -1,9 +1,9 @@
-import { ValidatorDefinitionsLoader } from './validator-definitions-loader.service';
-import { DoubleAgentValidator } from './double-agent-validator.service';
+import { ValidatorDefinitionsLoader } from './definitions-loader.service';
+import { DoubleAgentValidator } from './validator.service';
 
 import { NodeRemoteLoader } from './remote-loaders/node-remote-loader';
+
 import * as jsdomNS from 'jsdom';
-import * as jsdom from 'jsdom';
 
 describe('ValidatorDefinitionsLoader', () => {
   let doubleAgentValidator: DoubleAgentValidator;
@@ -12,13 +12,13 @@ describe('ValidatorDefinitionsLoader', () => {
   let jsdom = jsdomNS.jsdom;
   let window: Window;
   beforeEach(() => {
-    doubleAgentValidator = new DoubleAgentValidator();
-    loader = new ValidatorDefinitionsLoader(remoteLoader, doubleAgentValidator);
+    loader = new ValidatorDefinitionsLoader(remoteLoader);
     window = jsdom('<html><body>Página de Teste</body></html>').defaultView;
   });
 
   it('loads script from remote module', (done) => {
-    loader.load(window, 'http://localhost:8080/validacao', ['DoubleAgent.Example.JsonSchemaValidator']).then(() => {
+    loader.load(window, 'http://localhost:8080/validacao', ['DoubleAgent.Example.JsonSchemaValidator']).then((ajv) => {
+      doubleAgentValidator = new DoubleAgentValidator(ajv);
       doubleAgentValidator.validate('contribuinte-v1', {
         id: 1,
         nome: 'John',
@@ -29,4 +29,3 @@ describe('ValidatorDefinitionsLoader', () => {
     });
   });
 });
-

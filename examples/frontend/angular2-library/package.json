@@ -6,57 +6,45 @@
   "license": "MIT",
   "main": "double-agent-validator.js",
   "typings": "double-agent-validator.d.ts",
+  "files": [
+    "dist"
+  ],
   "scripts": {
-    "test": "TS_NODE_PROJECT=./src nyc mocha --require reflect-metadata --require ts-node/register --opts ./mocha.opts",
-    "compile": "webpack"
+    "test": "TS_NODE_PROJECT=./src nyc mocha  --require reflect-metadata --require ts-node/register --opts ./mocha.opts",
+    "test:single": "TS_NODE_PROJECT=./src nyc mocha --require reflect-metadata --require ts-node/register --opts ./mocha.ci.opts",
+    "compile": "webpack",
+    "ic": "npm run test:single && npm run compile",
+    "clean-dist": "rimraf dist/*"
   },
   "dependencies": {
-    "@angular/common": "2.2.1",
-    "@angular/compiler": "2.2.1",
-    "@angular/core": "2.2.1",
-    "@angular/http": "2.2.1",
-    "@angular/platform-browser": "2.2.1",
-    "@angular/platform-browser-dynamic": "2.2.1",
-    "@types/node": "^6.0.51",
     "ajv": "^4.9.0",
-    "core-js": "^2.4.1",
-    "lodash": "^4.16.3",
-    "reflect-metadata": "^0.1.8",
-    "rxjs": "5.0.0-beta.12",
-    "zone.js": "^0.6.23"
+    "chai": "^3.5.0",
+    "lodash": "^4.16.3"
   },
   "devDependencies": {
+    "@angular/common": "~2.0.0",
+    "@angular/compiler": "~2.0.0",
+    "@angular/core": "~2.0.0",
+    "@angular/http": "~2.0.0",
+    "@angular/platform-browser": "~2.0.0",
     "@types/chai": "^3.4.34",
     "@types/chai-as-promised": "^0.0.29",
-    "@types/jasmine": "^2.2.34",
     "@types/jsdom": "^2.0.29",
-    "@types/karma": "^0.13.33",
     "@types/lodash": "^4.14.36",
     "@types/mocha": "^2.2.33",
+    "@types/node": "^6.0.51",
     "@types/restler": "^3.1.5",
     "@types/webpack": "^1.12.34",
     "@types/yargs": "0.0.31",
     "awesome-typescript-loader": "^2.2.4",
     "codelyzer": "^1.0.0-beta.3",
-    "jasmine": "^2.5.2",
-    "jasmine-core": "^2.5.2",
     "jsdom": "^9.8.3",
-    "karma": "^1.3.0",
-    "karma-chrome-launcher": "^2.0.0",
-    "karma-coverage": "^1.1.1",
-    "karma-firefox-launcher": "^1.0.0",
-    "karma-jasmine": "^1.0.2",
-    "karma-jasmine-html-reporter": "^0.2.2",
-    "karma-mocha": "^1.2.0",
-    "karma-mocha-reporter": "^2.2.0",
-    "karma-phantomjs-launcher": "^1.0.2",
-    "karma-remap-istanbul": "^0.2.1",
-    "karma-sourcemap-loader": "^0.3.7",
-    "karma-webpack": "^1.8.0",
     "mocha": "^3.1.2",
     "nyc": "^10.0.0",
-    "phantomjs-prebuilt": "^2.1.12",
+    "reflect-metadata": "^0.1.8",
     "restler": "^3.4.0",
+    "rimraf": "^2.5.4",
+    "rxjs": "5.0.0-beta.12",
     "source-map-loader": "^0.1.5",
     "sourcemap-istanbul-instrumenter-loader": "^0.2.0",
     "ts-node": "^1.7.0",
@@ -64,12 +52,19 @@
     "tslint-loader": "^2.1.5",
     "typescript": "2.1.1",
     "webpack": "^2.1.0-beta.25",
-    "webpack-dev-server": "^2.1.0-beta.3",
     "webpack-node-externals": "^1.4.3",
-    "yargs": "^6.0.0"
+    "yargs": "^6.0.0",
+    "zone.js": "^0.6.23"
   },
   "peerDependencies": {
-    "restler": "^3.4.0"
+    "@angular/common": "~2.0.0",
+    "@angular/compiler": "~2.0.0",
+    "@angular/core": "~2.0.0",
+    "@angular/http": "~2.0.0",
+    "@angular/platform-browser": "~2.0.0",
+    "restler": "^3.4.0",
+    "rxjs": "5.0.0-beta.12",
+    "zone.js": "^0.6.23"
   },
   "nyc": {
     "include": [
@@ -91,7 +86,7 @@
     "reporter": [
       "text-summary",
       "text",
-      "html"
+      "lcov"
     ],
     "sourceMap": false,
     "instrument": true
