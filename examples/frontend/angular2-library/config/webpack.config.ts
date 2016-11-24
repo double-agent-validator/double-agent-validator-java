@@ -12,10 +12,10 @@ let config = {};
 
 if (argv.test) {
   // get webpack config for test the project
-  config = getTestConfig(); // require('./config/webpack.test.config');
+  config = getTestConfig();
 } else {
   // get webpack config for build the project
-  config = getBuildConfig('doubleagentvalidator.js', 'DoubleAgentValidator');
+  config = getBuildConfig('double-agent-validator.js', 'DoubleAgentValidator');
 }
 
 export default config;

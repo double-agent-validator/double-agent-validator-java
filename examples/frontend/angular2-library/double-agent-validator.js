@@ -163,4 +163,4 @@ DoubleAgentValidatorModule = __decorate([
 /***/ }
 /******/ ]);
 });
-//# sourceMappingURL=doubleagentvalidator.js.map
+//# sourceMappingURL=double-agent-validator.js.map

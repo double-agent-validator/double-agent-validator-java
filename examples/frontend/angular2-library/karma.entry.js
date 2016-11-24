@@ -6,6 +6,7 @@ require('core-js/es6/parse-int');
 require('core-js/es6/parse-float');
 require('core-js/es6/number');
 require('core-js/es6/math');
+require('core-js/es6/promise');
 require('core-js/es6/string');
 require('core-js/es6/date');
 require('core-js/es6/array');
