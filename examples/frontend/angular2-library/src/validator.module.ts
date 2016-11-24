@@ -5,18 +5,17 @@ import { DoubleAgentValidatorNg2Factory } from './ng2-factory.service';
 export const DOUBLE_AGENT_VALIDATOR_SCHEMA_URL = new OpaqueToken('DoubleAgentValidator.SCHEMA_URL');
 export const DOUBLE_AGENT_VALIDATOR_SCHEMA_NS = new OpaqueToken('DoubleAgentValidator.SCHEMA_NAMESPACES');
 @NgModule({
-  imports: [],
-  exports: [DoubleAgentValidator, DoubleAgentValidatorNg2Factory],
-  declarations: [],
   providers: [
     DoubleAgentValidator,
     DoubleAgentValidatorNg2Factory,
     {
       provide: APP_INITIALIZER,
-      useFactory: (factory: DoubleAgentValidatorNg2Factory, injector: Injector) => {
+      useFactory: (injector: Injector, factory: DoubleAgentValidatorNg2Factory) => {
+        console.log('HERE', injector);
         let url: string = injector.get(DOUBLE_AGENT_VALIDATOR_SCHEMA_URL);
         let namespaces: string[] = injector.get(DOUBLE_AGENT_VALIDATOR_SCHEMA_NS);
         return new Promise<void>((resolve, reject) => {
+          console.log('VALUES', url, namespaces);
           let errors = null;
           if (url == null) {
             errors = 'DoubleAgentValidator Module needs an url provided through the DOUBLE_AGENT_VALIDATOR_SCHEMA_URL token';
@@ -33,11 +32,11 @@ export const DOUBLE_AGENT_VALIDATOR_SCHEMA_NS = new OpaqueToken('DoubleAgentVali
       },
       deps: [
         Injector,
-        DOUBLE_AGENT_VALIDATOR_SCHEMA_URL,
-        DoubleAgentValidator,
-        DoubleAgentValidatorNg2Factory
+        DoubleAgentValidatorNg2Factory,
+        DoubleAgentValidator
       ]
     }
   ],
+  exports: [  ]
 })
 export class DoubleAgentValidatorModule { }

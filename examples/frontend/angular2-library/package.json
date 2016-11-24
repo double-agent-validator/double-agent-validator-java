@@ -4,8 +4,8 @@
   "description": "Double Agent Validator Angular 2 Library",
   "author": "Abner Oliveira",
   "license": "MIT",
-  "main": "double-agent-validator.js",
-  "typings": "double-agent-validator.d.ts",
+  "main": "dist/double-agent-validator.js",
+  "typings": "dist/src/index.d.ts",
   "files": [
     "dist"
   ],
@@ -14,7 +14,9 @@
     "test:single": "TS_NODE_PROJECT=./src nyc mocha --require reflect-metadata --require ts-node/register --opts ./mocha.ci.opts",
     "compile": "webpack",
     "ic": "npm run test:single && npm run compile",
-    "clean-dist": "rimraf dist/*"
+    "clean-dist": "rimraf dist/*",
+    "postinstall": "npm run compile"
+
   },
   "dependencies": {
     "ajv": "^4.9.0",

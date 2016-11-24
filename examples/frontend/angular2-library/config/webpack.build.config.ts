@@ -11,9 +11,9 @@ export function getBuildConfig(outputFileName: string, libraryName: string) {
     output: {
       path: path.join(__dirname, '../dist'),
       filename: outputFileName,
-      library: libraryName,
-      libraryTarget: 'umd',
-      umdNamedDefine: true
+      // library: libraryName,
+      libraryTarget: 'commonjs',
+      // umdNamedDefine: true
     },
     module: {
       loaders: [

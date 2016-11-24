@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Optional } from '@angular/core';
 import { ValidationResult } from './models';
 import * as ajvNsAndConstructor from 'ajv';
 import * as _ from 'lodash';
@@ -6,8 +6,9 @@ import * as _ from 'lodash';
 @Injectable()
 export class DoubleAgentValidator {
   private noErrorResult: ValidationResult = { hasErrors: false, errors: null };
+  private _ajv: ajvNsAndConstructor.Ajv;
 
-  constructor(private _ajv: ajvNsAndConstructor.Ajv) {
+  constructor(/*@Optional() private _ajv: ajvNsAndConstructor.Ajv*/) {
   }
 
   get ajv(): ajvNsAndConstructor.Ajv {

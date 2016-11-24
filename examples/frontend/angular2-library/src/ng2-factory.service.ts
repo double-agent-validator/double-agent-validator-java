@@ -13,16 +13,19 @@ export class DoubleAgentValidatorNg2Factory {
     let remoteLoader = new Angular2RemoteLoader(this.http);
     let validationsLoader = new ValidatorDefinitionsLoader(remoteLoader);
     let iframe = document.createElement('iframe');
+    iframe.id = 'DoubleAgentValidator';
     iframe.border = '0';
+    iframe.src = 'about:blank';
     iframe.style.background = 'transparent';
     iframe.style.width = '1px';
     iframe.style.height = '1px';
-    (<any>iframe).sandbox = 'allow-scripts';
+    (<any>iframe).sandbox = 'allow-scripts allow-same-origin';
     document.body.appendChild(iframe);
     let window = iframe.contentWindow;
     return new Promise<void>((resolve, reject) => {
       validationsLoader.load(window, url, namespaces).then((ajv: ajvNsAndConstructor.Ajv) => {
         this.doubleAgentValidator['_ajv'] = ajv;
+        window['DoubleAgentValidator'] = this.doubleAgentValidator;
         resolve(null);
       },
         (e) => {
