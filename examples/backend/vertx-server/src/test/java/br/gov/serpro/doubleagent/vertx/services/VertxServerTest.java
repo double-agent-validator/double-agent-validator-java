@@ -63,7 +63,7 @@ public class VertxServerTest {
 
     @Test
     public void obterScriptValidacao() {
-        get("/validacao").then()
+        get("/json-schema-validation").then()
                 .assertThat()
                 .statusCode(200)
                 .contentType("text/javascript");
@@ -82,7 +82,7 @@ public class VertxServerTest {
 
         Response response =  given().body(json.toString())
                 .when()
-                .post("/validacao?schema=contribuinte-v1")
+                .post("/json-schema-validation?schema=contribuinte-v1")
                 .then()
                 .assertThat()
                 .statusCode(200)

@@ -68,8 +68,8 @@ public class VertxServer extends AbstractVerticle {
     public void configureRoutes()  throws ScriptException, IOException {
         router.route().handler(BodyHandler.create());
         ValidacaoHandler validacaoHandler = new ValidacaoHandler(this.jsonSchemaValidator);
-        router.route(HttpMethod.GET, "/validacao").handler(validacaoHandler);
-        router.route(HttpMethod.POST, "/validacao").handler(validacaoHandler);
+        router.route(HttpMethod.GET, "/json-schema-validation").handler(validacaoHandler);
+        router.route(HttpMethod.POST, "/json-schema-validation").handler(validacaoHandler);
     }
 
 }
