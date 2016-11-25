@@ -1,6 +1,6 @@
 {
   "name": "double-agent-validator",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Double Agent Validator Angular 2 Library",
   "author": "Abner Oliveira",
   "license": "MIT",
@@ -15,7 +15,7 @@
     "compile": "webpack",
     "ic": "npm run test:single && npm run compile",
     "clean-dist": "rimraf dist/*",
-    "postinstall": "npm run compile"
+    "prepublish": "npm run compile"
   },
   "dependencies": {
     "ajv": "^4.9.0",

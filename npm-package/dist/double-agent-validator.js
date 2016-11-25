@@ -61,7 +61,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 16);
+/******/ 	return __webpack_require__(__webpack_require__.s = 15);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -784,8 +784,7 @@ module.exports = require("rxjs/ReplaySubject");
 module.exports = require("rxjs/add/operator/toPromise");
 
 /***/ },
-/* 15 */,
-/* 16 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
