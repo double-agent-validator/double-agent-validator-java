@@ -5,15 +5,12 @@ import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 
-import { CoreModule } from './core/core.module';
-
-let url = 'http://localhost:4200/api/validacao';
+let url = 'http://localhost:4200/assets/schema.js';
 let schemaNamespaces = ['DoubleAgent.Example.JsonSchemaValidator'];
 
 import { DoubleAgentValidatorModule, DOUBLE_AGENT_VALIDATOR_SCHEMA_NS, DOUBLE_AGENT_VALIDATOR_SCHEMA_URL }
   from 'double-agent-validator';
 
-  console.log('DOUBLE AGENT MODULE', DoubleAgentValidatorModule);
 
 @NgModule({
   declarations: [
@@ -21,7 +18,6 @@ import { DoubleAgentValidatorModule, DOUBLE_AGENT_VALIDATOR_SCHEMA_NS, DOUBLE_AG
   ],
   imports: [
     DoubleAgentValidatorModule,
-    CoreModule,
     BrowserModule,
     ReactiveFormsModule,
     FormsModule,

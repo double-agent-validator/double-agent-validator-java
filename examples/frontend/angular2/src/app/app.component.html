@@ -1,10 +1,16 @@
+<div class="alert alert-warning">
+In this example we are relying in the *ngIf to avoid errors on the component renderization caused
+when the formGroup is not initialized yet.
+
+Of course it could be implemented using CanActivate Router Guard when using router.
+</div>
 <div class="col-md-6">
   <div class="panel panel-info">
     <div class="panel-heading">
       <h3 class="panel-title">Formulário</h3>
     </div>
     <div class="panel-body">
-      <form [formGroup]="formContribuinte" role="form" (submit)="submterContribuinte($event.value)">
+      <form *ngIf="formContribuinte" [formGroup]="formContribuinte" role="form" (submit)="submterContribuinte($event.value)">
         <legend>Contribuinte</legend>
         <div class="form-group">
           <label for="id">Identificador:</label>
@@ -28,7 +34,7 @@
     </div>
   </div>
 </div>
-<div class="col-md-6 validation">
+<div class="col-md-6 validation" *ngIf="formContribuinte">
   <div class="panel panel-info">
     <div class="panel-heading">
       <h3 class="panel-title">Validation Status</h3>
