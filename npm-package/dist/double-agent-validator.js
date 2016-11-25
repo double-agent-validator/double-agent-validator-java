@@ -89,20 +89,56 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 var core_1 = __webpack_require__(0);
-var ajvNsAndConstructor = __webpack_require__(4);
-var _ = __webpack_require__(5);
+var ajvNsAndConstructor = __webpack_require__(5);
+var _ = __webpack_require__(6);
+/**
+ *
+ *
+ * @export
+ * @class DoubleAgentValidator
+ */
 var DoubleAgentValidator = (function () {
+    /**
+     * Creates an instance of DoubleAgentValidator.
+     *
+     * @param {ajvNsAndConstructor.Ajv} _ajv
+     *
+     * @memberOf DoubleAgentValidator
+     */
     function DoubleAgentValidator(_ajv) {
         this._ajv = _ajv;
+        /**
+         *
+         *
+         * @private
+         * @type {ValidationResult}
+         * @memberOf DoubleAgentValidator
+         */
         this.noErrorResult = { hasErrors: false, errors: null };
     }
     Object.defineProperty(DoubleAgentValidator.prototype, "ajv", {
+        /**
+         *
+         *
+         * @readonly
+         * @type {ajvNsAndConstructor.Ajv}
+         * @memberOf DoubleAgentValidator
+         */
         get: function () {
             return this._ajv;
         },
         enumerable: true,
         configurable: true
     });
+    /**
+     *
+     *
+     * @param {string} schemaName
+     * @param {*} data
+     * @returns {ValidationResult}
+     *
+     * @memberOf DoubleAgentValidator
+     */
     DoubleAgentValidator.prototype.validate = function (schemaName, data) {
         var result = this.ajv.validate(schemaName, data);
         if (result) {
@@ -116,6 +152,13 @@ var DoubleAgentValidator = (function () {
         }
     };
     Object.defineProperty(DoubleAgentValidator.prototype, "schemas", {
+        /**
+         *
+         *
+         * @readonly
+         * @type {string[]}
+         * @memberOf DoubleAgentValidator
+         */
         get: function () {
             return _.map(this.ajv['_schemas'], function (schema) { return schema['id']; });
         },
@@ -148,20 +191,50 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = __webpack_require__(0);
-var _ = __webpack_require__(5);
-var ajvNsAndConstructor = __webpack_require__(4);
+var _ = __webpack_require__(6);
+var ajvNsAndConstructor = __webpack_require__(5);
+/**
+ *
+ * This class loads a script from an url, parses it and fill an ajv instance with theirs definitions
+ * @export
+ * @class ValidatorDefinitionsLoader
+ */
 var ValidatorDefinitionsLoader = (function () {
+    /**
+     * Creates an instance of ValidatorDefinitionsLoader.
+     *
+     * @param {RemoteLoader} remoteLoader
+     *
+     * @memberOf ValidatorDefinitionsLoader
+     */
     function ValidatorDefinitionsLoader(remoteLoader) {
         this.remoteLoader = remoteLoader;
         this._ajv = new ajvNsAndConstructor({ allErrors: true, v5: true });
     }
     Object.defineProperty(ValidatorDefinitionsLoader.prototype, "ajv", {
+        /**
+         *
+         *
+         * @readonly
+         * @type {ajvNsAndConstructor.Ajv}
+         * @memberOf ValidatorDefinitionsLoader
+         */
         get: function () {
             return this._ajv;
         },
         enumerable: true,
         configurable: true
     });
+    /**
+     *
+     *
+     * @param {Window} window
+     * @param {string} url
+     * @param {string[]} namespaces
+     * @returns {Promise<ajvNsAndConstructor.Ajv>}
+     *
+     * @memberOf ValidatorDefinitionsLoader
+     */
     ValidatorDefinitionsLoader.prototype.load = function (window, url, namespaces) {
         var _this = this;
         return this.remoteLoader.getScript(url).then(function (scriptContent) {
@@ -177,7 +250,7 @@ var ValidatorDefinitionsLoader = (function () {
                     : "DoubleAgent.JsonSchemaValidator.loadMultiple([" + schemas.join(',') + "], ajv);";
                 window['ajv'] = _this.ajv;
                 window['_'] = _;
-                window.document.write("\n          <script>\n              " + script + "\n              " + loadSchemaCall + ";\n          </script>\n        ");
+                window.document.write("\n          <script>\n              " + script + "\n              " + loadSchemaCall + "\n          </script>\n        ");
                 resolve(_this.ajv);
             }
             catch (e) {
@@ -196,24 +269,6 @@ exports.ValidatorDefinitionsLoader = ValidatorDefinitionsLoader;
 
 /***/ },
 /* 3 */
-/***/ function(module, exports) {
-
-module.exports = require("@angular/http");
-
-/***/ },
-/* 4 */
-/***/ function(module, exports) {
-
-module.exports = require("ajv");
-
-/***/ },
-/* 5 */
-/***/ function(module, exports) {
-
-module.exports = require("lodash");
-
-/***/ },
-/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -244,25 +299,7 @@ DoubleAgentValidatorModule = __decorate([
             ng2_factory_service_1.DoubleAgentValidatorNg2Factory,
             {
                 provide: core_1.APP_INITIALIZER,
-                useFactory: function (injector, factory) {
-                    console.log('HERE', injector);
-                    var url = injector.get(exports.DOUBLE_AGENT_VALIDATOR_SCHEMA_URL);
-                    var namespaces = injector.get(exports.DOUBLE_AGENT_VALIDATOR_SCHEMA_NS);
-                    return new Promise(function (resolve, reject) {
-                        console.log('VALUES', url, namespaces);
-                        var errors = null;
-                        if (url == null) {
-                            errors = 'DoubleAgentValidator Module needs an url provided through the DOUBLE_AGENT_VALIDATOR_SCHEMA_URL token';
-                        }
-                        if (namespaces == null) {
-                            errors = (errors ? errors : '') + " DoubleAgentValidator Module needs the\n             namespaces provided through the DOUBLE_AGENT_VALIDATOR_SCHEMA_NS token";
-                        }
-                        if (errors) {
-                            reject(errors);
-                        }
-                        return factory.load(url, namespaces);
-                    });
-                },
+                useFactory: ng2_factory_service_1.DoubleAgentValidatorNg2Factory.factoryFn,
                 deps: [
                     core_1.Injector,
                     ng2_factory_service_1.DoubleAgentValidatorNg2Factory,
@@ -276,6 +313,24 @@ DoubleAgentValidatorModule = __decorate([
 ], DoubleAgentValidatorModule);
 exports.DoubleAgentValidatorModule = DoubleAgentValidatorModule;
 
+
+/***/ },
+/* 4 */
+/***/ function(module, exports) {
+
+module.exports = require("@angular/http");
+
+/***/ },
+/* 5 */
+/***/ function(module, exports) {
+
+module.exports = require("ajv");
+
+/***/ },
+/* 6 */
+/***/ function(module, exports) {
+
+module.exports = require("lodash");
 
 /***/ },
 /* 7 */
@@ -292,16 +347,16 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var http_1 = __webpack_require__(3);
+var http_1 = __webpack_require__(4);
 var validator_service_1 = __webpack_require__(1);
 var angular2_remote_loader_1 = __webpack_require__(8);
 var definitions_loader_service_1 = __webpack_require__(2);
 var core_1 = __webpack_require__(0);
+var validator_module_1 = __webpack_require__(3);
 /**
  *
- * This classs load the script with the schemas, formats and keywords from
- * a remote url, parses it in an isolated environment ('iframe') and
- * loads to the ajv object
+ * This classs provide a facility to load json schema definitions into a DoubleAgentValidator instance and provide it
+ * to Angular Dependency Injection
  * @export
  * @class DoubleAgentValidatorNg2Factory
  */
@@ -319,8 +374,38 @@ var DoubleAgentValidatorNg2Factory = (function () {
         this.doubleAgentValidator = doubleAgentValidator;
     }
     /**
-     * loads a script from a url, parses it and load into the ajv object
+     * This static function is utilized as a provider Factory to builds the DoubleAgentValidator
+     * instance filled with json schemas from an given url into the Angular2  dependency injection
      *
+     * @static
+     * @param {Injector} injector
+     * @param {DoubleAgentValidatorNg2Factory} factory
+     * @returns {Promise<void>}
+     *
+     * @memberOf DoubleAgentValidatorNg2Factory
+     */
+    DoubleAgentValidatorNg2Factory.factoryFn = function (injector, factory) {
+        var url = injector.get(validator_module_1.DOUBLE_AGENT_VALIDATOR_SCHEMA_URL);
+        var namespaces = injector.get(validator_module_1.DOUBLE_AGENT_VALIDATOR_SCHEMA_NS);
+        return new Promise(function (resolve, reject) {
+            console.log('VALUES', url, namespaces);
+            var errors = null;
+            if (url == null) {
+                errors = 'DoubleAgentValidator Module needs an url provided through the DOUBLE_AGENT_VALIDATOR_SCHEMA_URL token';
+            }
+            if (namespaces == null) {
+                errors = (errors ? errors : '') + " DoubleAgentValidator Module needs the\n             namespaces provided through the DOUBLE_AGENT_VALIDATOR_SCHEMA_NS token";
+            }
+            if (errors) {
+                reject(errors);
+            }
+            return factory.load(url, namespaces);
+        });
+    };
+    /**
+     * Loads a script from a url, parses it and load into the ajv object.
+     * At this moment is using a iframe to isolate the parse/evaluate of the code.
+     * Maybe it would useful have a strategy loading using web worker
      * @param {string} url
      * @param {string[]} namespaces
      * @returns {Promise<void>}
@@ -376,7 +461,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = __webpack_require__(0);
-var http_1 = __webpack_require__(3);
+var http_1 = __webpack_require__(4);
 __webpack_require__(9);
 var Angular2RemoteLoader = (function () {
     function Angular2RemoteLoader(http) {
@@ -419,7 +504,7 @@ function __export(m) {
 }
 __export(__webpack_require__(1));
 __export(__webpack_require__(2));
-__export(__webpack_require__(6));
+__export(__webpack_require__(3));
 
 
 /***/ }
