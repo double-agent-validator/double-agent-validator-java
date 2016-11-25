@@ -19,7 +19,6 @@
   },
   "dependencies": {
     "ajv": "^4.9.0",
-    "chai": "^3.5.0",
     "lodash": "^4.16.3"
   },
   "devDependencies": {
@@ -40,6 +39,7 @@
     "@types/webpack": "^1.12.34",
     "@types/yargs": "0.0.31",
     "awesome-typescript-loader": "^2.2.4",
+    "chai": "^3.5.0",
     "codelyzer": "^1.0.0-beta.3",
     "jsdom": "^9.8.3",
     "mocha": "^3.1.2",

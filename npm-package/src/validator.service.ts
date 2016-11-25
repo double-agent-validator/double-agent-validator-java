@@ -1,8 +1,10 @@
-import { Injectable, Optional } from '@angular/core';
 import { ValidationResult } from './models';
 import * as ajvNsAndConstructor from 'ajv';
 import * as _ from 'lodash';
 import { JsonSchema } from './models/schema/json-schema';
+import { Injectable } from '@angular/core';
+
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 
 /**
  *
@@ -21,14 +23,22 @@ export class DoubleAgentValidator {
    */
   private noErrorResult: ValidationResult = { hasErrors: false, errors: null };
 
+  private _ajv: ajvNsAndConstructor.Ajv;
+
+  isReady: ReplaySubject<void> = new ReplaySubject<void>(1);
+
   /**
    * Creates an instance of DoubleAgentValidator.
    *
-   * @param {ajvNsAndConstructor.Ajv} _ajv
    *
    * @memberOf DoubleAgentValidator
    */
-  constructor( @Optional() private _ajv: ajvNsAndConstructor.Ajv) {
+  constructor() {
+  }
+
+
+  private _notifyReady() {
+    this.isReady.next(null);
   }
 
   /**

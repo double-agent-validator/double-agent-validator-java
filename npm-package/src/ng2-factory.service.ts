@@ -79,17 +79,18 @@ export class DoubleAgentValidatorNg2Factory {
     iframe.style.background = 'transparent';
     iframe.style.width = '1px';
     iframe.style.height = '1px';
-    (<any>iframe).sandbox = 'allow-scripts allow-same-origin';
+    (<any>iframe).sandbox = 'allow-scripts allow-same-origin allow-modals';
     document.body.appendChild(iframe);
     let window = iframe.contentWindow;
     return new Promise<void>((resolve, reject) => {
       validationsLoader.load(window, url, namespaces).then((ajv: ajvNsAndConstructor.Ajv) => {
         this.doubleAgentValidator['_ajv'] = ajv;
         window['DoubleAgentValidator'] = this.doubleAgentValidator;
+        this.doubleAgentValidator['_notifyReady']();
         resolve(null);
       },
         (e) => {
-          reject('coudl not create the DoubleAgentValidator instance: ' + e);
+          reject('Could not create the DoubleAgentValidator instance: ' + e);
         });
     });
   }

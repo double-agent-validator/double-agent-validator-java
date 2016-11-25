@@ -147,4 +147,5 @@ var DoubleAgent;
     })(Example = DoubleAgent.Example || (DoubleAgent.Example = {}));
 })(DoubleAgent || (DoubleAgent = {}));
 //# sourceMappingURL=schemas.js.map
+// This line is not retrieved by the server yet
 DoubleAgent.JsonSchemaValidator.load(DoubleAgent.Example.JsonSchemaValidator, ajv);

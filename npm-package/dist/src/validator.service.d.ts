@@ -1,6 +1,7 @@
 import { ValidationResult } from './models';
 import * as ajvNsAndConstructor from 'ajv';
 import { JsonSchema } from './models/schema/json-schema';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
 /**
  *
  *
@@ -8,7 +9,6 @@ import { JsonSchema } from './models/schema/json-schema';
  * @class DoubleAgentValidator
  */
 export declare class DoubleAgentValidator {
-    private _ajv;
     /**
      *
      *
@@ -17,14 +17,16 @@ export declare class DoubleAgentValidator {
      * @memberOf DoubleAgentValidator
      */
     private noErrorResult;
+    private _ajv;
+    isReady: ReplaySubject<void>;
     /**
      * Creates an instance of DoubleAgentValidator.
      *
-     * @param {ajvNsAndConstructor.Ajv} _ajv
      *
      * @memberOf DoubleAgentValidator
      */
-    constructor(_ajv: ajvNsAndConstructor.Ajv);
+    constructor();
+    private _notifyReady();
     /**
      *
      *

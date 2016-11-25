@@ -61,7 +61,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 14);
+/******/ 	return __webpack_require__(__webpack_require__.s = 16);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -85,12 +85,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-};
-var core_1 = __webpack_require__(0);
-var ajvNsAndConstructor = __webpack_require__(8);
 var _ = __webpack_require__(2);
+var core_1 = __webpack_require__(0);
+var ReplaySubject_1 = __webpack_require__(13);
 /**
  *
  *
@@ -101,12 +98,10 @@ var DoubleAgentValidator = (function () {
     /**
      * Creates an instance of DoubleAgentValidator.
      *
-     * @param {ajvNsAndConstructor.Ajv} _ajv
      *
      * @memberOf DoubleAgentValidator
      */
-    function DoubleAgentValidator(_ajv) {
-        this._ajv = _ajv;
+    function DoubleAgentValidator() {
         /**
          *
          *
@@ -115,7 +110,11 @@ var DoubleAgentValidator = (function () {
          * @memberOf DoubleAgentValidator
          */
         this.noErrorResult = { hasErrors: false, errors: null };
+        this.isReady = new ReplaySubject_1.ReplaySubject(1);
     }
+    DoubleAgentValidator.prototype._notifyReady = function () {
+        this.isReady.next(null);
+    };
     Object.defineProperty(DoubleAgentValidator.prototype, "ajv", {
         /**
          *
@@ -200,8 +199,7 @@ var DoubleAgentValidator = (function () {
 }());
 DoubleAgentValidator = __decorate([
     core_1.Injectable(),
-    __param(0, core_1.Optional()),
-    __metadata("design:paramtypes", [Object])
+    __metadata("design:paramtypes", [])
 ], DoubleAgentValidator);
 exports.DoubleAgentValidator = DoubleAgentValidator;
 
@@ -229,7 +227,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = __webpack_require__(0);
 var _ = __webpack_require__(2);
-var ajvNsAndConstructor = __webpack_require__(8);
+var ajvNsAndConstructor = __webpack_require__(12);
 /**
  *
  * This class loads a script from an url, parses it and fill an ajv instance with theirs definitions
@@ -278,16 +276,32 @@ var ValidatorDefinitionsLoader = (function () {
             return _this.loadScript(window, scriptContent, namespaces);
         });
     };
-    ValidatorDefinitionsLoader.prototype.loadScript = function (window, script, schemas) {
+    ValidatorDefinitionsLoader.prototype.loadScript = function (iframeWindow, script, schemas) {
         var _this = this;
         return new Promise(function (resolve, reject) {
             try {
                 var loadSchemaCall = (schemas.length === 1)
                     ? "DoubleAgent.JsonSchemaValidator.load(" + schemas[0] + ", ajv);"
                     : "DoubleAgent.JsonSchemaValidator.loadMultiple([" + schemas.join(',') + "], ajv);";
-                window['ajv'] = _this.ajv;
-                window['_'] = _;
-                window.document.write("\n          <script>\n              " + script + "\n              " + loadSchemaCall + "\n          </script>\n        ");
+                iframeWindow['ajv'] = _this.ajv;
+                iframeWindow['_'] = _;
+                var qtySchemas = _.keys(_this.ajv['_schemas']).length;
+                iframeWindow['DoubleAgentValidator_SCHEMAS_QTY'] = qtySchemas;
+                // handler to check any error on script evalution
+                iframeWindow['DoubleAgentValidatorErrorHandler'] = function (e) {
+                    reject(e);
+                };
+                // handler to check if schemas were loaded into ajv
+                iframeWindow['DoubleAgentValidatorCheckSuccess'] = function () {
+                    if (!(_.keys(iframeWindow['ajv']['_schemas']).length > iframeWindow['DoubleAgentValidator_SCHEMAS_QTY'])) {
+                        // window.parent.alert('Application could not be loaded. No schemas were loaded!');
+                        reject('Application could not be loaded. No schemas were loaded!');
+                    }
+                    else {
+                        console.log('DoubleAgentValidator => ', 'SUCESSFULL CHECk!!!!!!!!!!!!!!!!!!!!!!!!!');
+                    }
+                };
+                iframeWindow.document.write("\n          <script>\n            try {\n              " + script + "\n              " + loadSchemaCall + ";\n              DoubleAgentValidatorCheckSuccess();\n            } catch(e) {\n              DoubleAgentValidatorErrorHandler(e);\n            }\n          </script>\n        ");
                 resolve(_this.ajv);
             }
             catch (e) {
@@ -310,6 +324,19 @@ exports.ValidatorDefinitionsLoader = ValidatorDefinitionsLoader;
 
 "use strict";
 "use strict";
+function __export(m) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+}
+__export(__webpack_require__(6));
+__export(__webpack_require__(9));
+
+
+/***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -321,8 +348,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = __webpack_require__(0);
 var validator_service_1 = __webpack_require__(1);
-var ng2_factory_service_1 = __webpack_require__(11);
-var form_1 = __webpack_require__(10);
+var ng2_factory_service_1 = __webpack_require__(10);
+var form_1 = __webpack_require__(4);
 exports.DOUBLE_AGENT_VALIDATOR_SCHEMA_URL = new core_1.OpaqueToken('DoubleAgentValidator.SCHEMA_URL');
 exports.DOUBLE_AGENT_VALIDATOR_SCHEMA_NS = new core_1.OpaqueToken('DoubleAgentValidator.SCHEMA_NAMESPACES');
 var DoubleAgentValidatorModule = (function () {
@@ -355,7 +382,7 @@ exports.DoubleAgentValidatorModule = DoubleAgentValidatorModule;
 
 
 /***/ },
-/* 5 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -370,7 +397,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = __webpack_require__(0);
-var forms_1 = __webpack_require__(6);
+var forms_1 = __webpack_require__(7);
 var validator_service_1 = __webpack_require__(1);
 var _ = __webpack_require__(2);
 var DoubleAgentFormControlValidatorBuilder = (function () {
@@ -461,22 +488,16 @@ exports.DoubleAgentFormControlValidatorBuilder = DoubleAgentFormControlValidator
 
 
 /***/ },
-/* 6 */
+/* 7 */
 /***/ function(module, exports) {
 
 module.exports = require("@angular/forms");
 
 /***/ },
-/* 7 */
-/***/ function(module, exports) {
-
-module.exports = require("@angular/http");
-
-/***/ },
 /* 8 */
 /***/ function(module, exports) {
 
-module.exports = require("ajv");
+module.exports = require("@angular/http");
 
 /***/ },
 /* 9 */
@@ -494,10 +515,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = __webpack_require__(0);
-var forms_1 = __webpack_require__(6);
+var forms_1 = __webpack_require__(7);
 var validator_service_1 = __webpack_require__(1);
 var _ = __webpack_require__(2);
-var form_control_validator_builder_service_1 = __webpack_require__(5);
+var form_control_validator_builder_service_1 = __webpack_require__(6);
 /**
  * This class allows creates a formGroup which contains all the fields represented in an given schema
  * each one containing it's own angular validators
@@ -594,19 +615,6 @@ exports.DoubleAgentFormGroupBuilder = DoubleAgentFormGroupBuilder;
 
 "use strict";
 "use strict";
-function __export(m) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
-}
-__export(__webpack_require__(5));
-__export(__webpack_require__(9));
-
-
-/***/ },
-/* 11 */
-/***/ function(module, exports, __webpack_require__) {
-
-"use strict";
-"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -616,12 +624,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var http_1 = __webpack_require__(7);
+var http_1 = __webpack_require__(8);
 var validator_service_1 = __webpack_require__(1);
-var angular2_remote_loader_1 = __webpack_require__(12);
+var angular2_remote_loader_1 = __webpack_require__(11);
 var definitions_loader_service_1 = __webpack_require__(3);
 var core_1 = __webpack_require__(0);
-var validator_module_1 = __webpack_require__(4);
+var validator_module_1 = __webpack_require__(5);
 /**
  *
  * This classs provide a facility to load json schema definitions into a DoubleAgentValidator instance and provide it
@@ -692,16 +700,17 @@ var DoubleAgentValidatorNg2Factory = (function () {
         iframe.style.background = 'transparent';
         iframe.style.width = '1px';
         iframe.style.height = '1px';
-        iframe.sandbox = 'allow-scripts allow-same-origin';
+        iframe.sandbox = 'allow-scripts allow-same-origin allow-modals';
         document.body.appendChild(iframe);
         var window = iframe.contentWindow;
         return new Promise(function (resolve, reject) {
             validationsLoader.load(window, url, namespaces).then(function (ajv) {
                 _this.doubleAgentValidator['_ajv'] = ajv;
                 window['DoubleAgentValidator'] = _this.doubleAgentValidator;
+                _this.doubleAgentValidator['_notifyReady']();
                 resolve(null);
             }, function (e) {
-                reject('coudl not create the DoubleAgentValidator instance: ' + e);
+                reject('Could not create the DoubleAgentValidator instance: ' + e);
             });
         });
     };
@@ -715,7 +724,7 @@ exports.DoubleAgentValidatorNg2Factory = DoubleAgentValidatorNg2Factory;
 
 
 /***/ },
-/* 12 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -730,8 +739,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = __webpack_require__(0);
-var http_1 = __webpack_require__(7);
-__webpack_require__(13);
+var http_1 = __webpack_require__(8);
+__webpack_require__(14);
 var Angular2RemoteLoader = (function () {
     function Angular2RemoteLoader(http) {
         this.http = http;
@@ -757,13 +766,26 @@ exports.Angular2RemoteLoader = Angular2RemoteLoader;
 
 
 /***/ },
+/* 12 */
+/***/ function(module, exports) {
+
+module.exports = require("ajv");
+
+/***/ },
 /* 13 */
+/***/ function(module, exports) {
+
+module.exports = require("rxjs/ReplaySubject");
+
+/***/ },
+/* 14 */
 /***/ function(module, exports) {
 
 module.exports = require("rxjs/add/operator/toPromise");
 
 /***/ },
-/* 14 */
+/* 15 */,
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -773,6 +795,7 @@ function __export(m) {
 }
 __export(__webpack_require__(1));
 __export(__webpack_require__(3));
+__export(__webpack_require__(5));
 __export(__webpack_require__(4));
 
 

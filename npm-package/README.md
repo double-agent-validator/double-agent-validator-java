@@ -7,9 +7,19 @@ This is a javascript library which allow to reuse the same json schemas used in 
 
 This libs depends on:
 
-* [ajv]()
-* [lodash]()
-* [angular2]()
+- **Double Agent Validator** dependencies:
+
+  * [ajv]()
+  * [lodash]()
+  * [angular2]()
+
+
+- **AJV** dependencies:
+
+  * [nodent]()
+  * [esprima]()
+  * [esprima-fb]()
+  * [regenerator]()
 
 
 How to use:
@@ -22,8 +32,17 @@ How to use:
 npm i --save double-agent-validator
 ```
 
+### 2. install the dependencies packages
 
-### 2. In your AppModule initialization inject a factory to get the validation script from the backend and fill-in the DoubleAgentValdiator service with the schemas, keywords and formats.
+```bash
+npm i --save nodent regenerator esprima esprima-fb 
+```
+
+> These are required because of the way ***ajv*** conditionally requests this packages through `require` but `Webpack` tries
+to get them into the bundle.
+We actually aren't using this as generators and async aren't supported on the java backend using then Nashorn Engine. 
+
+### 3. In your AppModule initialization inject a factory to get the validation script from the backend and fill-in the DoubleAgentValdiator service with the schemas, keywords and formats.
 
 
 ```typescript
@@ -131,6 +150,8 @@ export class MyFormComponent {
 - Test coverage
 
 - Better isolation on validators execution
+
+- Maybe include the ajv code on the java provided script so a direct dependecy will not be necessary on angular2 projects  
 
 - Provide the service to allow error messages mapping
 

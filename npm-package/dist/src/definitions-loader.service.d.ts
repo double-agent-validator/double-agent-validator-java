@@ -36,5 +36,5 @@ export declare class ValidatorDefinitionsLoader {
      * @memberOf ValidatorDefinitionsLoader
      */
     load(window: Window, url: string, namespaces: string[]): Promise<ajvNsAndConstructor.Ajv>;
-    private loadScript(window, script, schemas);
+    private loadScript(iframeWindow, script, schemas);
 }
