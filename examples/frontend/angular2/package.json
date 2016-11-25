@@ -25,6 +25,7 @@
     "bootstrap-sass": "^3.3.7",
     "bootswatch-scss": "github:log0ymxm/bootswatch-scss",
     "core-js": "^2.4.1",
+    "double-agent-validator": "^1.0.3",
     "esprima": "^3.1.2",
     "esprima-fb": "^15001.1001.0-dev-harmony-fb",
     "jquery": "^3.1.1",
