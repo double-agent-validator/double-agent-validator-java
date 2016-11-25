@@ -31,4 +31,14 @@ export class DoubleAgentValidator {
     return _.map(this.ajv['_schemas'], (schema) => schema['id']);
   }
 
+  // method to return keywords
+
+  // method to return known schemas
+
+  // method to return known formats
+
+  // method to build angular validator to the formControl
+
+  // method to build angular validator to the formGroup
+
 }

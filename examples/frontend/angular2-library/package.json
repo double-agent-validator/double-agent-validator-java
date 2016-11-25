@@ -16,7 +16,6 @@
     "ic": "npm run test:single && npm run compile",
     "clean-dist": "rimraf dist/*",
     "postinstall": "npm run compile"
-
   },
   "dependencies": {
     "ajv": "^4.9.0",
@@ -34,6 +33,7 @@
     "@types/jsdom": "^2.0.29",
     "@types/lodash": "^4.14.36",
     "@types/mocha": "^2.2.33",
+    "@types/nock": "^8.2.0",
     "@types/node": "^6.0.51",
     "@types/restler": "^3.1.5",
     "@types/webpack": "^1.12.34",
@@ -42,6 +42,8 @@
     "codelyzer": "^1.0.0-beta.3",
     "jsdom": "^9.8.3",
     "mocha": "^3.1.2",
+    "mock-request": "^0.1.2",
+    "nock": "^9.0.2",
     "nyc": "^10.0.0",
     "reflect-metadata": "^0.1.8",
     "restler": "^3.4.0",

@@ -1,9 +1,9 @@
 import { ValidationResult } from './models';
 import * as ajvNsAndConstructor from 'ajv';
 export declare class DoubleAgentValidator {
-    private noErrorResult;
     private _ajv;
-    constructor();
+    private noErrorResult;
+    constructor(_ajv: ajvNsAndConstructor.Ajv);
     readonly ajv: ajvNsAndConstructor.Ajv;
     validate(schemaName: string, data: any): ValidationResult;
     readonly schemas: string[];

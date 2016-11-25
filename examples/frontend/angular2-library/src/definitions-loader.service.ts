@@ -28,11 +28,13 @@ export class ValidatorDefinitionsLoader {
         window['ajv'] = this.ajv;
         window['_'] = _;
         window.document.write(`
+        BLBLBLBLBL
           <script>
               ${script}
-              ${loadSchemaCall};
+              ${loadSchemaCall}
           </script>
         `);
+        console.log('X', window['X']);
         resolve(this.ajv);
       } catch (e) {
         reject(e);
