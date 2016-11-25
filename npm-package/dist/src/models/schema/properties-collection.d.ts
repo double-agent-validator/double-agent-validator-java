@@ -1,4 +1,4 @@
-import { SchemaProperty } from './property';
+import { JsonSchemaProperty } from './json-schema-property';
 export interface PropertiesCollection {
-    [property: string]: SchemaProperty;
+    [property: string]: JsonSchemaProperty;
 }
