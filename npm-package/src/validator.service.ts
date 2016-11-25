@@ -2,6 +2,7 @@ import { Injectable, Optional } from '@angular/core';
 import { ValidationResult } from './models';
 import * as ajvNsAndConstructor from 'ajv';
 import * as _ from 'lodash';
+import { JsonSchema } from './models/schema/json-schema';
 
 /**
  *
@@ -27,7 +28,7 @@ export class DoubleAgentValidator {
    *
    * @memberOf DoubleAgentValidator
    */
-  constructor(@Optional() private _ajv: ajvNsAndConstructor.Ajv) {
+  constructor( @Optional() private _ajv: ajvNsAndConstructor.Ajv) {
   }
 
   /**
@@ -63,25 +64,48 @@ export class DoubleAgentValidator {
     }
   }
 
+  getSchema(schemaName: string): JsonSchema {
+    return <JsonSchema>this.ajv.getSchema(schemaName).schema;
+  }
+
+
   /**
    *
    *
-   * @readonly
-   * @type {string[]}
+   * @param {JsonSchema} schema
+   * @returns {string[]}
+   *
    * @memberOf DoubleAgentValidator
    */
-  get schemas(): string[] {
-    return _.map(this.ajv['_schemas'], (schema) => schema['id']);
+  getKeywords(schema: JsonSchema): string[] {
+    return _.keys(_.omit(schema, this.defaultKeywords));
   }
 
-  // method to return keywords
+  /**
+  *
+  *
+  * @readonly
+  * @type {string[]}
+  * @memberOf DoubleAgentValidator
+  */
+  get schemasNames(): string[] {
+    return _.map(
+      this.ajv['_schemas'], (schema) => schema['id']
+    ).filter((schema) => {
+      return _.omit(['abc'], schema.id);
+    });
+  }
 
-  // method to return known schemas
-
-  // method to return known formats
-
-  // method to build angular validator to the formControl
-
-  // method to build angular validator to the formGroup
+  // private methods
+  private get defaultKeywords(): string[] {
+    return [
+      'type', 'additionalProperties', 'patternProperties', 'maximum',
+      'minimum', 'multipleOf', 'maxLength', 'minLength', 'pattern',
+      'format', 'maxItems', 'minItems', 'uniqueItems', 'items', 'maxProperties',
+      'minProperties', 'required', 'dependencies', 'properties', '$ref', 'enum',
+      'not', 'anyOf', 'oneOf', 'allOf', 'additionalItems', '$schema', 'id', 'title',
+      'description', 'default'
+    ];
+  }
 
 }

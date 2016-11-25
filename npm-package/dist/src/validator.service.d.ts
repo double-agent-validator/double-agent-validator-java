@@ -1,5 +1,6 @@
 import { ValidationResult } from './models';
 import * as ajvNsAndConstructor from 'ajv';
+import { JsonSchema } from './models/schema/json-schema';
 /**
  *
  *
@@ -42,12 +43,23 @@ export declare class DoubleAgentValidator {
      * @memberOf DoubleAgentValidator
      */
     validate(schemaName: string, data: any): ValidationResult;
+    getSchema(schemaName: string): JsonSchema;
     /**
      *
      *
-     * @readonly
-     * @type {string[]}
+     * @param {JsonSchema} schema
+     * @returns {string[]}
+     *
      * @memberOf DoubleAgentValidator
      */
-    readonly schemas: string[];
+    getKeywords(schema: JsonSchema): string[];
+    /**
+    *
+    *
+    * @readonly
+    * @type {string[]}
+    * @memberOf DoubleAgentValidator
+    */
+    readonly schemasNames: string[];
+    private readonly defaultKeywords;
 }
