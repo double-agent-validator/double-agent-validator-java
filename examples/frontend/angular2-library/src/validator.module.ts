@@ -10,26 +10,7 @@ export const DOUBLE_AGENT_VALIDATOR_SCHEMA_NS = new OpaqueToken('DoubleAgentVali
     DoubleAgentValidatorNg2Factory,
     {
       provide: APP_INITIALIZER,
-      useFactory: (injector: Injector, factory: DoubleAgentValidatorNg2Factory) => {
-        console.log('HERE', injector);
-        let url: string = injector.get(DOUBLE_AGENT_VALIDATOR_SCHEMA_URL);
-        let namespaces: string[] = injector.get(DOUBLE_AGENT_VALIDATOR_SCHEMA_NS);
-        return new Promise<void>((resolve, reject) => {
-          console.log('VALUES', url, namespaces);
-          let errors = null;
-          if (url == null) {
-            errors = 'DoubleAgentValidator Module needs an url provided through the DOUBLE_AGENT_VALIDATOR_SCHEMA_URL token';
-          }
-          if (namespaces == null) {
-            errors = `${errors ? errors : ''} DoubleAgentValidator Module needs the
-             namespaces provided through the DOUBLE_AGENT_VALIDATOR_SCHEMA_NS token`;
-          }
-          if (errors) {
-            reject(errors);
-          }
-          return factory.load(url, namespaces);
-        });
-      },
+      useFactory: DoubleAgentValidatorNg2Factory.factoryFn,
       deps: [
         Injector,
         DoubleAgentValidatorNg2Factory,

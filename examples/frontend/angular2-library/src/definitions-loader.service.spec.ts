@@ -14,7 +14,7 @@ describe('ValidatorDefinitionsLoader', () => {
   let loader: ValidatorDefinitionsLoader;
   let remoteLoader = new NodeRemoteLoader();
   let jsdom = jsdomNS.jsdom;
-  let virtualConsole = jsdomNS.createVirtualConsole().sendTo(console);
+  jsdomNS.createVirtualConsole().sendTo(console);
 
   let window: Window;
   beforeEach(() => {

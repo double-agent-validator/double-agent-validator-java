@@ -2,20 +2,51 @@ import { Http } from '@angular/http';
 import { DoubleAgentValidator } from './validator.service';
 import { Angular2RemoteLoader } from './remote-loaders/angular2-remote-loader';
 import { ValidatorDefinitionsLoader } from './definitions-loader.service';
-import { Injectable } from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import * as ajvNsAndConstructor from 'ajv';
+import { DOUBLE_AGENT_VALIDATOR_SCHEMA_URL, DOUBLE_AGENT_VALIDATOR_SCHEMA_NS } from './validator.module';
 
 /**
  *
- * This classs load the script with the schemas, formats and keywords from
- * a remote url, parses it in an isolated environment ('iframe') and
- * loads to the ajv object
+ * This classs provide a facility to load json schema definitions into a DoubleAgentValidator instance and provide it
+ * to Angular Dependency Injection
  * @export
  * @class DoubleAgentValidatorNg2Factory
  */
 
 @Injectable()
 export class DoubleAgentValidatorNg2Factory {
+
+  /**
+   * This static function is utilized as a provider Factory to builds the DoubleAgentValidator
+   * instance filled with json schemas from an given url into the Angular2  dependency injection
+   *
+   * @static
+   * @param {Injector} injector
+   * @param {DoubleAgentValidatorNg2Factory} factory
+   * @returns {Promise<void>}
+   *
+   * @memberOf DoubleAgentValidatorNg2Factory
+   */
+  static factoryFn(injector: Injector, factory: DoubleAgentValidatorNg2Factory): Promise<void>  {
+        let url: string = injector.get(DOUBLE_AGENT_VALIDATOR_SCHEMA_URL);
+        let namespaces: string[] = injector.get(DOUBLE_AGENT_VALIDATOR_SCHEMA_NS);
+        return new Promise<void>((resolve, reject) => {
+          console.log('VALUES', url, namespaces);
+          let errors = null;
+          if (url == null) {
+            errors = 'DoubleAgentValidator Module needs an url provided through the DOUBLE_AGENT_VALIDATOR_SCHEMA_URL token';
+          }
+          if (namespaces == null) {
+            errors = `${errors ? errors : ''} DoubleAgentValidator Module needs the
+             namespaces provided through the DOUBLE_AGENT_VALIDATOR_SCHEMA_NS token`;
+          }
+          if (errors) {
+            reject(errors);
+          }
+          return factory.load(url, namespaces);
+        });
+  }
 
   /**
    * Creates an instance of DoubleAgentValidatorNg2Factory.
@@ -29,8 +60,9 @@ export class DoubleAgentValidatorNg2Factory {
   }
 
   /**
-   * loads a script from a url, parses it and load into the ajv object
-   *
+   * Loads a script from a url, parses it and load into the ajv object.
+   * At this moment is using a iframe to isolate the parse/evaluate of the code.
+   * Maybe it would useful have a strategy loading using web worker
    * @param {string} url
    * @param {string[]} namespaces
    * @returns {Promise<void>}
@@ -61,4 +93,5 @@ export class DoubleAgentValidatorNg2Factory {
         });
     });
   }
+
 }
