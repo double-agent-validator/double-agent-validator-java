@@ -5,6 +5,8 @@ Double Agent Validator
 [![coverage report](https://git.serpro/desdr/doubleagent-validator/badges/master/coverage.svg)](https://git.serpro/desdr/doubleagent-validator/commits/master)
 
 
+[![](https://jitpack.io/v/double-agent-validator/double-agent-validator-java.svg)](https://jitpack.io/#double-agent-validator/double-agent-validator-java)
+
 ### Requisitos:
 
 * Maven 3 ( a partir do 3.3 )
