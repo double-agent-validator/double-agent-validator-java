@@ -1,7 +1,7 @@
 Double Agent Validator
 ======================
 [![build status](https://gitlab.com/serpro/doubleagent-validator/badges/master/build.svg)](https://gitlab.com/serpro/doubleagent-validator/commits/master)
-verage report](https://gitlab.com/serpro/doubleagent-validator/badges/master/coverage.svg)](https://gitlab.com/serpro/doubleagent-validator/commits/master)
+[![coverage report](https://gitlab.com/serpro/doubleagent-validator/badges/master/coverage.svg)](https://gitlab.com/serpro/doubleagent-validator/commits/master)
 [![](https://jitpack.io/v/double-agent-validator/double-agent-validator-java.svg)](https://jitpack.io/#double-agent-validator/double-agent-validator-java)
 
 ### Requisitos:
