@@ -18,6 +18,31 @@ Para tanto levou-se ### em conta a capacidade de executar javascript no servidor
 que tem uma vantagem considerável em relação à script engine anterior (Rhino) que lenta.
 
 
+### Utilizado o componente
+
+#### Maven
+
+Adicione o jitpack como repositório maven, no seu arquivo pom.xml:
+
+```xml
+    <repositories>
+        <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+  ...
+```
+Adicione a dependência double-agent-validator no pom.xml, como a seguir:
+
+
+```xml
+        <dependency>
+            <groupId>com.gitlab.serpro</groupId>
+            <artifactId>double-agent-validator</artifactId>
+            <version>0.0.5</version>
+        </dependency>
+```
+
 ### Compilando e Instalando o componente double-agent-validator no maven
 
 ```

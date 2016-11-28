@@ -64,11 +64,18 @@
             <scope>test</scope>
         </dependency>
 
+        <!--<dependency>-->
+            <!--<groupId>br.gov.serpro.double-agent</groupId>-->
+            <!--<artifactId>double-agent-validator</artifactId>-->
+            <!--<version>${version.doubleagent}</version>-->
+        <!--</dependency>-->
+
         <dependency>
-            <groupId>br.gov.serpro.double-agent</groupId>
+            <groupId>com.gitlab.serpro</groupId>
             <artifactId>double-agent-validator</artifactId>
-            <version>${version.doubleagent}</version>
+            <version>0.0.5</version>
         </dependency>
+
 
         <dependency>
             <groupId>junit</groupId>
@@ -314,6 +321,10 @@
 
     <repositories>
         <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+        <repository>
             <id>maven-central</id>
             <releases>
                 <enabled>true</enabled>
@@ -321,22 +332,22 @@
             </releases>
             <url>http://repo1.maven.org/maven2</url>
         </repository>
-        <repository>
-            <id>nexus-serpro-releases</id>
-            <releases>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-            </releases>
-            <url>http://nexus.aic.serpro/content/repositories/releases/</url>
-        </repository>
-        <repository>
-            <id>nexus-serpro-snapshots</id>
-            <snapshots>
-                <enabled>true</enabled>
-                <updatePolicy>always</updatePolicy>
-            </snapshots>
-            <url>http://nexus.aic.serpro/content/repositories/snapshots/</url>
-        </repository>
+        <!--<repository>-->
+            <!--<id>nexus-serpro-releases</id>-->
+            <!--<releases>-->
+                <!--<enabled>true</enabled>-->
+                <!--<updatePolicy>always</updatePolicy>-->
+            <!--</releases>-->
+            <!--<url>http://nexus.aic.serpro/content/repositories/releases/</url>-->
+        <!--</repository>-->
+        <!--<repository>-->
+            <!--<id>nexus-serpro-snapshots</id>-->
+            <!--<snapshots>-->
+                <!--<enabled>true</enabled>-->
+                <!--<updatePolicy>always</updatePolicy>-->
+            <!--</snapshots>-->
+            <!--<url>http://nexus.aic.serpro/content/repositories/snapshots/</url>-->
+        <!--</repository>-->
 
     </repositories>
 
