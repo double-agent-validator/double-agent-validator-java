@@ -85,7 +85,7 @@ public class JsonSchemaValidatorTest {
     public void getVendorJavascript() throws Exception {
         InputStream is = this.getClass().getResourceAsStream("/validators/js/rfb.js");
         cut.loadSchemaData(is, "RFB.JsonSchemaValidator", "RFB.JsonSchemaValidator.Common", "RFB.JsonSchemaValidator.Documento");
-        String vendorScript = cut.getVendorScript();
+        String vendorScript = cut.getScriptFileWithDependencies();
         System.out.println("VENDOR SCRIPT: " + vendorScript );
         assertThat(vendorScript.contains("var ajv = new Ajv")).isTrue();
     }

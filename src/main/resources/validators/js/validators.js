@@ -65,6 +65,26 @@ var DoubleAgent;
             return result;
         }
         JsonSchemaValidator.validate = validate;
+        var defaultKeywords = [
+            'type', 'additionalProperties', 'patternProperties', 'maximum',
+            'minimum', 'multipleOf', 'maxLength', 'minLength', 'pattern',
+            'format', 'maxItems', 'minItems', 'uniqueItems', 'items', 'maxProperties',
+            'minProperties', 'required', 'dependencies', 'properties', '$ref', 'enum',
+            'not', 'anyOf', 'oneOf', 'allOf', 'additionalItems', '$schema', 'id', 'title',
+            'description', 'default'
+        ];
+        function getSchemas() {
+            return _.map(ajv['_schemas'], function (schema) { return schema['id']; });
+        }
+        JsonSchemaValidator.getSchemas = getSchemas;
+        function getSchemaObject(schemaName) {
+            return ajv.getSchema(schemaName) ? ajv.getSchema(schemaName).schema : null;
+        }
+        JsonSchemaValidator.getSchemaObject = getSchemaObject;
+        function getKeywords(schema) {
+            return _.keys(_.omit(schema, defaultKeywords));
+        }
+        JsonSchemaValidator.getKeywords = getKeywords;
     })(JsonSchemaValidator = DoubleAgent.JsonSchemaValidator || (DoubleAgent.JsonSchemaValidator = {}));
 })(DoubleAgent || (DoubleAgent = {}));
 //# sourceMappingURL=validators.js.map

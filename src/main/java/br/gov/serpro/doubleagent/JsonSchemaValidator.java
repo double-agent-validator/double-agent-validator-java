@@ -150,8 +150,9 @@ public class JsonSchemaValidator {
         return this.scriptsLoaded.toString();
     }
 
-    public String getVendorScript() {
-        return this.vendorScripts.toString();
+    public String getScriptFileWithDependencies() {
+        return vendorScripts.toString() + NEW_LINE + scriptsLoaded.toString();
     }
+
 
 }

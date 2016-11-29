@@ -71,4 +71,27 @@ namespace DoubleAgent.JsonSchemaValidator {
 
         return result;
     }
+
+    var defaultKeywords = [
+                            'type', 'additionalProperties', 'patternProperties', 'maximum',
+                            'minimum', 'multipleOf', 'maxLength', 'minLength', 'pattern',
+                            'format', 'maxItems', 'minItems', 'uniqueItems', 'items', 'maxProperties',
+                            'minProperties', 'required', 'dependencies', 'properties', '$ref', 'enum',
+                            'not', 'anyOf', 'oneOf', 'allOf', 'additionalItems', '$schema', 'id', 'title',
+                            'description', 'default'
+                  ];
+
+    export function getSchemas(): string[] {
+        return _.map(
+                                   ajv['_schemas'], (schema) => schema['id']
+                            );
+    }
+
+    export function getSchemaObject(schemaName): Object {
+        return ajv.getSchema(schemaName) ? ajv.getSchema(schemaName).schema : null;
+    }
+
+    export function getKeywords(schema: Object): string[] {
+        return _.keys(_.omit(schema, defaultKeywords));
+    }
 }
