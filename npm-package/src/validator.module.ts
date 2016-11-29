@@ -4,7 +4,8 @@ import { DoubleAgentValidatorNg2Factory } from './ng2-factory.service';
 import { DoubleAgentFormGroupBuilder, DoubleAgentFormControlValidatorBuilder } from './form';
 
 export const DOUBLE_AGENT_VALIDATOR_SCHEMA_URL = new OpaqueToken('DoubleAgentValidator.SCHEMA_URL');
-export const DOUBLE_AGENT_VALIDATOR_SCHEMA_NS = new OpaqueToken('DoubleAgentValidator.SCHEMA_NAMESPACES');
+export const DOUBLE_AGENT_VALIDATOR_SCHEMA_WITH_DEPENDENCIES = new OpaqueToken('DoubleAgentValidator.SCHEMA_WITH_DEPENDENCIES');
+
 @NgModule({
   providers: [
     DoubleAgentValidator,

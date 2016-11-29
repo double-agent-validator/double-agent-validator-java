@@ -1,36 +1,31 @@
 import { DoubleAgentValidator } from './validator.service';
 import Ajv = require('ajv');
 import { expect } from 'chai';
+import * as fs from 'fs';
+import * as path from 'path';
+import * as jsdomNS from 'jsdom';
+
 
 describe('DoubleAgentValidator', () => {
   let subject: DoubleAgentValidator;
+  let jsdom = jsdomNS.jsdom;
+  jsdomNS.createVirtualConsole().sendTo(console);
+  let scriptContent = fs.readFileSync(path.resolve(__dirname, '../mock-data/script-test.js')).toString();
+  let window: Window;
 
-  before(() => {
-    subject = new DoubleAgentValidator(new Ajv({allErrors: true, v5: true}));
+  before((done) => {
 
-    subject.ajv.addFormat('cpf', /^[0-9]{3}\.?[0-9]{3}\.?[0-9]{3}\-?[0-9]{2}$/);
-    subject.ajv.addFormat('cnpj', /^[0-9]{2}\.?[0-9]{3}\.?[0-9]{3}\/?[0-9]{4}\-?[0-9]{2}$/);
+    window = jsdom('<html><body>Página de Teste<script>' + scriptContent +
+    ' <script></body></html>', { url: 'http://localhost', loaded: (errors) => {
+      console.log('HHHHHHHHH', errors);
+      subject = new DoubleAgentValidator();
+      subject['scriptContext'] = window;
+      done();
+    }}).defaultView;
 
-    subject.ajv.addSchema({
-      id: 'contribuinte',
-      type: 'object',
-      required: ['id', 'ni', 'nome'],
-      properties: {
-        'id': {
-          type: 'number'
-        },
-        'ni': {
-          type: 'string',
-          format: 'cnpj'
-        },
-        'nome': {
-          type: 'string'
-        }
-      }
-    });
   });
 
   it('hasErrors return true when validation fails', () => {
-    expect(subject.validate('contribuinte', {}).hasErrors).to.be.equal(true);
+    expect(subject.validate('contribuinte-v1', {}).hasErrors).to.be.equal(true);
   });
 });

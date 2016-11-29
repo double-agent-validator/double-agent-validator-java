@@ -30,8 +30,9 @@ describe('ValidatorDefinitionsLoader', () => {
   });
 
   it('loads script from remote module', (done) => {
-    loader.load(window, 'http://localhost:8080/validacao', ['DoubleAgent.Example.JsonSchemaValidator']).then((ajv) => {
-      doubleAgentValidator = new DoubleAgentValidator(ajv);
+    loader.load(window, 'http://localhost:8080/validacao').then(() => {
+      doubleAgentValidator = new DoubleAgentValidator();
+      doubleAgentValidator['scriptContext'] = window;
       let result = doubleAgentValidator.validate('contribuinte-v1', {
         id: 1,
         nome: 'John',

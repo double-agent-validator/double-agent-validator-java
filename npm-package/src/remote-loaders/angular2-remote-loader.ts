@@ -10,13 +10,15 @@ export class Angular2RemoteLoader implements RemoteLoader {
 
   getScript(url: string) {
     return new Promise((resolve, reject) => {
+
       let observable: Observable<Response> = this.http.get(url);
+
       observable.subscribe((response: Response) => {
         resolve(response.text());
       },
-      (error) => { /* error handling block*/
+        (error) => { /* error handling block*/
           reject(error);
-      });
+        });
     });
   }
 }

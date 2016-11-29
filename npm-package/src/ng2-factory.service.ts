@@ -3,8 +3,10 @@ import { DoubleAgentValidator } from './validator.service';
 import { Angular2RemoteLoader } from './remote-loaders/angular2-remote-loader';
 import { ValidatorDefinitionsLoader } from './definitions-loader.service';
 import { Injectable, Injector } from '@angular/core';
-import * as ajvNsAndConstructor from 'ajv';
-import { DOUBLE_AGENT_VALIDATOR_SCHEMA_URL, DOUBLE_AGENT_VALIDATOR_SCHEMA_NS } from './validator.module';
+
+import { ValidatorExecutionContext } from './definitions-loader.service';
+
+import { DOUBLE_AGENT_VALIDATOR_SCHEMA_URL } from './validator.module';
 
 /**
  *
@@ -30,21 +32,16 @@ export class DoubleAgentValidatorNg2Factory {
    */
   static factoryFn(injector: Injector, factory: DoubleAgentValidatorNg2Factory): Promise<void>  {
         let url: string = injector.get(DOUBLE_AGENT_VALIDATOR_SCHEMA_URL);
-        let namespaces: string[] = injector.get(DOUBLE_AGENT_VALIDATOR_SCHEMA_NS);
         return new Promise<void>((resolve, reject) => {
-          console.log('VALUES', url, namespaces);
+          console.log('VALUES', url);
           let errors = null;
           if (url == null) {
             errors = 'DoubleAgentValidator Module needs an url provided through the DOUBLE_AGENT_VALIDATOR_SCHEMA_URL token';
           }
-          if (namespaces == null) {
-            errors = `${errors ? errors : ''} DoubleAgentValidator Module needs the
-             namespaces provided through the DOUBLE_AGENT_VALIDATOR_SCHEMA_NS token`;
-          }
           if (errors) {
             reject(errors);
           }
-          return factory.load(url, namespaces);
+          return factory.load(url);
         });
   }
 
@@ -64,12 +61,11 @@ export class DoubleAgentValidatorNg2Factory {
    * At this moment is using a iframe to isolate the parse/evaluate of the code.
    * Maybe it would useful have a strategy loading using web worker
    * @param {string} url
-   * @param {string[]} namespaces
    * @returns {Promise<void>}
    *
    * @memberOf DoubleAgentValidatorNg2Factory
    */
-  load(url: string, namespaces: string[]): Promise<void> {
+  load(url: string): Promise<void> {
     let remoteLoader = new Angular2RemoteLoader(this.http);
     let validationsLoader = new ValidatorDefinitionsLoader(remoteLoader);
     let iframe = document.createElement('iframe');
@@ -83,8 +79,8 @@ export class DoubleAgentValidatorNg2Factory {
     document.body.appendChild(iframe);
     let window = iframe.contentWindow;
     return new Promise<void>((resolve, reject) => {
-      validationsLoader.load(window, url, namespaces).then((ajv: ajvNsAndConstructor.Ajv) => {
-        this.doubleAgentValidator['_ajv'] = ajv;
+      validationsLoader.load(window, url).then(() => {
+        this.doubleAgentValidator['scriptContext'] = window;
         window['DoubleAgentValidator'] = this.doubleAgentValidator;
         this.doubleAgentValidator['_notifyReady']();
         resolve(null);

@@ -14,6 +14,8 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
  */
 @Injectable()
 export class DoubleAgentValidator {
+
+  private scriptContext: Window;
   /**
    *
    *
@@ -22,8 +24,6 @@ export class DoubleAgentValidator {
    * @memberOf DoubleAgentValidator
    */
   private noErrorResult: ValidationResult = { hasErrors: false, errors: null };
-
-  private _ajv: ajvNsAndConstructor.Ajv;
 
   isReady: ReplaySubject<void> = new ReplaySubject<void>(1);
 
@@ -35,7 +35,6 @@ export class DoubleAgentValidator {
    */
   constructor() {
   }
-
 
   private _notifyReady() {
     this.isReady.next(null);
@@ -49,7 +48,7 @@ export class DoubleAgentValidator {
    * @memberOf DoubleAgentValidator
    */
   get ajv(): ajvNsAndConstructor.Ajv {
-    return this._ajv;
+    return this.scriptContext['ajv'];
   }
 
   /**
@@ -62,7 +61,8 @@ export class DoubleAgentValidator {
    * @memberOf DoubleAgentValidator
    */
   validate(schemaName: string, data: any): ValidationResult {
-    let result: boolean = this.ajv.validate(schemaName, data);
+    console.log(_.keys(this.scriptContext).length);
+    let result: boolean = this.scriptContext['DoubleAgent']['JsonSchemaValidator'].validate(schemaName, data);
 
     if (result) {
       return this.noErrorResult;
@@ -75,7 +75,7 @@ export class DoubleAgentValidator {
   }
 
   getSchema(schemaName: string): JsonSchema {
-    return <JsonSchema>this.ajv.getSchema(schemaName).schema;
+    return <JsonSchema>this.scriptContext['DoubleAgent']['JsonSchemaValidator'].getSchemaObject(schemaName);
   }
 
 
@@ -88,7 +88,7 @@ export class DoubleAgentValidator {
    * @memberOf DoubleAgentValidator
    */
   getKeywords(schema: JsonSchema): string[] {
-    return _.keys(_.omit(schema, this.defaultKeywords));
+    return this.scriptContext['DoubleAgent']['JsonSchemaValidator'].getKeywords(schema);
   }
 
   /**
@@ -99,23 +99,9 @@ export class DoubleAgentValidator {
   * @memberOf DoubleAgentValidator
   */
   get schemasNames(): string[] {
-    return _.map(
-      this.ajv['_schemas'], (schema) => schema['id']
-    ).filter((schema) => {
-      return _.omit(['abc'], schema.id);
-    });
+    return this.scriptContext['DoubleAgent']['JsonSchemaValidator'].getSchemas();
   }
 
-  // private methods
-  private get defaultKeywords(): string[] {
-    return [
-      'type', 'additionalProperties', 'patternProperties', 'maximum',
-      'minimum', 'multipleOf', 'maxLength', 'minLength', 'pattern',
-      'format', 'maxItems', 'minItems', 'uniqueItems', 'items', 'maxProperties',
-      'minProperties', 'required', 'dependencies', 'properties', '$ref', 'enum',
-      'not', 'anyOf', 'oneOf', 'allOf', 'additionalItems', '$schema', 'id', 'title',
-      'description', 'default'
-    ];
-  }
+
 
 }
