@@ -1,9 +1,7 @@
 package br.gov.serpro.doubleagent;
 
-import br.gov.serpro.doubleagent.model.ItemValidationResult;
 import br.gov.serpro.doubleagent.model.ValidationResult;
 import org.apache.commons.io.IOUtils;
-import org.apache.commons.lang3.ArrayUtils;
 
 import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
@@ -41,6 +39,7 @@ public class JsonSchemaValidator {
             .getEngineByName("nashorn");
 
     StringBuilder scriptsLoaded = new StringBuilder();
+    StringBuilder vendorScripts = new StringBuilder();
 
     private Charset encoding = Charset.forName("UTF-8");
 
@@ -55,7 +54,9 @@ public class JsonSchemaValidator {
         loadVendorScripts(AJV_SCRIPT_NAME);
 
         // Initializes the ajv engine
-        nashorn.eval("var ajv = new Ajv({ allErrors: true, verbose: false });");
+        nashorn.eval(getAjvInitializationCode());
+
+        this.vendorScripts.append(getAjvInitializationCode() + NEW_LINE);
 
         // Loads the double-agent-validators base script
         loadJsScripts(DOUBLE_AGENT_VALIDATORS_SCRIPT_NAME);
@@ -112,26 +113,23 @@ public class JsonSchemaValidator {
 
 
     private void loadJsScripts(String scriptName) throws ScriptException, IOException {
-        loadScripts(JAVASCRIPT_ROOT_FOLDER, scriptName, true);
+        loadScripts(JAVASCRIPT_ROOT_FOLDER, scriptName, false);
     }
 
 
     private void loadVendorScripts(String scriptName) throws ScriptException, IOException {
-        loadScripts(VENDOR_FOLDER, scriptName);
+        loadScripts(VENDOR_FOLDER, scriptName, true);
     }
 
-    private void loadScripts(String folder, String scriptPath) throws ScriptException, IOException {
-        loadScripts(folder, scriptPath, false);
-    }
 
-    private void loadScripts(String folder, String scriptPath, boolean saveOnList) throws ScriptException, IOException {
+    private void loadScripts(String folder, String scriptPath, boolean isVendorScript) throws ScriptException, IOException {
         String scriptFilePath = folder + "/" + scriptPath;
-        InputStream is = getClass().getResourceAsStream(scriptFilePath);
-        System.out.println("LOADING SCRIPT FILE: " + scriptFilePath);
 
-        String script = IOUtils.toString(is, encoding);
+        String script = getScriptStreamFromResource(scriptFilePath);
 
-        if (saveOnList) {
+        if (isVendorScript) {
+            this.vendorScripts.append(script + NEW_LINE);
+        } else {
             this.scriptsLoaded.append(script + NEW_LINE);
         }
 
@@ -139,8 +137,21 @@ public class JsonSchemaValidator {
 
     }
 
+    private String getAjvInitializationCode() {
+        return "var ajv = new Ajv({ allErrors: true, verbose: false });";
+    }
+
+    private String getScriptStreamFromResource(String resourcePath) throws IOException {
+        InputStream is = getClass().getResourceAsStream(resourcePath);
+        return IOUtils.toString(is, encoding);
+    }
+
     public String getScriptFile() {
         return this.scriptsLoaded.toString();
+    }
+
+    public String getVendorScript() {
+        return this.vendorScripts.toString();
     }
 
 }
