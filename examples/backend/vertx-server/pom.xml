@@ -5,7 +5,7 @@
 
     <groupId>br.gov.serpro.double-agent</groupId>
     <artifactId>vertx-server</artifactId>
-    <version>0.0.5</version>
+    <version>0.0.7</version>
 
     <name>DoubleAgent Validator Vertx Example</name>
     <description>Aplicaçao Java utilizando o DoubleAgent Validator</description>
