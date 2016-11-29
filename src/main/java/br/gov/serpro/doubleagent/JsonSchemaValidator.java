@@ -3,6 +3,7 @@ package br.gov.serpro.doubleagent;
 import br.gov.serpro.doubleagent.model.ItemValidationResult;
 import br.gov.serpro.doubleagent.model.ValidationResult;
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.ArrayUtils;
 
 import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
@@ -63,16 +64,23 @@ public class JsonSchemaValidator {
 
     public void loadSchemaData(InputStream namespaceCode, String... namespaceName) throws ScriptException, IOException {
         String script = IOUtils.toString(namespaceCode, encoding);
-        this.scriptsLoaded.append(script + NEW_LINE);
+        String scriptLoadCall;
         if (namespaceName.length == 1) {
-            this.nashorn.eval(script);
-            this.nashorn.eval("DoubleAgent.JsonSchemaValidator.load(" + namespaceName[0] + ");");
+            scriptLoadCall = "DoubleAgent.JsonSchemaValidator.load(" + namespaceName[0] + ");";
             this.namespaces.add(namespaceName[0]);
         } else {
-            this.nashorn.eval(script);
-            this.nashorn.eval("DoubleAgent.JsonSchemaValidator.loadMultiple("+ Arrays.toString(namespaceName) + ");");
+            scriptLoadCall = "DoubleAgent.JsonSchemaValidator.loadMultiple("+ Arrays.toString(namespaceName) + ");";
             this.namespaces.addAll(Arrays.asList(namespaceName));
         }
+        // execute scripts
+        this.nashorn.eval(script);
+        // execute load of namespaces
+        this.nashorn.eval(scriptLoadCall);
+
+        // add script load to the STRING BUFFER
+        this.scriptsLoaded.append(script + NEW_LINE);
+        // add the call to load the namespaces to the STRING BUFFER
+        this.scriptsLoaded.append(scriptLoadCall);
     }
 
     public synchronized ValidationResult validate(String schemaName, String jsonTarget)
@@ -99,45 +107,9 @@ public class JsonSchemaValidator {
         Map<String, Map<String, Object>> resultMap = (Map<String, Map<String, Object>>)jsObjResult;
 
         // otherwise builds a ValidationResult object containing the errors
-        return buildValidationResultWithErrors(resultMap);
+        return ValidationResult.buildValidationResult(resultMap);
     }
 
-    private ValidationResult buildValidationResultWithErrors(Map<String, Map<String, Object>> resultData) throws IOException {
-        // TODO - Implement the build of a ValidationResult instance using Javascript/Nashorn so we will not need Jackson here
-        List<ItemValidationResult> results = new ArrayList<ItemValidationResult>();
-
-
-        for (Object key :
-                resultData.keySet()
-             ) {
-            ItemValidationResult itemResult = new ItemValidationResult();
-            for (String propKey : resultData.get(key).keySet()) {
-                switch (propKey) {
-                    case "keyword":
-                        itemResult.setKeyword((String)resultData.get(key).get(propKey));
-                        break;
-                    case "dataPath":
-                        itemResult.setDataPath((String)resultData.get(key).get(propKey));
-                        break;
-                    case "schemaPath":
-                        itemResult.setSchemaPath((String)resultData.get(key).get(propKey));
-                        break;
-                    case "params":
-                        itemResult.setParams((Map<String, String>) resultData.get(key).get(propKey));
-                        break;
-                    case "message":
-                        itemResult.setMessage((String)resultData.get(key).get(propKey));
-                        break;
-                }
-            }
-            results.add(itemResult);
-
-        }
-
-        ValidationResult validationResult = new ValidationResult();
-        validationResult.setErrors(results);
-        return validationResult;
-    }
 
     private void loadJsScripts(String scriptName) throws ScriptException, IOException {
         loadScripts(JAVASCRIPT_ROOT_FOLDER, scriptName, true);

@@ -73,8 +73,7 @@ public final class ExecDump {
         });
         reader.setExecutionDataVisitor(new IExecutionDataVisitor() {
             public void visitClassExecution(final ExecutionData data) {
-                if (filter == null || data.getName().contains(filter)) {
-
+                if (!data.getName().contains("Test") && (filter == null || data.getName().contains(filter))) {
                     out.printf("%016x  %3d of %3d   %s%n",
                             Long.valueOf(data.getId()),
                             Integer.valueOf(getHitCount(data.getProbes())),

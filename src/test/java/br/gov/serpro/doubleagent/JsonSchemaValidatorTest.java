@@ -21,8 +21,9 @@ public class JsonSchemaValidatorTest {
     @Rule
     public JUnitSoftAssertions softly = new JUnitSoftAssertions();
 
-    @Cut // Class Under Test
-            JsonSchemaValidator cut;
+    // Class Under Test
+    @Cut
+    JsonSchemaValidator cut;
 
     @Test
     public void testAddSchema() throws Exception {
