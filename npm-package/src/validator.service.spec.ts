@@ -21,9 +21,7 @@ describe('DoubleAgentValidator', () => {
       subject = new DoubleAgentValidator();
       subject['scriptContext'] = window;
       done();
-    }}).defaultView;
-
-  });
+    }}).defaultView;  });
 
   it('hasErrors return true when validation fails', () => {
     expect(subject.validate('contribuinte-v1', {}).hasErrors).to.be.equal(true);

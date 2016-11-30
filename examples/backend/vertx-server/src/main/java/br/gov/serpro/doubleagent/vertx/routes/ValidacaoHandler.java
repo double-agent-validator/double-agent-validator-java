@@ -50,7 +50,7 @@ public class ValidacaoHandler implements Handler<RoutingContext> {
         response.putHeader("content-type", "text/javascript");
         logger.info("GET Called. Returning JsonSchemaValidator Script");
         if ("true".equals(routingContext.request().params().get("with-dependencies"))) {
-            routingContext.response().end(this.jsonSchemaValidator.getVendorScript() + "\r\n" +  this.jsonSchemaValidator.getScriptFile());
+            routingContext.response().end(this.jsonSchemaValidator.getScriptFileWithDependencies());
         } else {
             routingContext.response().end(this.jsonSchemaValidator.getScriptFile());
         }
