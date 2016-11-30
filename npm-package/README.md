@@ -14,13 +14,6 @@ This libs depends on:
   * [angular2]()
 
 
-- **AJV** dependencies:
-
-  * [nodent]()
-  * [esprima]()
-  * [esprima-fb]()
-  * [regenerator]()
-
 
 How to use:
 -------- 
@@ -31,40 +24,23 @@ How to use:
 ```
 npm i --save double-agent-validator
 ```
-
-### 2. install the dependencies packages
-
-```bash
-npm i --save nodent regenerator esprima esprima-fb 
-```
-
-> These are required because of the way ***ajv*** conditionally requests this packages through `require` but `Webpack` tries
-to get them into the bundle.
-We actually aren't using this as generators and async aren't supported on the java backend using then Nashorn Engine. 
-
-### 3. In your AppModule initialization inject a factory to get the validation script from the backend and fill-in the DoubleAgentValdiator service with the schemas, keywords and formats.
+### 2. In your AppModule initialization inject a factory to get the validation script from the backend and fill-in the DoubleAgentValdiator service with the schemas, keywords and formats.
 
 
 ```typescript
 
 
 import {  NgModule } from '@angular/core';
-import { DoubleAgentValidatorModule, DOUBLE_AGENT_VALIDATOR_SCHEMA_URL, DOUBLE_AGENT_VALIDATOR_SCHEMA_NS} from 'double-agent-validator';
+import { DoubleAgentValidatorModule, DOUBLE_AGENT_VALIDATOR_SCHEMA_URL} from 'double-agent-validator';
 
-let url = 'http://localhost:8080/schemas';
-let schemaNamespaces = ['DoubleAgent.Example.JsonSchemaValidator'];
 
 @NgModule(
   {
     imports: [ DoubleAgentValidatorModule ],
     providers: [
       {
-        provide: DOUBLE_AGENT_VALIDATOR_SCHEMA_URL,
+        provide: 'http://localhost:8080/schemas', /* here you should point to your double-validator backend endpoint */
         useValue: url
-      },
-      {
-        provide: DOUBLE_AGENT_VALIDATOR_SCHEMA_NS,
-        useValue: schemaNamespaces
       }
     ]
   }
@@ -146,12 +122,6 @@ export class MyFormComponent {
 
 
 ## TODO
-
-- Test coverage
-
-- Better isolation on validators execution
-
-- Maybe include the ajv code on the java provided script so a direct dependecy will not be necessary on angular2 projects  
 
 - Provide the service to allow error messages mapping
 

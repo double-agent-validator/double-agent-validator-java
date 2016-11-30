@@ -6,7 +6,6 @@ import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 
 let url = 'http://localhost:4200/assets/schema.js';
-let schemaNamespaces = ['DoubleAgent.Example.JsonSchemaValidator'];
 
 import { DoubleAgentValidatorModule, DOUBLE_AGENT_VALIDATOR_SCHEMA_URL }
   from 'double-agent-validator';
