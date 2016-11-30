@@ -61,17 +61,8 @@ export class DoubleAgentValidator {
    * @memberOf DoubleAgentValidator
    */
   validate(schemaName: string, data: any): ValidationResult {
-    console.log(_.keys(this.scriptContext).length);
-    let result: boolean = this.scriptContext['DoubleAgent']['JsonSchemaValidator'].validate(schemaName, data);
-
-    if (result) {
-      return this.noErrorResult;
-    } else {
-      return {
-        hasErrors: true,
-        errors: this.ajv.errors
-      };
-    }
+    let result: ValidationResult = this.scriptContext['DoubleAgent']['JsonSchemaValidator'].validate(schemaName, data);
+    return result;
   }
 
   getSchema(schemaName: string): JsonSchema {

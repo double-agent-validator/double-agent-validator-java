@@ -13,7 +13,6 @@ export class AppComponent implements OnInit {
   private contribuinte: any = null;
 
   constructor(private doubleAgentValidator: DoubleAgentValidator, private formGroupBuilder: DoubleAgentFormGroupBuilder) {
-
   }
 
   ngOnInit() {

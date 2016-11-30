@@ -1,5 +1,4 @@
 import { RemoteLoader } from './models/remote-loader';
-import * as ajvNsAndConstructor from 'ajv';
 /**
  *
  * This class loads a script from an url, parses it and fill an ajv instance with theirs definitions
@@ -8,15 +7,15 @@ import * as ajvNsAndConstructor from 'ajv';
  */
 export declare class ValidatorDefinitionsLoader {
     private remoteLoader;
-    private _ajv;
+    _window: Window;
     /**
      *
      *
      * @readonly
-     * @type {ajvNsAndConstructor.Ajv}
+     * @type {ValidatorExecutionContext}
      * @memberOf ValidatorDefinitionsLoader
      */
-    readonly ajv: ajvNsAndConstructor.Ajv;
+    readonly validatorExecutionContext: Window;
     /**
      * Creates an instance of ValidatorDefinitionsLoader.
      *
@@ -30,11 +29,10 @@ export declare class ValidatorDefinitionsLoader {
      *
      * @param {Window} window
      * @param {string} url
-     * @param {string[]} namespaces
      * @returns {Promise<ajvNsAndConstructor.Ajv>}
      *
      * @memberOf ValidatorDefinitionsLoader
      */
-    load(window: Window, url: string, namespaces: string[]): Promise<ajvNsAndConstructor.Ajv>;
-    private loadScript(iframeWindow, script, schemas);
+    load(window: Window, url: string): Promise<void>;
+    private loadScript(window, script);
 }

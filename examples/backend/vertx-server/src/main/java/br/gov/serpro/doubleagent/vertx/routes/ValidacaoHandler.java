@@ -65,7 +65,7 @@ public class ValidacaoHandler implements Handler<RoutingContext> {
         HttpServerResponse response = routingContext.response();
         response.putHeader("content-type", "application/json");
 
-        String json= routingContext.getBodyAsString();
+        String json = routingContext.getBodyAsString();
         String schema = routingContext.request().getParam("schema");
 
         if (StringUtils.isNotBlank(json) && StringUtils.isNotBlank(schema)){

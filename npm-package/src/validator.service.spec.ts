@@ -5,6 +5,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 import * as jsdomNS from 'jsdom';
 
+import * as _ from 'lodash';
 
 describe('DoubleAgentValidator', () => {
   let subject: DoubleAgentValidator;
@@ -15,13 +16,17 @@ describe('DoubleAgentValidator', () => {
 
   before((done) => {
 
-    window = jsdom('<html><body>Página de Teste<script>' + scriptContent +
-    ' <script></body></html>', { url: 'http://localhost', loaded: (errors) => {
-      console.log('HHHHHHHHH', errors);
+    window = jsdom('<html><body>Página de Teste<script>' + scriptContent
+      + '</script></body></html>', { url: 'http://localhost' }).defaultView;
+
+    window.onload = (ev) => {
+
       subject = new DoubleAgentValidator();
       subject['scriptContext'] = window;
       done();
-    }}).defaultView;  });
+    }
+  });
+
 
   it('hasErrors return true when validation fails', () => {
     expect(subject.validate('contribuinte-v1', {}).hasErrors).to.be.equal(true);
