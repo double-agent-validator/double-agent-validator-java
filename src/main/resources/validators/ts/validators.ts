@@ -65,11 +65,12 @@ namespace DoubleAgent.JsonSchemaValidator {
         var result = validate(value);
 
         // if the validation failed then get the ajv.errors list as the result
-        if(!result) {
-            result = ajv.errors;
+        if(result) {
+            return { hasErrors: false, errors: null };
         }
-
-        return result;
+        else {
+            return validate.errors;
+        }
     }
 
     var defaultKeywords = [
