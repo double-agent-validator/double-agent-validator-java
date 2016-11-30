@@ -69,7 +69,10 @@ namespace DoubleAgent.JsonSchemaValidator {
             return { hasErrors: false, errors: null };
         }
         else {
-            return validate.errors;
+            return {
+                hasErrors: true,
+                errors: validate.errors
+            };
         }
     }
 
