@@ -9,6 +9,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
  * @class DoubleAgentValidator
  */
 export declare class DoubleAgentValidator {
+    private scriptContext;
     /**
      *
      *
@@ -17,7 +18,6 @@ export declare class DoubleAgentValidator {
      * @memberOf DoubleAgentValidator
      */
     private noErrorResult;
-    private _ajv;
     isReady: ReplaySubject<void>;
     /**
      * Creates an instance of DoubleAgentValidator.
@@ -63,5 +63,4 @@ export declare class DoubleAgentValidator {
     * @memberOf DoubleAgentValidator
     */
     readonly schemasNames: string[];
-    private readonly defaultKeywords;
 }

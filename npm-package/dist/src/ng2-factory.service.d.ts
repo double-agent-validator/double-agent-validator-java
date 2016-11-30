@@ -37,10 +37,9 @@ export declare class DoubleAgentValidatorNg2Factory {
      * At this moment is using a iframe to isolate the parse/evaluate of the code.
      * Maybe it would useful have a strategy loading using web worker
      * @param {string} url
-     * @param {string[]} namespaces
      * @returns {Promise<void>}
      *
      * @memberOf DoubleAgentValidatorNg2Factory
      */
-    load(url: string, namespaces: string[]): Promise<void>;
+    load(url: string): Promise<void>;
 }

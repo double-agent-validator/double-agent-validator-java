@@ -4,8 +4,6 @@ import { Angular2RemoteLoader } from './remote-loaders/angular2-remote-loader';
 import { ValidatorDefinitionsLoader } from './definitions-loader.service';
 import { Injectable, Injector } from '@angular/core';
 
-import { ValidatorExecutionContext } from './definitions-loader.service';
-
 import { DOUBLE_AGENT_VALIDATOR_SCHEMA_URL } from './validator.module';
 
 /**
