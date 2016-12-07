@@ -14,12 +14,13 @@ export const DOUBLE_AGENT_VALIDATOR_SCHEMA_WITH_DEPENDENCIES = new OpaqueToken('
     DoubleAgentFormControlValidatorBuilder,
     {
       provide: APP_INITIALIZER,
-      useFactory: DoubleAgentValidatorNg2Factory.factoryFn,
+      useFactory: (injector, doubleAgentValidatorNg2Factory, doubleAgentValidator) => { return   () => DoubleAgentValidatorNg2Factory.factoryFn(injector, doubleAgentValidatorNg2Factory) },
       deps: [
         Injector,
         DoubleAgentValidatorNg2Factory,
         DoubleAgentValidator
-      ]
+      ],
+      multi: true
     }
   ],
   exports: [  ]

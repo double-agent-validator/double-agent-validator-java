@@ -314,12 +314,13 @@ DoubleAgentValidatorModule = __decorate([
             form_1.DoubleAgentFormControlValidatorBuilder,
             {
                 provide: core_1.APP_INITIALIZER,
-                useFactory: ng2_factory_service_1.DoubleAgentValidatorNg2Factory.factoryFn,
+                useFactory: function (injector, doubleAgentValidatorNg2Factory, doubleAgentValidator) { return function () { return ng2_factory_service_1.DoubleAgentValidatorNg2Factory.factoryFn(injector, doubleAgentValidatorNg2Factory); }; },
                 deps: [
                     core_1.Injector,
                     ng2_factory_service_1.DoubleAgentValidatorNg2Factory,
                     validator_service_1.DoubleAgentValidator
-                ]
+                ],
+                multi: true
             }
         ],
         exports: []
@@ -616,6 +617,7 @@ var DoubleAgentValidatorNg2Factory = (function () {
      * @memberOf DoubleAgentValidatorNg2Factory
      */
     DoubleAgentValidatorNg2Factory.factoryFn = function (injector, factory) {
+        //return (): Promise<void> => {
         var url = injector.get(validator_module_1.DOUBLE_AGENT_VALIDATOR_SCHEMA_URL);
         return new Promise(function (resolve, reject) {
             console.log('VALUES', url);
@@ -626,8 +628,9 @@ var DoubleAgentValidatorNg2Factory = (function () {
             if (errors) {
                 reject(errors);
             }
-            return factory.load(url);
+            factory.load(url).then(function () { return resolve(); }).catch(function () { return reject(); });
         });
+        //}
     };
     /**
      * Loads a script from a url, parses it and load into the ajv object.

@@ -28,19 +28,22 @@ export class DoubleAgentValidatorNg2Factory {
    *
    * @memberOf DoubleAgentValidatorNg2Factory
    */
-  static factoryFn(injector: Injector, factory: DoubleAgentValidatorNg2Factory): Promise<void>  {
-        let url: string = injector.get(DOUBLE_AGENT_VALIDATOR_SCHEMA_URL);
-        return new Promise<void>((resolve, reject) => {
-          console.log('VALUES', url);
-          let errors = null;
-          if (url == null) {
-            errors = 'DoubleAgentValidator Module needs an url provided through the DOUBLE_AGENT_VALIDATOR_SCHEMA_URL token';
-          }
-          if (errors) {
-            reject(errors);
-          }
-          return factory.load(url);
-        });
+  static factoryFn(injector: Injector, factory: DoubleAgentValidatorNg2Factory) {
+    //return (): Promise<void> => {
+    let url: string = injector.get(DOUBLE_AGENT_VALIDATOR_SCHEMA_URL);
+    return new Promise<void>((resolve, reject) => {
+      console.log('VALUES', url);
+      let errors = null;
+      if (url == null) {
+        errors = 'DoubleAgentValidator Module needs an url provided through the DOUBLE_AGENT_VALIDATOR_SCHEMA_URL token';
+      }
+      if (errors) {
+        reject(errors);
+      }
+      factory.load(url).then(() => resolve()).catch(() => reject());
+    });
+    //}
+
   }
 
   /**
