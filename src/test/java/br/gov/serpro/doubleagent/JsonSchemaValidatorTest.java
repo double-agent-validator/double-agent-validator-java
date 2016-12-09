@@ -38,7 +38,7 @@ public class JsonSchemaValidatorTest {
     @Test
     public void testLoadSchemasFromMultipleNamespaces() throws Exception {
         InputStream is = this.getClass().getResourceAsStream("/validators/js/rfb.js");
-        cut.loadSchemaData(is, "RFB.JsonSchemaValidator", "RFB.JsonSchemaValidator.Common", "RFB.JsonSchemaValidator.Documento");
+        cut.loadSchemaData(is, "RFB.JsonSchemaValidator", "RFB.JsonSchemaValidator.Common", "RFB.JsonSchemaValidator.Common.TipoCredito", "RFB.JsonSchemaValidator.Common.TipoDeclaracao", "RFB.JsonSchemaValidator.Documento");
 
         ValidationResult result1 = cut.validate("tipoCredito-v1", "{ id: 1, descricao: \"some description\"}");
         ValidationResult result2 = cut.validate("tipoDeclaracao-v1", "{ id: 1, descricao: \"some description\"}");
@@ -50,7 +50,7 @@ public class JsonSchemaValidatorTest {
     @Test
     public void testValidationFailed() throws Exception {
         InputStream is = this.getClass().getResourceAsStream("/validators/js/rfb.js");
-        cut.loadSchemaData(is, "RFB.JsonSchemaValidator", "RFB.JsonSchemaValidator.Common", "RFB.JsonSchemaValidator.Documento");
+        cut.loadSchemaData(is, "RFB.JsonSchemaValidator", "RFB.JsonSchemaValidator.Common", "RFB.JsonSchemaValidator.Common.TipoCredito", "RFB.JsonSchemaValidator.Documento");
 
         ValidationResult result1 = cut.validate("tipoCredito-v1", "{ id: 1, descricao: null}");
 
@@ -60,7 +60,7 @@ public class JsonSchemaValidatorTest {
     @Test
     public void returnErrorsWhenValidationFails() throws Exception {
         InputStream is = this.getClass().getResourceAsStream("/validators/js/rfb.js");
-        cut.loadSchemaData(is, "RFB.JsonSchemaValidator", "RFB.JsonSchemaValidator.Common", "RFB.JsonSchemaValidator.Documento");
+        cut.loadSchemaData(is, "RFB.JsonSchemaValidator", "RFB.JsonSchemaValidator.Common", "RFB.JsonSchemaValidator.Common.TipoCredito", "RFB.JsonSchemaValidator.Documento");
 
         ValidationResult result1 = cut.validate("tipoCredito-v1", "{ id: 1, descricao: null}");
 
@@ -76,7 +76,7 @@ public class JsonSchemaValidatorTest {
     @Test
     public void getValidatorJavascript() throws Exception {
         InputStream is = this.getClass().getResourceAsStream("/validators/js/rfb.js");
-        cut.loadSchemaData(is, "RFB.JsonSchemaValidator", "RFB.JsonSchemaValidator.Common", "RFB.JsonSchemaValidator.Documento");
+        cut.loadSchemaData(is, "RFB.JsonSchemaValidator", "RFB.JsonSchemaValidator.Common", "RFB.JsonSchemaValidator.Common.TipoCredito", "RFB.JsonSchemaValidator.Documento");
         String validationScript = cut.getScriptFile();
         assertThat(validationScript.contains("contribuinte-v1")).isTrue();
     }
@@ -84,7 +84,7 @@ public class JsonSchemaValidatorTest {
     @Test
     public void getVendorJavascript() throws Exception {
         InputStream is = this.getClass().getResourceAsStream("/validators/js/rfb.js");
-        cut.loadSchemaData(is, "RFB.JsonSchemaValidator", "RFB.JsonSchemaValidator.Common", "RFB.JsonSchemaValidator.Documento");
+        cut.loadSchemaData(is, "RFB.JsonSchemaValidator", "RFB.JsonSchemaValidator.Common", "RFB.JsonSchemaValidator.Common.TipoCredito", "RFB.JsonSchemaValidator.Documento");
         String vendorScript = cut.getScriptFileWithDependencies();
         System.out.println("VENDOR SCRIPT: " + vendorScript );
         assertThat(vendorScript.contains("var ajv = new Ajv")).isTrue();
