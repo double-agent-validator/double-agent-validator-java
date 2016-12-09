@@ -39,17 +39,17 @@ var DoubleAgent;
         function loadMultiple(namespaces, ajvArg) {
             if (ajvArg === void 0) { ajvArg = null; }
             _.each(namespaces, function (namespace) {
-                _.each(namespace, function (klass, key) {
-                    if (_.has(klass, 'formats')) {
-                        loadFormats(klass.formats, (ajvArg ? ajvArg : ajv));
-                    }
-                    if (_.has(klass, 'keywords')) {
-                        loadKeywords(klass.keywords, (ajvArg ? ajvArg : ajv));
-                    }
-                    if (_.has(klass, 'schemas')) {
-                        loadSchemas(klass.schemas, (ajvArg ? ajvArg : ajv));
-                    }
-                });
+                /*_.each(namespace, (klass, key) => {*/
+                if (_.has(namespace, 'formats')) {
+                    loadFormats(namespace.formats, (ajvArg ? ajvArg : ajv));
+                }
+                if (_.has(namespace, 'keywords')) {
+                    loadKeywords(namespace.keywords, (ajvArg ? ajvArg : ajv));
+                }
+                if (_.has(namespace, 'schemas')) {
+                    loadSchemas(namespace.schemas, (ajvArg ? ajvArg : ajv));
+                }
+                /*});*/
             });
         }
         JsonSchemaValidator.loadMultiple = loadMultiple;
@@ -58,11 +58,16 @@ var DoubleAgent;
                 "$ref": schemaName
             });
             var result = validate(value);
-            // if the validation failed then get the validate.errors list as the result
-            if (!result) {
-                result = validate.errors;
+            // if the validation failed then get the ajv.errors list as the result
+            if (result) {
+                return { hasErrors: false, errors: null };
             }
-            return result;
+            else {
+                return {
+                    hasErrors: true,
+                    errors: validate.errors
+                };
+            }
         }
         JsonSchemaValidator.validate = validate;
         var defaultKeywords = [

@@ -6,7 +6,10 @@ declare var Java: any;
 declare namespace DoubleAgent.JsonSchemaValidator {
     function load(namespace: any, ajvArg?: any): void;
     function loadMultiple(namespaces: any, ajvArg?: any): void;
-    function validate(schemaName: any, value: any): any;
+    function validate(schemaName: any, value: any): {
+        hasErrors: boolean;
+        errors: any;
+    };
     function getSchemas(): string[];
     function getSchemaObject(schemaName: any): Object;
     function getKeywords(schema: Object): string[];

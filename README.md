@@ -151,9 +151,13 @@ result =  [
 ```
       
 
-Opcionamente, você pode servir junto com o script de validação dos seus json schemas as dependências ajv e lodash.
+Opcionamente, você pode servir junto com o script de validação dos seus json schemas as dependências `ajv` e `lodash`.
 
-A classe JsonSchemaValidator fornece o método `getScriptFileWithDependencies()` que possibilita retornar a String com os códigos javascript das bibliotecas `lodash (4.16.4)` e `ajv (4.8.2)`. Sendo assim, opcionalmente você pode servir seu script de validação dos seus schemas JSON juntamente com os scripts dessas duas dependências.
+
+A classe `JsonSchemaValidator` fornece o método `getScriptFileWithDependencies()` que possibilita retornar a String com os códigos javascript das bibliotecas `lodash (4.16.4)` e `ajv (4.8.2)`. 
+
+Sendo assim, opcionalmente você pode servir seu script de validação dos seus schemas JSON juntamente com os scripts dessas duas dependências.
+
 
 A aplicação de exemplo em vertx disponibiliza a chamada ao endpoint REST com um parâmetro `?with-dependencies=true` que demonstra justamente esta possibilidade.
 
@@ -162,6 +166,7 @@ Dessa forma, podemos adicionar em uma página html uma tag script apontando para
 
 * Executando o script no frontend Angular 2
 
-Existe um pacote npm chamado double-agent-validator que permite a integração com uma aplicação Angular 2.
+Existe um pacote npm chamado `double-agent-validator` que permite a integração com uma aplicação Angular 2.
+
 
 Para mais instruções acesse o [README.md](npm-package/README.md) do projeto npm ou veja um [exemplo](examples/frontend/angular2) de uso.
