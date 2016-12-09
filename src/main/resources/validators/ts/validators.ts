@@ -42,17 +42,17 @@ namespace DoubleAgent.JsonSchemaValidator {
 
     export function loadMultiple(namespaces: any, ajvArg: any = null) {
         _.each(namespaces, (namespace) => {
-            _.each(namespace, (klass, key) => {
-                if (_.has(klass, 'formats')) {
-                    loadFormats(klass.formats, (ajvArg ? ajvArg : ajv));
+            /*_.each(namespace, (klass, key) => {*/
+                if (_.has(namespace, 'formats')) {
+                    loadFormats(namespace.formats, (ajvArg ? ajvArg : ajv));
                 }
-                if (_.has(klass, 'keywords')) {
-                    loadKeywords(klass.keywords, (ajvArg ? ajvArg : ajv));
+                if (_.has(namespace, 'keywords')) {
+                    loadKeywords(namespace.keywords, (ajvArg ? ajvArg : ajv));
                 }
-                if (_.has(klass, 'schemas')) {
-                    loadSchemas(klass.schemas, (ajvArg ? ajvArg : ajv));
+                if (_.has(namespace, 'schemas')) {
+                    loadSchemas(namespace.schemas, (ajvArg ? ajvArg : ajv));
                 }
-            });
+            /*});*/
          });
     }
 

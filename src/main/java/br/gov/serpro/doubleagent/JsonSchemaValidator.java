@@ -98,17 +98,18 @@ public class JsonSchemaValidator {
         nashorn.eval("var result = DoubleAgent.JsonSchemaValidator.validate('" + schemaName + "', value);");
 
         // get the result from the nashorn environment
-        Object jsObjResult = nashorn.getBindings(ScriptContext.ENGINE_SCOPE).get("result");
-
+        Map<String, Object>jsObjResult = (Map<String, Object>) nashorn.getBindings(ScriptContext.ENGINE_SCOPE).get("result");
+        
         // if the value is true, so get a result indicating "no error"
-        if (jsObjResult.equals(true)) {
+        if (Boolean.FALSE.equals(jsObjResult.get("hasErrors"))) {
             return new ValidationResult();
+        } else {
+        	// otherwise builds a ValidationResult object containing the errors
+        	Map<String, Map<String, Object>> resultMap = (Map<String, Map<String, Object>>)jsObjResult.get("errors");
+        	return ValidationResult.buildValidationResult(resultMap);       	
         }
 
-        Map<String, Map<String, Object>> resultMap = (Map<String, Map<String, Object>>)jsObjResult;
 
-        // otherwise builds a ValidationResult object containing the errors
-        return ValidationResult.buildValidationResult(resultMap);
     }
 
 
