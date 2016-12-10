@@ -2,27 +2,33 @@ var DoubleAgent;
 (function (DoubleAgent) {
     var JsonSchemaValidator;
     (function (JsonSchemaValidator) {
-        function loadFormats(formats, ajv) {
-            if (ajv === void 0) { ajv = null; }
+        function loadFormats(formats, _ajv) {
+            if (_ajv === void 0) { _ajv = null; }
+            var ajvInstance = (_ajv ? _ajv : ajv);
             _.each(formats, function (item) {
-                ajv.addFormat(item.name, item.format);
+                ajvInstance.addFormat(item.name, item.format);
             });
         }
-        function loadKeywords(keywords, ajv) {
-            if (ajv === void 0) { ajv = null; }
+        JsonSchemaValidator.loadFormats = loadFormats;
+        function loadKeywords(keywords, _ajv) {
+            if (_ajv === void 0) { _ajv = null; }
+            var ajvInstance = (_ajv ? _ajv : ajv);
             _.each(keywords, function (item) {
-                ajv.addKeyword(item.name, {
+                ajvInstance.addKeyword(item.name, {
                     compile: item.fn,
                     schema: item.metaSchema
                 });
             });
         }
-        function loadSchemas(schemas, ajv) {
-            if (ajv === void 0) { ajv = null; }
+        JsonSchemaValidator.loadKeywords = loadKeywords;
+        function loadSchemas(schemas, _ajv) {
+            if (_ajv === void 0) { _ajv = null; }
+            var ajvInstance = (_ajv ? _ajv : ajv);
             _.each(schemas, function (schema) {
-                ajv.addSchema(schema);
+                ajvInstance.addSchema(schema);
             });
         }
+        JsonSchemaValidator.loadSchemas = loadSchemas;
         function load(namespace, ajvArg) {
             if (ajvArg === void 0) { ajvArg = null; }
             if (_.has(namespace, 'formats')) {

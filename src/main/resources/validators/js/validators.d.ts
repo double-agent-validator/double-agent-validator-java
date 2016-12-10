@@ -4,6 +4,9 @@ declare var ajv: any;
 declare var load: Function;
 declare var Java: any;
 declare namespace DoubleAgent.JsonSchemaValidator {
+    function loadFormats(formats: any, _ajv?: any): void;
+    function loadKeywords(keywords: any, _ajv?: any): void;
+    function loadSchemas(schemas: any, _ajv?: any): void;
     function load(namespace: any, ajvArg?: any): void;
     function loadMultiple(namespaces: any, ajvArg?: any): void;
     function validate(schemaName: any, value: any): {

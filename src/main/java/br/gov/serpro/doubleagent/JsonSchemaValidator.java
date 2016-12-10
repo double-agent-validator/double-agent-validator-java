@@ -63,8 +63,14 @@ public class JsonSchemaValidator {
 
     }
 
-    public void loadSchemaData(InputStream namespaceCode, String... namespaceName) throws ScriptException, IOException {
-        String script = IOUtils.toString(namespaceCode, encoding);
+
+    public void loadSchemaData(InputStream scriptCode)  throws ScriptException, IOException {
+        loadValidationScript(scriptCode);
+    }
+
+    public void loadSchemaData(InputStream scriptCode, String... namespaceName) throws ScriptException, IOException {
+
+        loadValidationScript(scriptCode);
         String scriptLoadCall;
         if (namespaceName.length == 1) {
             scriptLoadCall = "DoubleAgent.JsonSchemaValidator.load(" + namespaceName[0] + ");";
@@ -73,15 +79,22 @@ public class JsonSchemaValidator {
             scriptLoadCall = "DoubleAgent.JsonSchemaValidator.loadMultiple("+ Arrays.toString(namespaceName) + ");";
             this.namespaces.addAll(Arrays.asList(namespaceName));
         }
-        // execute scripts
-        this.nashorn.eval(script);
+
         // execute load of namespaces
         this.nashorn.eval(scriptLoadCall);
 
-        // add script load to the STRING BUFFER
-        this.scriptsLoaded.append(script + NEW_LINE);
         // add the call to load the namespaces to the STRING BUFFER
         this.scriptsLoaded.append(scriptLoadCall);
+    }
+
+    private void loadValidationScript(InputStream scriptCode) throws IOException, ScriptException {
+        String script = IOUtils.toString(scriptCode, encoding);
+        // execute scripts
+        this.nashorn.eval(script);
+
+
+        // add script load to the STRING BUFFER
+        this.scriptsLoaded.append(script + NEW_LINE);
     }
 
     public synchronized ValidationResult validate(String schemaName, String jsonTarget)

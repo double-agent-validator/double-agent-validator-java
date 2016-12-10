@@ -5,15 +5,17 @@ declare var Java;
 
 namespace DoubleAgent.JsonSchemaValidator {
 
-    function loadFormats(formats, ajv: any = null) {
+    export function loadFormats(formats, _ajv: any = null) {
+        let ajvInstance = (_ajv ? _ajv : ajv);
         _.each(formats, (item) => {
-            ajv.addFormat(item.name, item.format)
+            ajvInstance.addFormat(item.name, item.format)
         });
     }
 
-    function loadKeywords(keywords, ajv: any = null) {
+    export function loadKeywords(keywords, _ajv: any = null) {
+        let ajvInstance = (_ajv ? _ajv : ajv);
         _.each(keywords, (item) => {
-            ajv.addKeyword(item.name,
+            ajvInstance.addKeyword(item.name,
                 {
                     compile: item.fn,
                     schema: item.metaSchema
@@ -22,9 +24,10 @@ namespace DoubleAgent.JsonSchemaValidator {
         });
     }
 
-    function loadSchemas(schemas, ajv: any = null) {
+    export function loadSchemas(schemas, _ajv: any = null) {
+        let ajvInstance = (_ajv ? _ajv : ajv);
         _.each(schemas, (schema) => {
-            ajv.addSchema(schema)
+            ajvInstance.addSchema(schema)
         });
     }
 
@@ -43,17 +46,17 @@ namespace DoubleAgent.JsonSchemaValidator {
     export function loadMultiple(namespaces: any, ajvArg: any = null) {
         _.each(namespaces, (namespace) => {
             /*_.each(namespace, (klass, key) => {*/
-                if (_.has(namespace, 'formats')) {
-                    loadFormats(namespace.formats, (ajvArg ? ajvArg : ajv));
-                }
-                if (_.has(namespace, 'keywords')) {
-                    loadKeywords(namespace.keywords, (ajvArg ? ajvArg : ajv));
-                }
-                if (_.has(namespace, 'schemas')) {
-                    loadSchemas(namespace.schemas, (ajvArg ? ajvArg : ajv));
-                }
+            if (_.has(namespace, 'formats')) {
+                loadFormats(namespace.formats, (ajvArg ? ajvArg : ajv));
+            }
+            if (_.has(namespace, 'keywords')) {
+                loadKeywords(namespace.keywords, (ajvArg ? ajvArg : ajv));
+            }
+            if (_.has(namespace, 'schemas')) {
+                loadSchemas(namespace.schemas, (ajvArg ? ajvArg : ajv));
+            }
             /*});*/
-         });
+        });
     }
 
     export function validate(schemaName, value) {
@@ -61,11 +64,11 @@ namespace DoubleAgent.JsonSchemaValidator {
             {
                 "$ref": schemaName
             }
-            );
+        );
         var result = validate(value);
 
         // if the validation failed then get the ajv.errors list as the result
-        if(result) {
+        if (result) {
             return { hasErrors: false, errors: null };
         }
         else {
@@ -77,18 +80,18 @@ namespace DoubleAgent.JsonSchemaValidator {
     }
 
     var defaultKeywords = [
-                            'type', 'additionalProperties', 'patternProperties', 'maximum',
-                            'minimum', 'multipleOf', 'maxLength', 'minLength', 'pattern',
-                            'format', 'maxItems', 'minItems', 'uniqueItems', 'items', 'maxProperties',
-                            'minProperties', 'required', 'dependencies', 'properties', '$ref', 'enum',
-                            'not', 'anyOf', 'oneOf', 'allOf', 'additionalItems', '$schema', 'id', 'title',
-                            'description', 'default'
-                  ];
+        'type', 'additionalProperties', 'patternProperties', 'maximum',
+        'minimum', 'multipleOf', 'maxLength', 'minLength', 'pattern',
+        'format', 'maxItems', 'minItems', 'uniqueItems', 'items', 'maxProperties',
+        'minProperties', 'required', 'dependencies', 'properties', '$ref', 'enum',
+        'not', 'anyOf', 'oneOf', 'allOf', 'additionalItems', '$schema', 'id', 'title',
+        'description', 'default'
+    ];
 
     export function getSchemas(): string[] {
         return _.map(
-                                   ajv['_schemas'], (schema) => schema['id']
-                            );
+            ajv['_schemas'], (schema) => schema['id']
+        );
     }
 
     export function getSchemaObject(schemaName): Object {
