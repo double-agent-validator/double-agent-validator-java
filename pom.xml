@@ -91,7 +91,7 @@
                     <workingDirectory>src/main/resources/validators</workingDirectory>
                     <nodeVersion>v6.9.1</nodeVersion>
                     <npmVersion>3.10.8</npmVersion>
-                    <downloadRoot>https://cnpmjs.org/mirrors/node/</downloadRoot>
+                    <nodeDownloadRoot>https://cnpmjs.org/mirrors/node/</nodeDownloadRoot>
                 </configuration>
                 <executions>
                     <execution>
