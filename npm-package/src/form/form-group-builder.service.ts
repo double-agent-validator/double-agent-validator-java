@@ -37,7 +37,7 @@ export class DoubleAgentFormGroupBuilder {
    *
    * @memberOf FormGroupBuilder
    */
-  build(schemaName: string): FormGroup {
+  build(schemaName: string): any {
 
     // TODO validar se o esquema existe e retornar erro apropriado
     let jsonSchema: JsonSchema = this.doubleAgentValidator.getSchema(schemaName);
@@ -51,12 +51,8 @@ export class DoubleAgentFormGroupBuilder {
       formGroupConfig[attributeName] = new FormControl('', this.formControlValidatorBuilder.build(jsonSchema, attributeName));
     });
 
-
-    console.log('formGroupConfig', formGroupConfig);
     // cria uma instância do FormGroup a partir da configuração construída
     formGroup = this.formBuilder.group(formGroupConfig);
-
-    console.log('formGroup', formGroup);
 
     // construir validador do FormGroup (keywords do objeto)
     this.addKeywordsValidator(jsonSchema, formGroup);
@@ -82,7 +78,6 @@ export class DoubleAgentFormGroupBuilder {
 
 
       let data = formGroup.value;
-      console.log('Validating data', data);
 
       // runs the validation
       let result = this.doubleAgentValidator.validate(schemaName, data);

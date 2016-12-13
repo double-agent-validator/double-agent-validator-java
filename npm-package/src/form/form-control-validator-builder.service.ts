@@ -22,9 +22,8 @@ export class DoubleAgentFormControlValidatorBuilder {
    */
   build(schema: JsonSchema, property: string): ValidatorFn {
     let validators: ValidatorFn[] = [];
-    console.log('SCHEMA and property', schema, property);
+
     if (schema.required && schema.required.indexOf(property) >= 0) {
-      console.log('Required validator found', property);
       validators.push(Validators.required);
     }
     validators.push(this.buildAngularValidator(schema.id, property));
@@ -55,8 +54,6 @@ export class DoubleAgentFormControlValidatorBuilder {
       } else {
         data = propertyOrFormData;
       }
-
-      console.log('Validating data', data);
 
       // runs the validation
       let result = this.doubleAgentValidator.validate(schemaName, data);

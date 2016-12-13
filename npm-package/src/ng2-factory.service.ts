@@ -1,10 +1,10 @@
 import { Http } from '@angular/http';
 import { DoubleAgentValidator } from './validator.service';
-import { Angular2RemoteLoader } from './remote-loaders/angular2-remote-loader';
 import { ValidatorDefinitionsLoader } from './definitions-loader.service';
 import { Injectable, Injector } from '@angular/core';
 
 import { DOUBLE_AGENT_VALIDATOR_SCHEMA_URL } from './validator.module';
+import { RemoteLoader } from './models/remote-loader';
 
 /**
  *
@@ -32,7 +32,6 @@ export class DoubleAgentValidatorNg2Factory {
     //return (): Promise<void> => {
     let url: string = injector.get(DOUBLE_AGENT_VALIDATOR_SCHEMA_URL);
     return new Promise<void>((resolve, reject) => {
-      console.log('VALUES', url);
       let errors = null;
       if (url == null) {
         errors = 'DoubleAgentValidator Module needs an url provided through the DOUBLE_AGENT_VALIDATOR_SCHEMA_URL token';
@@ -54,7 +53,10 @@ export class DoubleAgentValidatorNg2Factory {
    *
    * @memberOf DoubleAgentValidatorNg2Factory
    */
-  constructor(private http: Http, private doubleAgentValidator: DoubleAgentValidator) {
+  constructor(
+    private http: Http,
+    private doubleAgentValidator: DoubleAgentValidator,
+    private remoteLoader: RemoteLoader) {
   }
 
   /**
@@ -67,8 +69,7 @@ export class DoubleAgentValidatorNg2Factory {
    * @memberOf DoubleAgentValidatorNg2Factory
    */
   load(url: string): Promise<void> {
-    let remoteLoader = new Angular2RemoteLoader(this.http);
-    let validationsLoader = new ValidatorDefinitionsLoader(remoteLoader);
+    let validationsLoader = new ValidatorDefinitionsLoader(this.remoteLoader);
     let iframe = document.createElement('iframe');
     iframe.id = 'DoubleAgentValidator';
     iframe.border = '0';
