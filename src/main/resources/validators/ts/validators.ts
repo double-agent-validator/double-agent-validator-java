@@ -94,6 +94,11 @@ namespace DoubleAgent.JsonSchemaValidator {
         );
     }
 
+    export function getFormats(): {} {
+        return ajv['_formats'];
+    }
+
+
     export function getSchemaObject(schemaName): Object {
         return ajv.getSchema(schemaName) ? ajv.getSchema(schemaName).schema : null;
     }
