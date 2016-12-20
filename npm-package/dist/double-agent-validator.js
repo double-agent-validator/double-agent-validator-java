@@ -61,7 +61,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 16);
+/******/ 	return __webpack_require__(__webpack_require__.s = 17);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -86,7 +86,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = __webpack_require__(0);
-var ReplaySubject_1 = __webpack_require__(14);
+var ReplaySubject_1 = __webpack_require__(15);
 /**
  *
  *
@@ -323,6 +323,7 @@ var ng2_factory_service_1 = __webpack_require__(12);
 var form_1 = __webpack_require__(4);
 var remote_loader_1 = __webpack_require__(2);
 var angular2_remote_loader_1 = __webpack_require__(13);
+var value_verifier_service_1 = __webpack_require__(14);
 exports.DOUBLE_AGENT_VALIDATOR_SCHEMA_URL = new core_1.OpaqueToken('DoubleAgentValidator.SCHEMA_URL');
 exports.DOUBLE_AGENT_VALIDATOR_SCHEMA_WITH_DEPENDENCIES = new core_1.OpaqueToken('DoubleAgentValidator.SCHEMA_WITH_DEPENDENCIES');
 var DoubleAgentValidatorModule = (function () {
@@ -336,6 +337,7 @@ DoubleAgentValidatorModule = __decorate([
             validator_service_1.DoubleAgentValidator,
             ng2_factory_service_1.DoubleAgentValidatorNg2Factory,
             form_1.DoubleAgentFormGroupBuilder,
+            value_verifier_service_1.DoubleAgentValueVerifier,
             form_1.DoubleAgentFormControlValidatorBuilder,
             {
                 provide: remote_loader_1.RemoteLoader,
@@ -732,7 +734,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = __webpack_require__(0);
 var http_1 = __webpack_require__(8);
-__webpack_require__(15);
+__webpack_require__(16);
 var Angular2RemoteLoader = (function () {
     function Angular2RemoteLoader(http) {
         this.http = http;
@@ -759,18 +761,73 @@ exports.Angular2RemoteLoader = Angular2RemoteLoader;
 
 /***/ },
 /* 14 */
-/***/ function(module, exports) {
+/***/ function(module, exports, __webpack_require__) {
 
-module.exports = require("rxjs/ReplaySubject");
+"use strict";
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var core_1 = __webpack_require__(0);
+var validator_service_1 = __webpack_require__(1);
+var DoubleAgentValueVerifier = (function () {
+    function DoubleAgentValueVerifier(doubleAgentValidator) {
+        this.doubleAgentValidator = doubleAgentValidator;
+    }
+    DoubleAgentValueVerifier.prototype.filter = function (formControlName, value) {
+        var schemaName = formControlName.control.parent.parent['schemaName'];
+        var propertyName = formControlName.name;
+        var schema = this.doubleAgentValidator.getSchema(schemaName);
+        var property = schema.properties[propertyName];
+        if (property) {
+            if (property['pattern'] || property['format']) {
+                var formatName = property['format'];
+                var pattern = null;
+                if (formatName) {
+                    pattern = this.doubleAgentValidator.getFormats[formatName];
+                }
+                else {
+                    pattern = property['pattern'];
+                }
+                if (pattern.test(value)) {
+                    return value;
+                }
+                else {
+                    return null;
+                }
+            }
+            return value;
+        }
+    };
+    return DoubleAgentValueVerifier;
+}());
+DoubleAgentValueVerifier = __decorate([
+    core_1.Injectable(),
+    __metadata("design:paramtypes", [validator_service_1.DoubleAgentValidator])
+], DoubleAgentValueVerifier);
+exports.DoubleAgentValueVerifier = DoubleAgentValueVerifier;
+
 
 /***/ },
 /* 15 */
 /***/ function(module, exports) {
 
-module.exports = require("rxjs/add/operator/toPromise");
+module.exports = require("rxjs/ReplaySubject");
 
 /***/ },
 /* 16 */
+/***/ function(module, exports) {
+
+module.exports = require("rxjs/add/operator/toPromise");
+
+/***/ },
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
