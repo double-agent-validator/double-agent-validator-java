@@ -4,6 +4,7 @@ import { DoubleAgentValidatorNg2Factory } from './ng2-factory.service';
 import { DoubleAgentFormGroupBuilder, DoubleAgentFormControlValidatorBuilder } from './form';
 import { RemoteLoader } from './models/remote-loader';
 import { Angular2RemoteLoader } from './remote-loaders/angular2-remote-loader';
+import { DoubleAgentValueVerifier } from './value-verifier.service';
 
 export const DOUBLE_AGENT_VALIDATOR_SCHEMA_URL = new OpaqueToken('DoubleAgentValidator.SCHEMA_URL');
 export const DOUBLE_AGENT_VALIDATOR_SCHEMA_WITH_DEPENDENCIES = new OpaqueToken('DoubleAgentValidator.SCHEMA_WITH_DEPENDENCIES');
@@ -13,6 +14,7 @@ export const DOUBLE_AGENT_VALIDATOR_SCHEMA_WITH_DEPENDENCIES = new OpaqueToken('
     DoubleAgentValidator,
     DoubleAgentValidatorNg2Factory,
     DoubleAgentFormGroupBuilder,
+    DoubleAgentValueVerifier,
     DoubleAgentFormControlValidatorBuilder,
     {
           provide: RemoteLoader,

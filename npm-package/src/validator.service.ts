@@ -82,6 +82,10 @@ export class DoubleAgentValidator {
     return this.scriptContext['DoubleAgent']['JsonSchemaValidator'].getKeywords(schema);
   }
 
+  getFormats(): {} {
+    return this.scriptContext['DoubleAgent']['JsonSchemaValidator'].getFormats();
+  }
+
   /**
   *
   *

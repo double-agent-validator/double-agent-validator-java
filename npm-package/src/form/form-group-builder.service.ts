@@ -4,6 +4,7 @@ import { DoubleAgentValidator } from '../validator.service';
 import { JsonSchema } from '../models/schema/json-schema';
 import * as _ from 'lodash';
 import { DoubleAgentFormControlValidatorBuilder } from './form-control-validator-builder.service';
+import { DoubleAgentFormGroup } from './form-group';
 
 /**
  * This class allows creates a formGroup which contains all the fields represented in an given schema
@@ -37,11 +38,16 @@ export class DoubleAgentFormGroupBuilder {
    *
    * @memberOf FormGroupBuilder
    */
-  build(schemaName: string): any {
+  build(schemaName: string): DoubleAgentFormGroup | FormGroup {
 
     // TODO validar se o esquema existe e retornar erro apropriado
     let jsonSchema: JsonSchema = this.doubleAgentValidator.getSchema(schemaName);
-    let formGroup: FormGroup;
+
+    if (!jsonSchema) {
+      throw Error(`Schema ${schemaName} not found!`);
+    }
+
+    let formGroup: DoubleAgentFormGroup;
     let formGroupConfig = {};
 
     // percorre os atributos definidos no jsonSchema, adicionando um FormControl com os respectivos
@@ -52,11 +58,12 @@ export class DoubleAgentFormGroupBuilder {
     });
 
     // cria uma instância do FormGroup a partir da configuração construída
-    formGroup = this.formBuilder.group(formGroupConfig);
+    formGroup = <any>this.formBuilder.group(formGroupConfig);
 
     // construir validador do FormGroup (keywords do objeto)
     this.addKeywordsValidator(jsonSchema, formGroup);
 
+    formGroup.jsonSchema = jsonSchema;
 
     // retorna o Form Group
     return formGroup;
