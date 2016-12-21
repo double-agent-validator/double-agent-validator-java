@@ -298,8 +298,8 @@ exports.ValidatorDefinitionsLoader = ValidatorDefinitionsLoader;
 function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
-__export(__webpack_require__(6));
-__export(__webpack_require__(11));
+__export(__webpack_require__(7));
+__export(__webpack_require__(12));
 
 
 /***/ },
@@ -319,11 +319,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = __webpack_require__(0);
 var validator_service_1 = __webpack_require__(1);
-var ng2_factory_service_1 = __webpack_require__(12);
+var ng2_factory_service_1 = __webpack_require__(13);
 var form_1 = __webpack_require__(4);
 var remote_loader_1 = __webpack_require__(2);
-var angular2_remote_loader_1 = __webpack_require__(13);
-var value_verifier_service_1 = __webpack_require__(14);
+var angular2_remote_loader_1 = __webpack_require__(14);
+var value_verifier_service_1 = __webpack_require__(6);
 exports.DOUBLE_AGENT_VALIDATOR_SCHEMA_URL = new core_1.OpaqueToken('DoubleAgentValidator.SCHEMA_URL');
 exports.DOUBLE_AGENT_VALIDATOR_SCHEMA_WITH_DEPENDENCIES = new core_1.OpaqueToken('DoubleAgentValidator.SCHEMA_WITH_DEPENDENCIES');
 var DoubleAgentValidatorModule = (function () {
@@ -377,9 +377,64 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = __webpack_require__(0);
-var forms_1 = __webpack_require__(7);
 var validator_service_1 = __webpack_require__(1);
-var _ = __webpack_require__(9);
+var DoubleAgentValueVerifier = (function () {
+    function DoubleAgentValueVerifier(doubleAgentValidator) {
+        this.doubleAgentValidator = doubleAgentValidator;
+    }
+    DoubleAgentValueVerifier.prototype.filter = function (formControlName, value) {
+        var schemaName = formControlName.control.parent.parent['schemaName'];
+        var propertyName = formControlName.name;
+        var schema = this.doubleAgentValidator.getSchema(schemaName);
+        var property = schema.properties[propertyName];
+        if (property) {
+            if (property['pattern'] || property['format']) {
+                var formatName = property['format'];
+                var pattern = null;
+                if (formatName) {
+                    pattern = this.doubleAgentValidator.getFormats[formatName];
+                }
+                else {
+                    pattern = property['pattern'];
+                }
+                if (pattern.test(value)) {
+                    return value;
+                }
+                else {
+                    return null;
+                }
+            }
+            return value;
+        }
+    };
+    return DoubleAgentValueVerifier;
+}());
+DoubleAgentValueVerifier = __decorate([
+    core_1.Injectable(),
+    __metadata("design:paramtypes", [validator_service_1.DoubleAgentValidator])
+], DoubleAgentValueVerifier);
+exports.DoubleAgentValueVerifier = DoubleAgentValueVerifier;
+
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var core_1 = __webpack_require__(0);
+var forms_1 = __webpack_require__(8);
+var validator_service_1 = __webpack_require__(1);
+var _ = __webpack_require__(10);
 var DoubleAgentFormControlValidatorBuilder = (function () {
     function DoubleAgentFormControlValidatorBuilder(doubleAgentValidator) {
         this.doubleAgentValidator = doubleAgentValidator;
@@ -465,25 +520,25 @@ exports.DoubleAgentFormControlValidatorBuilder = DoubleAgentFormControlValidator
 
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports) {
 
 module.exports = require("@angular/forms");
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports) {
 
 module.exports = require("@angular/http");
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports) {
 
 module.exports = require("lodash");
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -495,7 +550,7 @@ __export(__webpack_require__(2));
 
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -510,10 +565,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = __webpack_require__(0);
-var forms_1 = __webpack_require__(7);
+var forms_1 = __webpack_require__(8);
 var validator_service_1 = __webpack_require__(1);
-var _ = __webpack_require__(9);
-var form_control_validator_builder_service_1 = __webpack_require__(6);
+var _ = __webpack_require__(10);
+var form_control_validator_builder_service_1 = __webpack_require__(7);
 /**
  * This class allows creates a formGroup which contains all the fields represented in an given schema
  * each one containing it's own angular validators
@@ -553,9 +608,13 @@ var DoubleAgentFormGroupBuilder = (function () {
         var formGroupConfig = {};
         // percorre os atributos definidos no jsonSchema, adicionando um FormControl com os respectivos
         // validadores para cada campo no objeto formGroupConfig
-        _.each(jsonSchema.properties, function (attribute, attributeName) {
-            // TODO get state value from property default
-            formGroupConfig[attributeName] = new forms_1.FormControl('', _this.formControlValidatorBuilder.build(jsonSchema, attributeName));
+        _.each(jsonSchema.properties, function (property, propertyName) {
+            if (!_.has('$ref', property) || property['type'] === 'object') {
+                // TODO get state value from property default
+                var formControl = new forms_1.FormControl('', _this.formControlValidatorBuilder.build(jsonSchema, propertyName));
+                formControl.jsonSchemaProperty = jsonSchema.properties[propertyName];
+                formGroupConfig[propertyName] = formControl;
+            }
         });
         // cria uma instância do FormGroup a partir da configuração construída
         formGroup = this.formBuilder.group(formGroupConfig);
@@ -606,7 +665,7 @@ exports.DoubleAgentFormGroupBuilder = DoubleAgentFormGroupBuilder;
 
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -620,7 +679,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var http_1 = __webpack_require__(8);
+var http_1 = __webpack_require__(9);
 var validator_service_1 = __webpack_require__(1);
 var definitions_loader_service_1 = __webpack_require__(3);
 var core_1 = __webpack_require__(0);
@@ -718,7 +777,7 @@ exports.DoubleAgentValidatorNg2Factory = DoubleAgentValidatorNg2Factory;
 
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -733,7 +792,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = __webpack_require__(0);
-var http_1 = __webpack_require__(8);
+var http_1 = __webpack_require__(9);
 __webpack_require__(16);
 var Angular2RemoteLoader = (function () {
     function Angular2RemoteLoader(http) {
@@ -757,61 +816,6 @@ Angular2RemoteLoader = __decorate([
     __metadata("design:paramtypes", [http_1.Http])
 ], Angular2RemoteLoader);
 exports.Angular2RemoteLoader = Angular2RemoteLoader;
-
-
-/***/ },
-/* 14 */
-/***/ function(module, exports, __webpack_require__) {
-
-"use strict";
-"use strict";
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-var core_1 = __webpack_require__(0);
-var validator_service_1 = __webpack_require__(1);
-var DoubleAgentValueVerifier = (function () {
-    function DoubleAgentValueVerifier(doubleAgentValidator) {
-        this.doubleAgentValidator = doubleAgentValidator;
-    }
-    DoubleAgentValueVerifier.prototype.filter = function (formControlName, value) {
-        var schemaName = formControlName.control.parent.parent['schemaName'];
-        var propertyName = formControlName.name;
-        var schema = this.doubleAgentValidator.getSchema(schemaName);
-        var property = schema.properties[propertyName];
-        if (property) {
-            if (property['pattern'] || property['format']) {
-                var formatName = property['format'];
-                var pattern = null;
-                if (formatName) {
-                    pattern = this.doubleAgentValidator.getFormats[formatName];
-                }
-                else {
-                    pattern = property['pattern'];
-                }
-                if (pattern.test(value)) {
-                    return value;
-                }
-                else {
-                    return null;
-                }
-            }
-            return value;
-        }
-    };
-    return DoubleAgentValueVerifier;
-}());
-DoubleAgentValueVerifier = __decorate([
-    core_1.Injectable(),
-    __metadata("design:paramtypes", [validator_service_1.DoubleAgentValidator])
-], DoubleAgentValueVerifier);
-exports.DoubleAgentValueVerifier = DoubleAgentValueVerifier;
 
 
 /***/ },
@@ -839,7 +843,8 @@ __export(__webpack_require__(1));
 __export(__webpack_require__(3));
 __export(__webpack_require__(5));
 __export(__webpack_require__(4));
-__export(__webpack_require__(10));
+__export(__webpack_require__(11));
+__export(__webpack_require__(6));
 
 
 /***/ }
