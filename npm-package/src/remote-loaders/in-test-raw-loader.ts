@@ -1,4 +1,8 @@
+import { Inject, Injectable } from '@angular/core';
 import { RemoteLoader } from '../models/remote-loader';
+import { DoubleAgentValidator } from '../validator.service';
+import { DoubleAgentValidatorNg2Factory } from '../ng2-factory.service';
+import { DOUBLE_AGENT_VALIDATOR_SCHEMA_URL } from '../validator.module';
 
 /**
  * To be used in tests for Angular applications
@@ -8,7 +12,15 @@ import { RemoteLoader } from '../models/remote-loader';
  * @class InTestRawLoader
  * @implements {RemoteLoader}
 * */
+@Injectable()
 export class InTestRawLoader implements RemoteLoader {
+
+  constructor(
+    @Inject(DOUBLE_AGENT_VALIDATOR_SCHEMA_URL) doubleAgentScriptContent: string,
+    doubleAgentValidator: DoubleAgentValidator) {
+    let daFactory = new DoubleAgentValidatorNg2Factory(doubleAgentValidator, this);
+    daFactory.load(doubleAgentScriptContent).then(() => { });
+  }
   getScript(doubleAgentRawContent: string): Promise<string> {
     return new Promise<string>((resolve, reject) => {
       resolve(doubleAgentRawContent);

@@ -1,4 +1,3 @@
-import { Http } from '@angular/http';
 import { DoubleAgentValidator } from './validator.service';
 import { ValidatorDefinitionsLoader } from './definitions-loader.service';
 import { Injectable, Injector } from '@angular/core';
@@ -29,7 +28,7 @@ export class DoubleAgentValidatorNg2Factory {
    * @memberOf DoubleAgentValidatorNg2Factory
    */
   static factoryFn(injector: Injector, factory: DoubleAgentValidatorNg2Factory) {
-    //return (): Promise<void> => {
+    // return (): Promise<void> => {
     let url: string = injector.get(DOUBLE_AGENT_VALIDATOR_SCHEMA_URL);
     return new Promise<void>((resolve, reject) => {
       let errors = null;
@@ -41,20 +40,19 @@ export class DoubleAgentValidatorNg2Factory {
       }
       factory.load(url).then(() => resolve()).catch(() => reject());
     });
-    //}
+    // }
 
   }
 
   /**
    * Creates an instance of DoubleAgentValidatorNg2Factory.
    *
-   * @param {Http} http
    * @param {DoubleAgentValidator} doubleAgentValidator
+   * @param {remoteLoader} the remoteLoader which will be used to load the validation scripts
    *
    * @memberOf DoubleAgentValidatorNg2Factory
    */
   constructor(
-    private http: Http,
     private doubleAgentValidator: DoubleAgentValidator,
     private remoteLoader: RemoteLoader) {
   }
