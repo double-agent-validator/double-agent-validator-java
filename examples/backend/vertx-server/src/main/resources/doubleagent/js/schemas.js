@@ -13,6 +13,10 @@ var DoubleAgent;
                     name: 'cnpj',
                     format: /^[0-9]{2}\.?[0-9]{3}\.?[0-9]{3}\/?[0-9]{4}\-?[0-9]{2}$/
                 },
+                {
+                    name: 'data-brasileira',
+                    format: /^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/
+                }
             ];
             JsonSchemaValidator.keywords = [
                 {
@@ -74,6 +78,10 @@ var DoubleAgent;
                         },
                         nome: {
                             type: 'string'
+                        },
+                        nascimento: {
+                            type: 'string',
+                            format: 'data-brasileira'
                         }
                     }
                 }
@@ -81,4 +89,3 @@ var DoubleAgent;
         })(JsonSchemaValidator = Example.JsonSchemaValidator || (Example.JsonSchemaValidator = {}));
     })(Example = DoubleAgent.Example || (DoubleAgent.Example = {}));
 })(DoubleAgent || (DoubleAgent = {}));
-//# sourceMappingURL=schemas.js.map

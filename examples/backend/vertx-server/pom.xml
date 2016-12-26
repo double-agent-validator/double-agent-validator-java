@@ -5,7 +5,7 @@
 
     <groupId>br.gov.serpro.double-agent</groupId>
     <artifactId>vertx-server</artifactId>
-    <version>0.0.11</version>
+    <version>0.0.15</version>
 
     <name>DoubleAgent Validator Vertx Example</name>
     <description>Aplicaçao Java utilizando o DoubleAgent Validator</description>
@@ -13,7 +13,7 @@
     <properties>
         <version.vertx>3.3.3</version.vertx>
         <version.jackson>2.8.4</version.jackson>
-        <version.doubleagent>0.0.11</version.doubleagent>
+        <version.doubleagent>0.0.15</version.doubleagent>
         <version.frontend-maven-plugin>1.1</version.frontend-maven-plugin>
         <version.sl4j>1.6.1</version.sl4j>
         <main.verticle>br.gov.serpro.doubleagent.vertx.VertxServer</main.verticle>

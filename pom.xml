@@ -37,7 +37,7 @@
         <version.commons-lang3>3.5</version.commons-lang3>
         <version.commons-io>2.5</version.commons-io>
         <version.frontend-maven-plugin>1.1</version.frontend-maven-plugin>
-        
+        <skip.node>true</skip.node>
         <repository.id>nexus</repository.id>
         <repository.name>releases</repository.name>
         <repository.url>http://nexus.aic.serpro/content/repositories/releases</repository.url>
@@ -87,6 +87,7 @@
                 <artifactId>frontend-maven-plugin</artifactId>
                 <version>${version.frontend-maven-plugin}</version>
                 <configuration>
+                    <skip>${skip.node}</skip>
                     <installDirectory>${user.home}/maven</installDirectory>
                     <workingDirectory>src/main/resources/validators</workingDirectory>
                     <nodeVersion>v6.9.1</nodeVersion>
@@ -191,6 +192,15 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
+    <profiles>
+        <profile>
+            <id>development</id>
+            <properties>
+                <skip.node>false</skip.node>
+            </properties>
+        </profile>
+    </profiles>
     
     <distributionManagement>
 		<repository>

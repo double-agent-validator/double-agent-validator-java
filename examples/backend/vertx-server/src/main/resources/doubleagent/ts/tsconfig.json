@@ -7,7 +7,7 @@
     "module": "none",
     "moduleResolution": "node",
     "outFile": "../js/schemas.js",
-    "sourceMap": true,
+    "sourceMap": false,
     "target": "es5",
     "typeRoots": [
       "../node_modules/@types"

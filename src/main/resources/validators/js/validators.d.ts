@@ -14,6 +14,7 @@ declare namespace DoubleAgent.JsonSchemaValidator {
         errors: any;
     };
     function getSchemas(): string[];
+    function getFormats(): {};
     function getSchemaObject(schemaName: any): Object;
     function getKeywords(schema: Object): string[];
 }

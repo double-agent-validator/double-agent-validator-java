@@ -88,6 +88,10 @@ var DoubleAgent;
             return _.map(ajv['_schemas'], function (schema) { return schema['id']; });
         }
         JsonSchemaValidator.getSchemas = getSchemas;
+        function getFormats() {
+            return ajv['_formats'];
+        }
+        JsonSchemaValidator.getFormats = getFormats;
         function getSchemaObject(schemaName) {
             return ajv.getSchema(schemaName) ? ajv.getSchema(schemaName).schema : null;
         }
@@ -98,4 +102,3 @@ var DoubleAgent;
         JsonSchemaValidator.getKeywords = getKeywords;
     })(JsonSchemaValidator = DoubleAgent.JsonSchemaValidator || (DoubleAgent.JsonSchemaValidator = {}));
 })(DoubleAgent || (DoubleAgent = {}));
-//# sourceMappingURL=validators.js.map
