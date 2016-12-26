@@ -12,14 +12,14 @@ export class AppComponent implements OnInit {
   formContribuinte: FormGroup;
   private contribuinte: any = null;
 
-  constructor(private doubleAgentValidator: DoubleAgentValidator, private formGroupBuilder: DoubleAgentFormGroupBuilder) {
+  constructor(private formGroupBuilder: DoubleAgentFormGroupBuilder) {
   }
 
   ngOnInit() {
-    this.doubleAgentValidator.isReady.subscribe(() => {
-      // <any> here is needed because of small diferences between angular 2 versions in the AbstractControl definition
-      this.formContribuinte = <any>this.formGroupBuilder.build('contribuinte-v1');
-    });
+
+    // <any> here is needed because of small diferences between angular 2 versions in the AbstractControl definition
+    this.formContribuinte = <any>this.formGroupBuilder.build('contribuinte-v1');
+
 
   }
 

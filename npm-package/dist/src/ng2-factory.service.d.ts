@@ -1,4 +1,3 @@
-import { Http } from '@angular/http';
 import { DoubleAgentValidator } from './validator.service';
 import { Injector } from '@angular/core';
 import { RemoteLoader } from './models/remote-loader';
@@ -10,7 +9,6 @@ import { RemoteLoader } from './models/remote-loader';
  * @class DoubleAgentValidatorNg2Factory
  */
 export declare class DoubleAgentValidatorNg2Factory {
-    private http;
     private doubleAgentValidator;
     private remoteLoader;
     /**
@@ -28,12 +26,12 @@ export declare class DoubleAgentValidatorNg2Factory {
     /**
      * Creates an instance of DoubleAgentValidatorNg2Factory.
      *
-     * @param {Http} http
      * @param {DoubleAgentValidator} doubleAgentValidator
+     * @param {remoteLoader} the remoteLoader which will be used to load the validation scripts
      *
      * @memberOf DoubleAgentValidatorNg2Factory
      */
-    constructor(http: Http, doubleAgentValidator: DoubleAgentValidator, remoteLoader: RemoteLoader);
+    constructor(doubleAgentValidator: DoubleAgentValidator, remoteLoader: RemoteLoader);
     /**
      * Loads a script from a url, parses it and load into the ajv object.
      * At this moment is using a iframe to isolate the parse/evaluate of the code.

@@ -29,6 +29,11 @@ Of course it could be implemented using CanActivate Router Guard when using rout
           <label for="nome">Nacionalidade:</label>
           <input type="text" class="form-control" id="nome" placeholder="Digite a nacionalidade" formControlName="nacionalidade">
         </div>
+
+         <div class="form-group">
+          <label for="nome">Data Nascimento:</label>
+          <input type="text" class="form-control" id="nome" placeholder="Digite a data de nascimento" formControlName="nascimento">
+        </div>
         <button [disabled]="formContribuinte.invalid" type="submit" class="btn btn-primary">Salvar</button>
       </form>
     </div>
