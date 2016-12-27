@@ -6,8 +6,7 @@ if (!Array.isArray) {
 }
 
 if (!Array.prototype['customLookup']) {
-  Object.defineProperty(Array.prototype, 'customLookup', {
-    value: function(predicate) {
+  Array.prototype['customLookup'] = function(predicate) {
      'use strict';
      if (this == null) {
        throw new TypeError('Array.prototype.find called on null or undefined');
@@ -27,6 +26,5 @@ if (!Array.prototype['customLookup']) {
        }
      }
      return undefined;
-    }
-  });
+    };
 }
