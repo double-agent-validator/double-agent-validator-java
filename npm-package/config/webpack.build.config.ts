@@ -7,7 +7,11 @@ export function getBuildConfig(outputFileName: string, libraryName: string) {
     entry: path.join(__dirname, '../src/index.ts'),
     devtool: 'source-map',
     target: 'node',
-    externals: [nodeExternals()],
+    externals: [
+      nodeExternals({
+        whitelist: [ 'vanilla-masker']
+      })
+    ],
     output: {
       path: path.join(__dirname, '../dist'),
       filename: outputFileName,
