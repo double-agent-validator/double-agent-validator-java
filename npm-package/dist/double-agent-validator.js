@@ -61,7 +61,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 21);
+/******/ 	return __webpack_require__(__webpack_require__.s = 20);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -86,7 +86,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = __webpack_require__(0);
-var ReplaySubject_1 = __webpack_require__(19);
+var ReplaySubject_1 = __webpack_require__(18);
 /**
  *
  *
@@ -645,7 +645,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = __webpack_require__(0);
 var http_1 = __webpack_require__(17);
-__webpack_require__(20);
+__webpack_require__(19);
 var Angular2RemoteLoader = (function () {
     function Angular2RemoteLoader(http) {
         this.http = http;
@@ -879,16 +879,27 @@ exports.InTestRawLoader = InTestRawLoader;
 
 "use strict";
 "use strict";
-var restler = __webpack_require__(18);
 /**
+ *
  * This class allow get the script source on node environment
  */
 var NodeRemoteLoader = (function () {
     function NodeRemoteLoader() {
+        Promise.resolve().then((function (requireRuntime) {
+            this._restler = requireRuntime('restler');
+        }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
     }
+    Object.defineProperty(NodeRemoteLoader.prototype, "restler", {
+        get: function () {
+            return this._restler;
+        },
+        enumerable: true,
+        configurable: true
+    });
     NodeRemoteLoader.prototype.getScript = function (url) {
+        var _this = this;
         return new Promise(function (resolve, reject) {
-            restler.get(url).on('complete', function (data, response) {
+            _this.restler.get(url).on('complete', function (data, response) {
                 if (data instanceof Error) {
                     reject(data.message);
                 }
@@ -913,22 +924,16 @@ module.exports = require("@angular/http");
 /* 18 */
 /***/ function(module, exports) {
 
-module.exports = require("restler");
+module.exports = require("rxjs/ReplaySubject");
 
 /***/ },
 /* 19 */
 /***/ function(module, exports) {
 
-module.exports = require("rxjs/ReplaySubject");
-
-/***/ },
-/* 20 */
-/***/ function(module, exports) {
-
 module.exports = require("rxjs/add/operator/toPromise");
 
 /***/ },
-/* 21 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";

@@ -1,13 +1,20 @@
 import { RemoteLoader } from '../models/remote-loader';
 
+declare var require: any;
 /**
+ *
  * This class allow get the script source on node environment
  */
 export class NodeRemoteLoader implements RemoteLoader {
+
   private _restler: any;
+  constructor() {
+    require.ensure([], function(requireRuntime) {
+      this._restler = requireRuntime('restler');
+    });
+  }
 
   get restler(): any {
-    this._restler = this._restler ? this._restler : require('restler');
     return this._restler;
   }
 
