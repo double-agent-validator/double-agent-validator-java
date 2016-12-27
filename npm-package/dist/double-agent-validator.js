@@ -61,7 +61,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 20);
+/******/ 	return __webpack_require__(__webpack_require__.s = 25);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -86,7 +86,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = __webpack_require__(0);
-var ReplaySubject_1 = __webpack_require__(18);
+var ReplaySubject_1 = __webpack_require__(22);
 /**
  *
  *
@@ -202,6 +202,12 @@ exports.RemoteLoader = RemoteLoader;
 
 /***/ },
 /* 3 */
+/***/ function(module, exports) {
+
+module.exports = require("@angular/forms");
+
+/***/ },
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -216,9 +222,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var validator_service_1 = __webpack_require__(1);
-var definitions_loader_service_1 = __webpack_require__(5);
+var definitions_loader_service_1 = __webpack_require__(6);
 var core_1 = __webpack_require__(0);
-var validator_module_1 = __webpack_require__(4);
+var validator_module_1 = __webpack_require__(5);
 var remote_loader_1 = __webpack_require__(2);
 /**
  *
@@ -310,7 +316,7 @@ exports.DoubleAgentValidatorNg2Factory = DoubleAgentValidatorNg2Factory;
 
 
 /***/ },
-/* 4 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -326,11 +332,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = __webpack_require__(0);
 var validator_service_1 = __webpack_require__(1);
-var ng2_factory_service_1 = __webpack_require__(3);
-var form_1 = __webpack_require__(6);
+var ng2_factory_service_1 = __webpack_require__(4);
+var form_1 = __webpack_require__(7);
 var remote_loader_1 = __webpack_require__(2);
-var angular2_remote_loader_1 = __webpack_require__(9);
-var value_verifier_service_1 = __webpack_require__(7);
+var angular2_remote_loader_1 = __webpack_require__(12);
+var value_verifier_service_1 = __webpack_require__(8);
+var input_mask_directive_1 = __webpack_require__(10);
+var input_html5_attributes_directive_1 = __webpack_require__(9);
 exports.DOUBLE_AGENT_VALIDATOR_SCHEMA_URL = new core_1.OpaqueToken('DoubleAgentValidator.SCHEMA_URL');
 exports.DOUBLE_AGENT_VALIDATOR_SCHEMA_WITH_DEPENDENCIES = new core_1.OpaqueToken('DoubleAgentValidator.SCHEMA_WITH_DEPENDENCIES');
 var DoubleAgentValidatorModule = (function () {
@@ -340,6 +348,10 @@ var DoubleAgentValidatorModule = (function () {
 }());
 DoubleAgentValidatorModule = __decorate([
     core_1.NgModule({
+        declarations: [
+            input_mask_directive_1.InputMaskDirective,
+            input_html5_attributes_directive_1.InputHtml5AttributesDirective
+        ],
         providers: [
             validator_service_1.DoubleAgentValidator,
             ng2_factory_service_1.DoubleAgentValidatorNg2Factory,
@@ -361,7 +373,10 @@ DoubleAgentValidatorModule = __decorate([
                 multi: true
             }
         ],
-        exports: []
+        exports: [
+            input_mask_directive_1.InputMaskDirective,
+            input_html5_attributes_directive_1.InputHtml5AttributesDirective
+        ]
     }),
     __metadata("design:paramtypes", [])
 ], DoubleAgentValidatorModule);
@@ -369,7 +384,7 @@ exports.DoubleAgentValidatorModule = DoubleAgentValidatorModule;
 
 
 /***/ },
-/* 5 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -458,7 +473,7 @@ exports.ValidatorDefinitionsLoader = ValidatorDefinitionsLoader;
 
 
 /***/ },
-/* 6 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -466,12 +481,12 @@ exports.ValidatorDefinitionsLoader = ValidatorDefinitionsLoader;
 function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
-__export(__webpack_require__(8));
-__export(__webpack_require__(14));
+__export(__webpack_require__(11));
+__export(__webpack_require__(18));
 
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -526,7 +541,7 @@ exports.DoubleAgentValueVerifier = DoubleAgentValueVerifier;
 
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -541,9 +556,176 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = __webpack_require__(0);
-var forms_1 = __webpack_require__(10);
+var forms_1 = __webpack_require__(3);
+/**
+ * The FormControls created with the DoubleAgentValidatorFormBuilder
+ * will have properties defined in the keyworkd maxLength or ui.maxLength
+ * or minLength or ui.minLength reflected to the input field associated to the formControlName
+ *
+ * @export
+ * @class InputHtml5AttributesDirective
+ */
+var InputHtml5AttributesDirective = (function () {
+    function InputHtml5AttributesDirective(renderer, formControlName, elementRef) {
+        this.renderer = renderer;
+        this.formControlName = formControlName;
+        this.elementRef = elementRef;
+    }
+    InputHtml5AttributesDirective.prototype.findInputElement = function () {
+        if (this.elementRef.nativeElement instanceof HTMLInputElement) {
+            return this.elementRef.nativeElement;
+        }
+        else {
+            var rootElement = this.elementRef.nativeElement;
+            var elementChildren = Array.from(rootElement.children);
+            for (var _i = 0, elementChildren_1 = elementChildren; _i < elementChildren_1.length; _i++) {
+                var el = elementChildren_1[_i];
+                if (el instanceof HTMLInputElement) {
+                    return el;
+                }
+            }
+            return null;
+        }
+    };
+    InputHtml5AttributesDirective.prototype.ngOnInit = function () {
+        this.controlJsonProperty = this.formControlName.control.jsonSchemaProperty;
+        if (!this.controlJsonProperty) {
+            return;
+        } // return if does not have jsonSchemaProperty defined
+        var element = this.findInputElement();
+        if (!element) {
+            return;
+        } // return if the element is not a input
+        if (this.controlJsonProperty['maxLength']) {
+            this.renderer.setElementAttribute(element, 'maxlength', this.controlJsonProperty['maxLength']);
+        }
+        if (this.controlJsonProperty['ui'] && this.controlJsonProperty['ui']['maxLength']) {
+            this.renderer.setElementAttribute(element, 'maxlength', this.controlJsonProperty['ui']['maxLength']);
+        }
+        if (this.controlJsonProperty['minLength']) {
+            this.renderer.setElementAttribute(element, 'minlength', this.controlJsonProperty['minLength']);
+        }
+        if (this.controlJsonProperty['ui'] && this.controlJsonProperty['ui']['minLength']) {
+            this.renderer.setElementAttribute(element, 'minlength', this.controlJsonProperty['ui']['minLength']);
+        }
+    };
+    return InputHtml5AttributesDirective;
+}());
+InputHtml5AttributesDirective = __decorate([
+    core_1.Directive({
+        selector: '[formControlName]'
+    }),
+    __metadata("design:paramtypes", [core_1.Renderer,
+        forms_1.FormControlName,
+        core_1.ElementRef])
+], InputHtml5AttributesDirective);
+exports.InputHtml5AttributesDirective = InputHtml5AttributesDirective;
+
+
+/***/ },
+/* 10 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var core_1 = __webpack_require__(0);
+var forms_1 = __webpack_require__(3);
+var VMasker = __webpack_require__(24);
 var validator_service_1 = __webpack_require__(1);
-var _ = __webpack_require__(11);
+/**
+ * Applies a mask to user input following the configuration
+ * passed-in the json-schema which originated the formControlName (if it is the case)
+ *
+ * @export
+ * @class InputMaskDirective
+ * @implements {OnInit}
+ */
+var InputMaskDirective = (function () {
+    function InputMaskDirective(renderer, elementRef, doubleAgentValidator, injector) {
+        this.renderer = renderer;
+        this.elementRef = elementRef;
+        this.doubleAgentValidator = doubleAgentValidator;
+        this.injector = injector;
+    }
+    InputMaskDirective.prototype.formControlName = function () {
+        return this.injector.get(forms_1.FormControlName);
+    };
+    InputMaskDirective.prototype.getUiMask = function (value) {
+        var jsonProperty = this.formControlName().control.jsonSchemaProperty;
+        if (jsonProperty && jsonProperty['ui']) {
+            if (Array.isArray(jsonProperty['ui']['mask'])) {
+                var masksArray = jsonProperty['ui']['mask'];
+                var mask = masksArray.find(function (item) { return new RegExp(item['matcher']).test(value); });
+                return mask ? mask['value'] : null;
+            }
+            else {
+                return jsonProperty['ui'] ? jsonProperty['ui']['mask'] : null;
+            }
+        }
+        return null;
+    };
+    InputMaskDirective.prototype.onInput = function (value) {
+        // Write back to model
+        if (value) {
+            var mask = this.getUiMask(value);
+            // write formatted to to control view
+            if (mask) {
+                value = VMasker.toPattern(value, mask);
+            }
+            this.writeValue(value);
+        }
+    };
+    InputMaskDirective.prototype.writeValue = function (value) {
+        this.formControlName().control.setValue(value);
+    };
+    return InputMaskDirective;
+}());
+__decorate([
+    core_1.HostListener('input', ['$event.target.value']),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], InputMaskDirective.prototype, "onInput", null);
+InputMaskDirective = __decorate([
+    core_1.Directive({
+        selector: '[formControlName]'
+    }),
+    __metadata("design:paramtypes", [core_1.Renderer,
+        core_1.ElementRef,
+        validator_service_1.DoubleAgentValidator,
+        core_1.Injector])
+], InputMaskDirective);
+exports.InputMaskDirective = InputMaskDirective;
+
+
+/***/ },
+/* 11 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+var core_1 = __webpack_require__(0);
+var forms_1 = __webpack_require__(3);
+var validator_service_1 = __webpack_require__(1);
+var _ = __webpack_require__(13);
 var DoubleAgentFormControlValidatorBuilder = (function () {
     function DoubleAgentFormControlValidatorBuilder(doubleAgentValidator) {
         this.doubleAgentValidator = doubleAgentValidator;
@@ -629,7 +811,7 @@ exports.DoubleAgentFormControlValidatorBuilder = DoubleAgentFormControlValidator
 
 
 /***/ },
-/* 9 */
+/* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -644,8 +826,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = __webpack_require__(0);
-var http_1 = __webpack_require__(17);
-__webpack_require__(19);
+var http_1 = __webpack_require__(21);
+__webpack_require__(23);
 var Angular2RemoteLoader = (function () {
     function Angular2RemoteLoader(http) {
         this.http = http;
@@ -671,19 +853,26 @@ exports.Angular2RemoteLoader = Angular2RemoteLoader;
 
 
 /***/ },
-/* 10 */
-/***/ function(module, exports) {
-
-module.exports = require("@angular/forms");
-
-/***/ },
-/* 11 */
+/* 13 */
 /***/ function(module, exports) {
 
 module.exports = require("lodash");
 
 /***/ },
-/* 12 */
+/* 14 */
+/***/ function(module, exports, __webpack_require__) {
+
+"use strict";
+"use strict";
+function __export(m) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+}
+__export(__webpack_require__(10));
+__export(__webpack_require__(9));
+
+
+/***/ },
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -695,7 +884,42 @@ __export(__webpack_require__(2));
 
 
 /***/ },
-/* 13 */
+/* 16 */
+/***/ function(module, exports) {
+
+if (!Array.isArray) {
+    Array['isArray'] = function (arg) {
+        return Object.prototype.toString.call(arg) === '[object Array]';
+    };
+}
+if (!Array.prototype.find) {
+    Object.defineProperty(Array.prototype, 'find', {
+        value: function (predicate) {
+            'use strict';
+            if (this == null) {
+                throw new TypeError('Array.prototype.find called on null or undefined');
+            }
+            if (typeof predicate !== 'function') {
+                throw new TypeError('predicate must be a function');
+            }
+            var list = Object(this);
+            var length = list.length || 0;
+            var thisArg = arguments[1];
+            var value;
+            for (var i = 0; i < length; i++) {
+                value = list[i];
+                if (predicate.call(thisArg, value, i, list)) {
+                    return value;
+                }
+            }
+            return undefined;
+        }
+    });
+}
+
+
+/***/ },
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -703,13 +927,13 @@ __export(__webpack_require__(2));
 function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
-__export(__webpack_require__(16));
-__export(__webpack_require__(9));
-__export(__webpack_require__(15));
+__export(__webpack_require__(20));
+__export(__webpack_require__(12));
+__export(__webpack_require__(19));
 
 
 /***/ },
-/* 14 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -724,10 +948,10 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = __webpack_require__(0);
-var forms_1 = __webpack_require__(10);
+var forms_1 = __webpack_require__(3);
 var validator_service_1 = __webpack_require__(1);
-var _ = __webpack_require__(11);
-var form_control_validator_builder_service_1 = __webpack_require__(8);
+var _ = __webpack_require__(13);
+var form_control_validator_builder_service_1 = __webpack_require__(11);
 /**
  * This class allows creates a formGroup which contains all the fields represented in an given schema
  * each one containing it's own angular validators
@@ -824,7 +1048,7 @@ exports.DoubleAgentFormGroupBuilder = DoubleAgentFormGroupBuilder;
 
 
 /***/ },
-/* 15 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -843,8 +1067,8 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 };
 var core_1 = __webpack_require__(0);
 var validator_service_1 = __webpack_require__(1);
-var ng2_factory_service_1 = __webpack_require__(3);
-var validator_module_1 = __webpack_require__(4);
+var ng2_factory_service_1 = __webpack_require__(4);
+var validator_module_1 = __webpack_require__(5);
 /**
  * To be used in tests for Angular applications
  * We can rely on mechanisms like webpack raw-loader to read the script from the disk and pass it directly
@@ -874,7 +1098,7 @@ exports.InTestRawLoader = InTestRawLoader;
 
 
 /***/ },
-/* 16 */
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -915,25 +1139,31 @@ exports.NodeRemoteLoader = NodeRemoteLoader;
 
 
 /***/ },
-/* 17 */
+/* 21 */
 /***/ function(module, exports) {
 
 module.exports = require("@angular/http");
 
 /***/ },
-/* 18 */
+/* 22 */
 /***/ function(module, exports) {
 
 module.exports = require("rxjs/ReplaySubject");
 
 /***/ },
-/* 19 */
+/* 23 */
 /***/ function(module, exports) {
 
 module.exports = require("rxjs/add/operator/toPromise");
 
 /***/ },
-/* 20 */
+/* 24 */
+/***/ function(module, exports) {
+
+module.exports = require("vanilla-masker");
+
+/***/ },
+/* 25 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -941,14 +1171,16 @@ module.exports = require("rxjs/add/operator/toPromise");
 function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
+__webpack_require__(16);
 __export(__webpack_require__(1));
-__export(__webpack_require__(5));
-__export(__webpack_require__(4));
 __export(__webpack_require__(6));
-__export(__webpack_require__(12));
+__export(__webpack_require__(5));
 __export(__webpack_require__(7));
-__export(__webpack_require__(13));
-__export(__webpack_require__(3));
+__export(__webpack_require__(15));
+__export(__webpack_require__(8));
+__export(__webpack_require__(17));
+__export(__webpack_require__(4));
+__export(__webpack_require__(14));
 
 
 /***/ }

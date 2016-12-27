@@ -1,6 +1,6 @@
 {
   "name": "double-agent-validator",
-  "version": "1.0.27",
+  "version": "1.0.28",
   "description": "Double Agent Validator Angular 2 Library",
   "author": "Abner Oliveira",
   "license": "MIT",
@@ -17,8 +17,7 @@
     "clean-dist": "rimraf dist/*",
     "prepublish": "npm run compile"
   },
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "@angular/common": "^2.0.0",
     "@angular/compiler": "^2.0.0",
@@ -56,6 +55,7 @@
     "tslint": "^3.15.1",
     "tslint-loader": "^2.1.5",
     "typescript": "2.1.1",
+    "vanilla-masker": "^1.0.9",
     "webpack": "^2.1.0-beta.25",
     "webpack-node-externals": "^1.4.3",
     "yargs": "^6.0.0",
