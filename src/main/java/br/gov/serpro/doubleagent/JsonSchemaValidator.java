@@ -38,8 +38,8 @@ public class JsonSchemaValidator {
     private ScriptEngine nashorn = (ScriptEngine) new ScriptEngineManager()
             .getEngineByName("nashorn");
 
-    StringBuilder scriptsLoaded = new StringBuilder();
-    StringBuilder vendorScripts = new StringBuilder();
+    private StringBuilder scriptsLoaded = new StringBuilder();
+    private StringBuilder vendorScripts = new StringBuilder();
 
     private Charset encoding = Charset.forName("UTF-8");
 
@@ -56,7 +56,7 @@ public class JsonSchemaValidator {
         // Initializes the ajv engine
         nashorn.eval(getAjvInitializationCode());
 
-        this.vendorScripts.append(getAjvInitializationCode() + NEW_LINE);
+        this.vendorScripts.append(getAjvInitializationCode()).append(NEW_LINE);
 
         // Loads the double-agent-validators base script
         loadJsScripts(DOUBLE_AGENT_VALIDATORS_SCRIPT_NAME);
@@ -94,7 +94,7 @@ public class JsonSchemaValidator {
 
 
         // add script load to the STRING BUFFER
-        this.scriptsLoaded.append(script + NEW_LINE);
+        this.scriptsLoaded.append(script).append(NEW_LINE);
     }
 
     public synchronized ValidationResult validate(String schemaName, String jsonTarget)
@@ -133,6 +133,15 @@ public class JsonSchemaValidator {
 
     private void loadVendorScripts(String scriptName) throws ScriptException, IOException {
         loadScripts(VENDOR_FOLDER, scriptName, true);
+    }
+
+    public void loadExtraVendorScript(InputStream scriptCode) throws IOException, ScriptException {
+        String script = IOUtils.toString(scriptCode, encoding);
+        // execute scripts
+        this.nashorn.eval(script);
+
+        // add script load to the STRING BUFFER
+        this.vendorScripts.append(script + NEW_LINE);
     }
 
 
