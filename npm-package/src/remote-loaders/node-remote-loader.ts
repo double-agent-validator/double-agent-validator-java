@@ -1,15 +1,19 @@
-import * as restler from 'restler';
-import * as http from 'http';
 import { RemoteLoader } from '../models/remote-loader';
 
 /**
  * This class allow get the script source on node environment
  */
 export class NodeRemoteLoader implements RemoteLoader {
+  private _restler: any;
+
+  get restler(): any {
+    this._restler = this._restler ? this._restler : require('restler');
+    return this._restler;
+  }
 
   getScript(url: string): Promise<string> {
     return new Promise<string>((resolve, reject) => {
-      restler.get(url).on('complete', (data?: any, response?: http.ServerResponse) => {
+      this.restler.get(url).on('complete', (data?: any, response?: any) => {
         if (data instanceof Error) {
           reject(data.message);
         } else {
