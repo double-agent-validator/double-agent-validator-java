@@ -4,6 +4,7 @@ import { FormControlName } from '@angular/forms';
 import * as VMasker from 'vanilla-masker';
 import { DoubleAgentValidator } from '../validator.service';
 import { DoubleAgentFormControl } from '../form/form-control';
+import { findInArray } from '../helpers';
 
 /**
  * Applies a mask to user input following the configuration
@@ -37,7 +38,7 @@ export class InputMaskDirective {
     if (jsonProperty && jsonProperty['ui']) {
       if (Array.isArray(jsonProperty['ui']['mask'])) {
         let masksArray = jsonProperty['ui']['mask'];
-        let mask = masksArray.customLookup((item) => new RegExp(item['matcher']).test(value));
+        let mask = findInArray(masksArray, (item) => new RegExp(item['matcher']).test(value));
         return mask ? mask['value'] : null;
 
       } else {

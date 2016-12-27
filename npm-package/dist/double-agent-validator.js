@@ -61,7 +61,7 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 25);
+/******/ 	return __webpack_require__(__webpack_require__.s = 26);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -86,7 +86,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = __webpack_require__(0);
-var ReplaySubject_1 = __webpack_require__(22);
+var ReplaySubject_1 = __webpack_require__(23);
 /**
  *
  *
@@ -639,8 +639,9 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = __webpack_require__(0);
 var forms_1 = __webpack_require__(3);
-var VMasker = __webpack_require__(24);
+var VMasker = __webpack_require__(25);
 var validator_service_1 = __webpack_require__(1);
+var helpers_1 = __webpack_require__(19);
 /**
  * Applies a mask to user input following the configuration
  * passed-in the json-schema which originated the formControlName (if it is the case)
@@ -664,7 +665,7 @@ var InputMaskDirective = (function () {
         if (jsonProperty && jsonProperty['ui']) {
             if (Array.isArray(jsonProperty['ui']['mask'])) {
                 var masksArray = jsonProperty['ui']['mask'];
-                var mask = masksArray.customLookup(function (item) { return new RegExp(item['matcher']).test(value); });
+                var mask = helpers_1.findInArray(masksArray, function (item) { return new RegExp(item['matcher']).test(value); });
                 return mask ? mask['value'] : null;
             }
             else {
@@ -826,8 +827,8 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = __webpack_require__(0);
-var http_1 = __webpack_require__(21);
-__webpack_require__(23);
+var http_1 = __webpack_require__(22);
+__webpack_require__(24);
 var Angular2RemoteLoader = (function () {
     function Angular2RemoteLoader(http) {
         this.http = http;
@@ -892,28 +893,6 @@ if (!Array.isArray) {
         return Object.prototype.toString.call(arg) === '[object Array]';
     };
 }
-if (!Array.prototype['customLookup']) {
-    Array.prototype['customLookup'] = function (predicate) {
-        'use strict';
-        if (this == null) {
-            throw new TypeError('Array.prototype.find called on null or undefined');
-        }
-        if (typeof predicate !== 'function') {
-            throw new TypeError('predicate must be a function');
-        }
-        var list = Object(this);
-        var length = list.length || 0;
-        var thisArg = arguments[1];
-        var value;
-        for (var i = 0; i < length; i++) {
-            value = list[i];
-            if (predicate.call(thisArg, value, i, list)) {
-                return value;
-            }
-        }
-        return undefined;
-    };
-}
 
 
 /***/ },
@@ -925,9 +904,9 @@ if (!Array.prototype['customLookup']) {
 function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
-__export(__webpack_require__(20));
+__export(__webpack_require__(21));
 __export(__webpack_require__(12));
-__export(__webpack_require__(19));
+__export(__webpack_require__(20));
 
 
 /***/ },
@@ -1047,6 +1026,35 @@ exports.DoubleAgentFormGroupBuilder = DoubleAgentFormGroupBuilder;
 
 /***/ },
 /* 19 */
+/***/ function(module, exports) {
+
+"use strict";
+"use strict";
+function findInArray(array, predicate) {
+    if (array == null) {
+        throw new TypeError('findInArray called on null or undefined');
+    }
+    if (typeof predicate !== 'function') {
+        throw new TypeError('predicate must be a function');
+    }
+    var list = Object(array);
+    var length = list.length || 0;
+    var thisArg = arguments[2];
+    var value;
+    for (var i = 0; i < length; i++) {
+        value = list[i];
+        if (predicate.call(thisArg, value, i, list)) {
+            return value;
+        }
+    }
+    return undefined;
+}
+exports.findInArray = findInArray;
+;
+
+
+/***/ },
+/* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1096,7 +1104,7 @@ exports.InTestRawLoader = InTestRawLoader;
 
 
 /***/ },
-/* 20 */
+/* 21 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1137,31 +1145,31 @@ exports.NodeRemoteLoader = NodeRemoteLoader;
 
 
 /***/ },
-/* 21 */
+/* 22 */
 /***/ function(module, exports) {
 
 module.exports = require("@angular/http");
 
 /***/ },
-/* 22 */
+/* 23 */
 /***/ function(module, exports) {
 
 module.exports = require("rxjs/ReplaySubject");
 
 /***/ },
-/* 23 */
+/* 24 */
 /***/ function(module, exports) {
 
 module.exports = require("rxjs/add/operator/toPromise");
 
 /***/ },
-/* 24 */
+/* 25 */
 /***/ function(module, exports) {
 
 module.exports = require("vanilla-masker");
 
 /***/ },
-/* 25 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
 "use strict";
