@@ -5,8 +5,8 @@ if (!Array.isArray) {
   };
 }
 
-if (!Array.prototype.find) {
-  Object.defineProperty(Array.prototype, 'find', {
+if (!Array.prototype['customLookup']) {
+  Object.defineProperty(Array.prototype, 'customLookup', {
     value: function(predicate) {
      'use strict';
      if (this == null) {

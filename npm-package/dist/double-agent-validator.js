@@ -664,7 +664,7 @@ var InputMaskDirective = (function () {
         if (jsonProperty && jsonProperty['ui']) {
             if (Array.isArray(jsonProperty['ui']['mask'])) {
                 var masksArray = jsonProperty['ui']['mask'];
-                var mask = masksArray.find(function (item) { return new RegExp(item['matcher']).test(value); });
+                var mask = masksArray.customLookup(function (item) { return new RegExp(item['matcher']).test(value); });
                 return mask ? mask['value'] : null;
             }
             else {
@@ -892,8 +892,8 @@ if (!Array.isArray) {
         return Object.prototype.toString.call(arg) === '[object Array]';
     };
 }
-if (!Array.prototype.find) {
-    Object.defineProperty(Array.prototype, 'find', {
+if (!Array.prototype['customLookup']) {
+    Object.defineProperty(Array.prototype, 'customLookup', {
         value: function (predicate) {
             'use strict';
             if (this == null) {
