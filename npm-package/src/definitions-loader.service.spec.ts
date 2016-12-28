@@ -2,17 +2,21 @@ import { ValidatorDefinitionsLoader } from './definitions-loader.service';
 import { DoubleAgentValidator } from './validator.service';
 import * as nock from 'nock';
 import { NodeRemoteLoader } from './remote-loaders/node-remote-loader';
-import * as fs from 'fs';
+// import * as fs from 'fs';
 import * as path from 'path';
 import * as jsdomNS from 'jsdom';
 
 
 import { expect } from 'chai';
+import { InTestRawLoader } from './remote-loaders/in-test-raw-loader';
+
+let scriptContent = require('raw-loader!../mock-data/script-test.js');
+let doubleAgentValidator = new DoubleAgentValidator();
 
 describe('ValidatorDefinitionsLoader', () => {
-  let doubleAgentValidator: DoubleAgentValidator;
+
   let loader: ValidatorDefinitionsLoader;
-  let remoteLoader = new NodeRemoteLoader();
+  let remoteLoader = new InTestRawLoader(scriptContent, doubleAgentValidator);
   let jsdom = jsdomNS.jsdom;
   jsdomNS.createVirtualConsole().sendTo(console);
 
@@ -20,17 +24,10 @@ describe('ValidatorDefinitionsLoader', () => {
   beforeEach(() => {
     loader = new ValidatorDefinitionsLoader(remoteLoader);
     window = jsdom('<html><body>Página de Teste</body></html>', { url: 'http://localhost' }).defaultView;
-
-    // mock request
-    let scriptContent = fs.readFileSync(path.resolve(__dirname, '../mock-data/script-test.js')).toString();
-    nock('http://localhost:8080')
-      .get('/validacao')
-      .reply(200, scriptContent)
-      ;
   });
 
   it('loads script from remote module', (done) => {
-    loader.load(window, 'http://localhost:8080/validacao').then(() => {
+    loader.load(window, scriptContent).then(() => {
       doubleAgentValidator = new DoubleAgentValidator();
       doubleAgentValidator['scriptContext'] = window;
       let result = doubleAgentValidator.validate('contribuinte-v1', {

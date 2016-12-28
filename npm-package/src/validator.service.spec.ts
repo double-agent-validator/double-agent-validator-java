@@ -1,8 +1,6 @@
 import { DoubleAgentValidator } from './validator.service';
 import Ajv = require('ajv');
 import { expect } from 'chai';
-import * as fs from 'fs';
-import * as path from 'path';
 import * as jsdomNS from 'jsdom';
 
 import * as _ from 'lodash';
@@ -11,7 +9,7 @@ describe('DoubleAgentValidator', () => {
   let subject: DoubleAgentValidator;
   let jsdom = jsdomNS.jsdom;
   jsdomNS.createVirtualConsole().sendTo(console);
-  let scriptContent = fs.readFileSync(path.resolve(__dirname, '../mock-data/script-test.js')).toString();
+  let scriptContent = require('raw-loader!../mock-data/script-test.js');
   let window: Window;
 
   before((done) => {
@@ -20,7 +18,6 @@ describe('DoubleAgentValidator', () => {
       + '</script></body></html>', { url: 'http://localhost' }).defaultView;
 
     window.onload = (ev) => {
-
       subject = new DoubleAgentValidator();
       subject['scriptContext'] = window;
       done();

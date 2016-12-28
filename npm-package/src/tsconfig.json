@@ -6,11 +6,10 @@
     "lib": ["dom", "es2015", "es5" ],
     "sourceRoot": "src",
     "mapRoot": "./",
-    "sourceMap": false,
+    "sourceMap": true,
     "module": "commonjs",
     "moduleResolution": "node",
     "outDir": "../dist/out-tsc",
-    "sourceMap": true,
     "target": "es5",
     "typeRoots": [
       "../node_modules/@types"

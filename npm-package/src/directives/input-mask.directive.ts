@@ -38,7 +38,9 @@ export class InputMaskDirective {
     if (jsonProperty && jsonProperty['ui']) {
       if (Array.isArray(jsonProperty['ui']['mask'])) {
         let masksArray = jsonProperty['ui']['mask'];
-        let mask = findInArray(masksArray, (item) => new RegExp(item['matcher']).test(value));
+        let mask = findInArray(masksArray, (item) => {
+          return new RegExp(item['matcher']).test(value)
+        });
         return mask ? mask['value'] : null;
 
       } else {

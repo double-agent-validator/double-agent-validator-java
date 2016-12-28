@@ -66,6 +66,7 @@ export class DoubleAgentValidator {
   }
 
   getSchema(schemaName: string): JsonSchema {
+    debugger;
     return <JsonSchema>this.scriptContext['DoubleAgent']['JsonSchemaValidator'].getSchemaObject(schemaName);
   }
 

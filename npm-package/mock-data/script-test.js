@@ -279,7 +279,27 @@ var DoubleAgent;
                                     type: 'string',
                                     format: 'cnpj'
                                 }
-                            ]
+                            ],
+                            ui: {
+                                mask: [
+                                    {
+                                        matcher: "^[0-9\.\-]{1-14}$",
+                                        value: "999.999.999-99"
+                                    },
+                                    {
+                                        matcher: "^[0-9\.\-]{15-18}$",
+                                        value: "99.999.999/9999-99"
+                                    },
+                                    {
+                                        matcher: "^[0-9]{1,11}$",
+                                        value: "999.999.999-99"
+                                    },
+                                    {
+                                        matcher: "^[0-9]{12,14}$",
+                                        value: "99.999.999/9999-99"
+                                    }
+                                ],
+                            }
                         },
                         nacionalidade: {
                             type: "string",
