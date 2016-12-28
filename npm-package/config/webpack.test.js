@@ -13,11 +13,9 @@ module.exports = {
   module: {
     loaders: [{
       test: /\.ts$/,
-      loader:
-        'awesome-typescript-loader', //?configFileName=' + tsConfigPath + 'sourceMap=' + !coverageEnabled + ',experimentalDecorators=true,inlineSourceMap=' + coverageEnabled + ',module=commonjs,noEmitHelpers=false,compilerOptions{}=removeComments:true'
+      loader: 'awesome-typescript-loader', //?configFileName=' + tsConfigPath + 'sourceMap=' + !coverageEnabled + ',experimentalDecorators=true,inlineSourceMap=' + coverageEnabled + ',module=commonjs,noEmitHelpers=false,compilerOptions{}=removeComments:true'
       query: {
-        tsconfig: tsConfigPath,
-        experimentalDecorators: true
+        tsconfig: tsConfigPath
       }
     }, {
       test: /\.html$/,
