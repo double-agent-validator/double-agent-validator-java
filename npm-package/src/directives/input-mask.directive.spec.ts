@@ -2,12 +2,8 @@ import { Component } from '@angular/core';
 import { ReactiveFormsModule, FormGroup } from '@angular/forms';
 import { getTestBed, TestBed, ComponentFixture } from '@angular/core/testing';
 import { expect } from 'chai';
-import { spy } from 'sinon';
 import { InputMaskDirective } from './input-mask.directive';
 import { DoubleAgentFormGroupBuilder } from '../form/form-group-builder.service';
-import { DoubleAgentValidatorModule, DOUBLE_AGENT_VALIDATOR_SCHEMA_URL } from '../validator.module';
-import { RemoteLoader } from '../models/remote-loader';
-import { InTestRawLoader } from '../remote-loaders/in-test-raw-loader';
 import { DoubleAgentValidator } from '../validator.service';
 import { DoubleAgentFormControlValidatorBuilder } from '../form/form-control-validator-builder.service';
 import * as jsdomNS from 'jsdom';
@@ -101,7 +97,7 @@ describe(`InputMaskDirective`, () => {
     let niControlWithMask = getMockForMask(fixture, 'ni', null);
     niControlWithMask.triggerInput('00000000000191');
     fixture.detectChanges();
-    expect(niControlWithMask.getValueAfterMask()).to.eq('00.000.000/0001-91');
+    expect(niControlWithMask.writeValueStub.calledWith('00.000.000/0001-91')).to.be.true;
   });
 
   it('should be valid after mask cnpj', () => {
@@ -117,7 +113,7 @@ describe(`InputMaskDirective`, () => {
     let niControlWithMask = getMockForMask(fixture, 'ni', null);
     niControlWithMask.triggerInput('00000000191');
     fixture.detectChanges();
-    expect(niControlWithMask.getValueAfterMask()).to.eq('000.000.001-91');
+    expect(niControlWithMask.writeValueStub.calledWith('000.000.001-91')).to.be.true;
   });
 
   it('should be valid after mask cpf', () => {

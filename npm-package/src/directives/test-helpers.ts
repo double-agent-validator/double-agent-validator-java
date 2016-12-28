@@ -18,9 +18,10 @@ export function getMockForMask(fixture: ComponentFixture<any>, controlName: stri
   let setValueMockFn = (value) => {
     valueAfterMask = value;
   };
-  sinon.stub(maskDirective, 'writeValue', setValueMockFn);
+  let maskDirectiveWriteValue = sinon.stub(maskDirective, 'writeValue', setValueMockFn);
   return {
     maskDirective: maskDirective,
+    writeValueStub: maskDirectiveWriteValue,
     element: element,
     triggerInput: (inputValue: String) => {
       element.triggerEventHandler('input', { target: { value: inputValue } });
