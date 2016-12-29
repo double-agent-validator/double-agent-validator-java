@@ -142,6 +142,7 @@ var DoubleAgentValidator = (function () {
         return result;
     };
     DoubleAgentValidator.prototype.getSchema = function (schemaName) {
+        debugger;
         return this.scriptContext['DoubleAgent']['JsonSchemaValidator'].getSchemaObject(schemaName);
     };
     /**
@@ -665,7 +666,9 @@ var InputMaskDirective = (function () {
         if (jsonProperty && jsonProperty['ui']) {
             if (Array.isArray(jsonProperty['ui']['mask'])) {
                 var masksArray = jsonProperty['ui']['mask'];
-                var mask = helpers_1.findInArray(masksArray, function (item) { return new RegExp(item['matcher']).test(value); });
+                var mask = helpers_1.findInArray(masksArray, function (item) {
+                    return new RegExp(item['matcher']).test(value);
+                });
                 return mask ? mask['value'] : null;
             }
             else {
@@ -1115,9 +1118,9 @@ exports.InTestRawLoader = InTestRawLoader;
  */
 var NodeRemoteLoader = (function () {
     function NodeRemoteLoader() {
-        Promise.resolve().then((function (requireRuntime) {
+        Promise.resolve().catch(function(err) { __webpack_require__.oe(err); }).then((function (requireRuntime) {
             this._restler = requireRuntime('restler');
-        }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
+        }).bind(null, __webpack_require__));
     }
     Object.defineProperty(NodeRemoteLoader.prototype, "restler", {
         get: function () {
