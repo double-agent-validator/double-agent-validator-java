@@ -3,12 +3,17 @@ package br.gov.serpro.doubleagent;
 import br.gov.serpro.doubleagent.model.ValidationResult;
 import com.fitbur.testify.Cut;
 import com.fitbur.testify.junit.UnitTest;
+import org.apache.commons.io.FileUtils;
 import org.assertj.core.api.JUnitSoftAssertions;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.io.File;
 import java.io.InputStream;
+import java.nio.charset.Charset;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -90,6 +95,26 @@ public class JsonSchemaValidatorTest {
         assertThat(vendorScript.contains("var ajv = new Ajv")).isTrue();
     }
 
+    @Test
+    public void writeToFile() throws Exception {
+        InputStream is = this.getClass().getResourceAsStream("/validators/js/rfb.js");
+        cut.loadSchemaData(is, "RFB.JsonSchemaValidator", "RFB.JsonSchemaValidator.Common", "RFB.JsonSchemaValidator.Common.TipoCredito", "RFB.JsonSchemaValidator.Documento");
+
+        long millis = System.currentTimeMillis() % 1000;
+        File f = File.createTempFile("jsonschema", Long.toString(millis));
+        cut.writeToFile(f.getPath());
+
+        String content = FileUtils.readFileToString(f, Charset.forName("UTF-8"));
+
+        assertThat(content).contains("name: 'checarHabilitacaoContribuinte'");
+    }
+
+
+    private String getCurrentPath() {
+        Path currentRelativePath = Paths.get("");
+        String path = currentRelativePath.toAbsolutePath().toString();
+        return path;
+    }
 
 }
 
