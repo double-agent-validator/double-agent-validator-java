@@ -142,6 +142,7 @@ var DoubleAgentValidator = (function () {
         return result;
     };
     DoubleAgentValidator.prototype.getSchema = function (schemaName) {
+        debugger;
         return this.scriptContext['DoubleAgent']['JsonSchemaValidator'].getSchemaObject(schemaName);
     };
     /**
@@ -665,7 +666,9 @@ var InputMaskDirective = (function () {
         if (jsonProperty && jsonProperty['ui']) {
             if (Array.isArray(jsonProperty['ui']['mask'])) {
                 var masksArray = jsonProperty['ui']['mask'];
-                var mask = helpers_1.findInArray(masksArray, function (item) { return new RegExp(item['matcher']).test(value); });
+                var mask = helpers_1.findInArray(masksArray, function (item) {
+                    return new RegExp(item['matcher']).test(value);
+                });
                 return mask ? mask['value'] : null;
             }
             else {
@@ -769,6 +772,14 @@ var DoubleAgentFormControlValidatorBuilder = (function () {
             var data = {};
             if (_.isString(propertyOrFormData)) {
                 data[propertyOrFormData] = control.value;
+                var jsonSchemaFormControl = control;
+                if (jsonSchemaFormControl.jsonSchemaProperty &&
+                    jsonSchemaFormControl.jsonSchemaProperty.ui &&
+                    jsonSchemaFormControl.jsonSchemaProperty.ui.dependents && control.root && control.root['controls']) {
+                    _.each(jsonSchemaFormControl.jsonSchemaProperty.ui.dependents, function (propertyName) {
+                        data[propertyName] = control.root['controls'][propertyName].value;
+                    });
+                }
             }
             else {
                 data = propertyOrFormData;
@@ -778,15 +789,31 @@ var DoubleAgentFormControlValidatorBuilder = (function () {
             if (result.hasErrors) {
                 // if a specific property was provided, then only returns error refering that property
                 if (_.isString(propertyOrFormData)) {
-                    var errorsOfProperty = result.errors.filter(function (error) {
-                        return error.dataPath.match("." + propertyOrFormData);
+                    /*let errorsOfProperty = result.errors.filter((error) => {
+                      return error.dataPath.match(`\.${propertyOrFormData}`);
                     });
                     if (errorsOfProperty.length > 0) {
-                        validationResult.jsonSchema = {
-                            errors: errorsOfProperty
-                        };
-                        return validationResult;
-                    }
+                      validationResult.jsonSchema = {
+                        errors: errorsOfProperty
+                      };
+                      return validationResult;
+                    }*/
+                    _.each(result.errors, function (error) {
+                        if (error.dataPath) {
+                            var propertyName = error.dataPath.substring(1);
+                            var form = control.root;
+                            if (form && form.controls[propertyName]) {
+                                if (!form.controls[propertyName].errors) {
+                                    form.controls[propertyName].errors = [];
+                                }
+                                if (!form.controls[propertyName].errors['jsonSchema']) {
+                                    form.controls[propertyName].errors['jsonSchema'] = { errors: [] };
+                                }
+                                form.controls[propertyName].errors['jsonSchema'].errors.push(error);
+                                control.updateValueAndValidity({ onlySelf: true, emitEvent: false });
+                            }
+                        }
+                    });
                 }
                 else {
                     // if no specific property was passed, so return all errors found
@@ -978,6 +1005,18 @@ var DoubleAgentFormGroupBuilder = (function () {
         });
         // cria uma instância do FormGroup a partir da configuração construída
         formGroup = this.formBuilder.group(formGroupConfig);
+        // subscribe to valueChange of control if it has valdiateOnChange ui keyword
+        _.each(formGroup.controls, function (formControl) {
+            if (formControl.jsonSchemaProperty['ui'] && formControl.jsonSchemaProperty['ui']['validateOnChange']) {
+                formControl.valueChanges.subscribe(function () {
+                    _.each(formControl.jsonSchemaProperty['ui']['validateOnChange'], function (propertyToValidate) {
+                        if (formGroup.controls[propertyToValidate]) {
+                            formGroup.controls[propertyToValidate].updateValueAndValidity({ onlySelf: true });
+                        }
+                    });
+                });
+            }
+        });
         // construir validador do FormGroup (keywords do objeto)
         this.addKeywordsValidator(jsonSchema, formGroup);
         formGroup.jsonSchema = jsonSchema;
