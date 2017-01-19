@@ -789,15 +789,6 @@ var DoubleAgentFormControlValidatorBuilder = (function () {
             if (result.hasErrors) {
                 // if a specific property was provided, then only returns error refering that property
                 if (_.isString(propertyOrFormData)) {
-                    /*let errorsOfProperty = result.errors.filter((error) => {
-                      return error.dataPath.match(`\.${propertyOrFormData}`);
-                    });
-                    if (errorsOfProperty.length > 0) {
-                      validationResult.jsonSchema = {
-                        errors: errorsOfProperty
-                      };
-                      return validationResult;
-                    }*/
                     _.each(result.errors, function (error) {
                         if (error.dataPath) {
                             var propertyName = error.dataPath.substring(1);
