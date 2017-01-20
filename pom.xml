@@ -23,7 +23,7 @@
 
     <groupId>br.gov.serpro.double-agent</groupId>
     <artifactId>double-agent-validator</artifactId>
-    <version>0.0.17</version>
+    <version>0.0.18</version>
     <packaging>jar</packaging>
 
     <properties>
