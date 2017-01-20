@@ -9,8 +9,10 @@ import * as jsdomNS from 'jsdom';
 
 import { expect } from 'chai';
 import { InTestRawLoader } from './remote-loaders/in-test-raw-loader';
+import { getDoubleAgentMockedScriptContent } from './directives/test-helpers';
 
-let scriptContent = require('raw-loader!../mock-data/script-test.js');
+let scriptContent = getDoubleAgentMockedScriptContent();
+
 let doubleAgentValidator = new DoubleAgentValidator();
 
 describe('ValidatorDefinitionsLoader', () => {

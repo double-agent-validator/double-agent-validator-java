@@ -7,9 +7,9 @@ import { DoubleAgentFormGroupBuilder } from '../form/form-group-builder.service'
 import { DoubleAgentValidator } from '../validator.service';
 import { DoubleAgentFormControlValidatorBuilder } from '../form/form-control-validator-builder.service';
 import * as jsdomNS from 'jsdom';
-import { getMockForMask } from './test-helpers';
+import { getMockForMask, getDoubleAgentMockedScriptContent } from './test-helpers';
 
-let scriptContent = require('raw-loader!../../mock-data/script-test.js');
+let scriptContent = getDoubleAgentMockedScriptContent();
 
 let jsdom = jsdomNS.jsdom;
 jsdomNS.createVirtualConsole().sendTo(console);

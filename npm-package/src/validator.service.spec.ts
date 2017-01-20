@@ -4,12 +4,13 @@ import { expect } from 'chai';
 import * as jsdomNS from 'jsdom';
 
 import * as _ from 'lodash';
+import { getDoubleAgentMockedScriptContent } from './directives/test-helpers';
 
 describe('DoubleAgentValidator', () => {
   let subject: DoubleAgentValidator;
   let jsdom = jsdomNS.jsdom;
   jsdomNS.createVirtualConsole().sendTo(console);
-  let scriptContent = require('raw-loader!../mock-data/script-test.js');
+  let scriptContent = getDoubleAgentMockedScriptContent();
   let window: Window;
 
   before((done) => {

@@ -1,6 +1,6 @@
 {
   "name": "double-agent-validator",
-  "version": "1.0.31",
+  "version": "1.0.32",
   "description": "Double Agent Validator Angular 2 Library",
   "author": "Abner Oliveira",
   "license": "MIT",
@@ -12,8 +12,8 @@
   "scripts": {
     "mocha-webpack": "mocha-webpack -w -G",
     "mocha-webpack:ci": "mocha-webpack -G",
-    "test": "TS_NODE_PROJECT=./src nyc mocha  --require reflect-metadata --require ts-node/register --opts ./mocha.opts",
-    "test:single": "TS_NODE_PROJECT=./src nyc mocha --require reflect-metadata --require ts-node/register --opts ./mocha.ci.opts",
+    "test": "TS_NODE_PROJECT=./src nyc mocha  --require ts-node/register --opts ./mocha.opts",
+    "test:single": "TS_NODE_PROJECT=./src nyc mocha --require ts-node/register --opts ./mocha.ci.opts",
     "compile": "webpack",
     "ic": "npm run test:single && npm run compile",
     "clean-dist": "rimraf dist/*",
@@ -53,7 +53,6 @@
     "nock": "^9.0.2",
     "nyc": "^10.0.0",
     "raw-loader": "^0.5.1",
-    "reflect-metadata": "^0.1.8",
     "restler": "^3.4.0",
     "rimraf": "^2.5.4",
     "rxjs": "5.0.1",

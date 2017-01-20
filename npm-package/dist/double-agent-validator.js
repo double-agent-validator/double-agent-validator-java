@@ -142,7 +142,6 @@ var DoubleAgentValidator = (function () {
         return result;
     };
     DoubleAgentValidator.prototype.getSchema = function (schemaName) {
-        debugger;
         return this.scriptContext['DoubleAgent']['JsonSchemaValidator'].getSchemaObject(schemaName);
     };
     /**
@@ -789,22 +788,15 @@ var DoubleAgentFormControlValidatorBuilder = (function () {
             if (result.hasErrors) {
                 // if a specific property was provided, then only returns error refering that property
                 if (_.isString(propertyOrFormData)) {
-                    _.each(result.errors, function (error) {
-                        if (error.dataPath) {
-                            var propertyName = error.dataPath.substring(1);
-                            var form = control.root;
-                            if (form && form.controls[propertyName]) {
-                                if (!form.controls[propertyName].errors) {
-                                    form.controls[propertyName].errors = [];
-                                }
-                                if (!form.controls[propertyName].errors['jsonSchema']) {
-                                    form.controls[propertyName].errors['jsonSchema'] = { errors: [] };
-                                }
-                                form.controls[propertyName].errors['jsonSchema'].errors.push(error);
-                                control.updateValueAndValidity({ onlySelf: true, emitEvent: false });
-                            }
-                        }
+                    var errorsOfProperty = result.errors.filter(function (error) {
+                        return error.dataPath.match("." + propertyOrFormData);
                     });
+                    if (errorsOfProperty.length > 0) {
+                        validationResult.jsonSchema = {
+                            errors: errorsOfProperty
+                        };
+                        return validationResult;
+                    }
                 }
                 else {
                     // if no specific property was passed, so return all errors found
@@ -1145,9 +1137,9 @@ exports.InTestRawLoader = InTestRawLoader;
  */
 var NodeRemoteLoader = (function () {
     function NodeRemoteLoader() {
-        Promise.resolve().catch(function(err) { __webpack_require__.oe(err); }).then((function (requireRuntime) {
+        Promise.resolve().then((function (requireRuntime) {
             this._restler = requireRuntime('restler');
-        }).bind(null, __webpack_require__));
+        }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
     }
     Object.defineProperty(NodeRemoteLoader.prototype, "restler", {
         get: function () {
