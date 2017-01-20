@@ -1145,9 +1145,9 @@ exports.InTestRawLoader = InTestRawLoader;
  */
 var NodeRemoteLoader = (function () {
     function NodeRemoteLoader() {
-        Promise.resolve().then((function (requireRuntime) {
+        Promise.resolve().catch(function(err) { __webpack_require__.oe(err); }).then((function (requireRuntime) {
             this._restler = requireRuntime('restler');
-        }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
+        }).bind(null, __webpack_require__));
     }
     Object.defineProperty(NodeRemoteLoader.prototype, "restler", {
         get: function () {

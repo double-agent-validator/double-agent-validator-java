@@ -7,8 +7,7 @@ import javax.script.ScriptContext;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -175,6 +174,15 @@ public class JsonSchemaValidator {
 
     public String getScriptFileWithDependencies() {
         return vendorScripts.toString() + NEW_LINE + scriptsLoaded.toString();
+    }
+
+    public void writeToFile(String path) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(path))) {
+            bw.write(this.scriptsLoaded.toString());
+        } catch(IOException e) {
+            System.err.println("Could not write JsonSchema to disk" + e.getMessage());
+            e.printStackTrace(System.err);
+        }
     }
 
 

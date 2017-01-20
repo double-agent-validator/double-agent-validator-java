@@ -4,10 +4,12 @@ var path = require('path');
 let coverageEnabled = false;
 let tsConfigPath = path.join(__dirname, '../src/tsconfig.json');
 module.exports = {
+  context: path.join(__dirname, '../'),
   devtool: 'inline-source-map',
 
   resolve: {
-    extensions: ['.ts', '.js']
+    extensions: ['.ts', '.js'],
+
   },
 
   module: {
