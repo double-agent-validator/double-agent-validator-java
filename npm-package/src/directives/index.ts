@@ -1,2 +1,2 @@
-export * from './input-mask.directive';
-export * from './input-html5-attributes.directive';
+export { InputMaskDirective} from './input-mask.directive';
+export { InputHtml5AttributesDirective } from './input-html5-attributes.directive';

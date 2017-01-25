@@ -1,2 +1,2 @@
-export * from './validation-result';
-export * from './remote-loader';
+export { ValidationResult } from './validation-result';
+export { RemoteLoader } from './remote-loader';

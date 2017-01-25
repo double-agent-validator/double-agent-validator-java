@@ -1,3 +1,3 @@
-export * from './properties-collection';
-export * from './json-schema';
-export * from './json-schema-property';
+export { PropertiesCollection } from './properties-collection';
+export { JsonSchema } from './json-schema';
+export { JsonSchemaProperty } from './json-schema-property';
