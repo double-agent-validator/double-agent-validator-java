@@ -2,6 +2,13 @@ import { FormBuilder, FormGroup, ValidatorFn } from '@angular/forms';
 import { DoubleAgentValidator } from '../validator.service';
 import { DoubleAgentFormControlValidatorBuilder } from './form-control-validator-builder.service';
 import { DoubleAgentFormGroup } from './form-group';
+export interface FormGroupStates {
+    [key: string]: FormControlState;
+}
+export declare type FormControlState = string | {
+    value: string;
+    disabled: boolean;
+};
 /**
  * This class allows creates a formGroup which contains all the fields represented in an given schema
  * each one containing it's own angular validators
@@ -29,7 +36,7 @@ export declare class DoubleAgentFormGroupBuilder {
      *
      * @memberOf FormGroupBuilder
      */
-    build(schemaName: string): DoubleAgentFormGroup | FormGroup;
+    build(schemaName: string, formGroupStates?: FormGroupStates): DoubleAgentFormGroup | FormGroup;
     private addKeywordsValidator(schema, formGroup);
     buildAngularFormGroupValidator(schemaName: string, keywords: string[], formGroup: FormGroup): ValidatorFn;
 }

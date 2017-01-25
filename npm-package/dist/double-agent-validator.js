@@ -967,7 +967,7 @@ var DoubleAgentFormGroupBuilder = (function () {
      *
      * @memberOf FormGroupBuilder
      */
-    DoubleAgentFormGroupBuilder.prototype.build = function (schemaName) {
+    DoubleAgentFormGroupBuilder.prototype.build = function (schemaName, formGroupStates) {
         var _this = this;
         // TODO validar se o esquema existe e retornar erro apropriado
         var jsonSchema = this.doubleAgentValidator.getSchema(schemaName);
@@ -980,8 +980,11 @@ var DoubleAgentFormGroupBuilder = (function () {
         // validadores para cada campo no objeto formGroupConfig
         _.each(jsonSchema.properties, function (property, propertyName) {
             if (!_.has('$ref', property) || property['type'] === 'object') {
-                // TODO get state value from property default
-                var formControl = new forms_1.FormControl('', _this.formControlValidatorBuilder.build(jsonSchema, propertyName));
+                var formState = '';
+                if (formGroupStates && formGroupStates[propertyName]) {
+                    formState = formGroupStates[propertyName];
+                }
+                var formControl = new forms_1.FormControl(formState, _this.formControlValidatorBuilder.build(jsonSchema, propertyName));
                 formControl.jsonSchemaProperty = jsonSchema.properties[propertyName];
                 formGroupConfig[propertyName] = formControl;
             }
@@ -1137,9 +1140,9 @@ exports.InTestRawLoader = InTestRawLoader;
  */
 var NodeRemoteLoader = (function () {
     function NodeRemoteLoader() {
-        Promise.resolve().then((function (requireRuntime) {
+        Promise.resolve().catch(function(err) { __webpack_require__.oe(err); }).then((function (requireRuntime) {
             this._restler = requireRuntime('restler');
-        }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
+        }).bind(null, __webpack_require__));
     }
     Object.defineProperty(NodeRemoteLoader.prototype, "restler", {
         get: function () {

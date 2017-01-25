@@ -1,8 +1,12 @@
 {
   "name": "double-agent-validator",
-  "version": "1.0.32",
+  "version": "1.0.33",
   "description": "Double Agent Validator Angular 2 Library",
   "author": "Abner Oliveira",
+  "repository": {
+    "type": "git",
+    "url": "git@gitlab.com:serpro/double-agent-validator.git"
+  },
   "license": "MIT",
   "main": "dist/double-agent-validator.js",
   "typings": "dist/src/index.d.ts",
