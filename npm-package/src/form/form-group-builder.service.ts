@@ -75,6 +75,19 @@ export class DoubleAgentFormGroupBuilder {
     // cria uma instância do FormGroup a partir da configuração construída
     formGroup = <any>this.formBuilder.group(formGroupConfig);
 
+    // subscribe to valueChange of control if it has valdiateOnChange ui keyword
+    _.each(formGroup.controls, (formControl: DoubleAgentFormControl) => {
+      if (formControl.jsonSchemaProperty['ui'] && formControl.jsonSchemaProperty['ui']['validateOnChange']) {
+        formControl.valueChanges.subscribe(() => {
+          _.each(formControl.jsonSchemaProperty['ui']['validateOnChange'], (propertyToValidate) => {
+            if (formGroup.controls[propertyToValidate]) {
+              formGroup.controls[propertyToValidate].updateValueAndValidity({ onlySelf: true });
+            }
+          });
+        });
+      }
+    });
+
     // construir validador do FormGroup (keywords do objeto)
     this.addKeywordsValidator(jsonSchema, formGroup);
 

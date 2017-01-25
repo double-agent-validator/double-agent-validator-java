@@ -7,6 +7,20 @@ import { InputMaskDirective } from './input-mask.directive';
 
 import * as sinon from 'sinon';
 
+
+export function getDoubleAgentMockedScriptContent() {
+  let scriptContent = '';
+  try {
+    scriptContent = require('raw-loader!../../mock-data/script-test.js');
+  } catch (e) {
+    let readScript = `let fs = require('fs');
+                  var path = require('path');
+                  scriptContent = String(fs.readFileSync(path.join(__dirname, '../../mock-data/script-test.js')));`;
+    eval(readScript);
+  }
+  return scriptContent;
+}
+
 export function getFormElement(fixture: ComponentFixture<any>, controlName: string) {
   return fixture.debugElement.query(By.css(`input[formcontrolname=${controlName}]`));
 }

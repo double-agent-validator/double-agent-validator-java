@@ -142,7 +142,6 @@ var DoubleAgentValidator = (function () {
         return result;
     };
     DoubleAgentValidator.prototype.getSchema = function (schemaName) {
-        debugger;
         return this.scriptContext['DoubleAgent']['JsonSchemaValidator'].getSchemaObject(schemaName);
     };
     /**
@@ -772,6 +771,14 @@ var DoubleAgentFormControlValidatorBuilder = (function () {
             var data = {};
             if (_.isString(propertyOrFormData)) {
                 data[propertyOrFormData] = control.value;
+                var jsonSchemaFormControl = control;
+                if (jsonSchemaFormControl.jsonSchemaProperty &&
+                    jsonSchemaFormControl.jsonSchemaProperty.ui &&
+                    jsonSchemaFormControl.jsonSchemaProperty.ui.dependents && control.root && control.root['controls']) {
+                    _.each(jsonSchemaFormControl.jsonSchemaProperty.ui.dependents, function (propertyName) {
+                        data[propertyName] = control.root['controls'][propertyName].value;
+                    });
+                }
             }
             else {
                 data = propertyOrFormData;
@@ -981,6 +988,18 @@ var DoubleAgentFormGroupBuilder = (function () {
         });
         // cria uma instância do FormGroup a partir da configuração construída
         formGroup = this.formBuilder.group(formGroupConfig);
+        // subscribe to valueChange of control if it has valdiateOnChange ui keyword
+        _.each(formGroup.controls, function (formControl) {
+            if (formControl.jsonSchemaProperty['ui'] && formControl.jsonSchemaProperty['ui']['validateOnChange']) {
+                formControl.valueChanges.subscribe(function () {
+                    _.each(formControl.jsonSchemaProperty['ui']['validateOnChange'], function (propertyToValidate) {
+                        if (formGroup.controls[propertyToValidate]) {
+                            formGroup.controls[propertyToValidate].updateValueAndValidity({ onlySelf: true });
+                        }
+                    });
+                });
+            }
+        });
         // construir validador do FormGroup (keywords do objeto)
         this.addKeywordsValidator(jsonSchema, formGroup);
         formGroup.jsonSchema = jsonSchema;
@@ -1118,9 +1137,9 @@ exports.InTestRawLoader = InTestRawLoader;
  */
 var NodeRemoteLoader = (function () {
     function NodeRemoteLoader() {
-        Promise.resolve().catch(function(err) { __webpack_require__.oe(err); }).then((function (requireRuntime) {
+        Promise.resolve().then((function (requireRuntime) {
             this._restler = requireRuntime('restler');
-        }).bind(null, __webpack_require__));
+        }).bind(null, __webpack_require__)).catch(__webpack_require__.oe);
     }
     Object.defineProperty(NodeRemoteLoader.prototype, "restler", {
         get: function () {
