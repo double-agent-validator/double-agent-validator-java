@@ -7,6 +7,12 @@ import { DoubleAgentFormControlValidatorBuilder } from './form-control-validator
 import { DoubleAgentFormGroup } from './form-group';
 import { DoubleAgentFormControl } from './form-control';
 
+export interface FormGroupStates {
+  [key: string]: FormControlState;
+}
+
+export type FormControlState  = string | { value: string, disabled: boolean };
+
 /**
  * This class allows creates a formGroup which contains all the fields represented in an given schema
  * each one containing it's own angular validators
@@ -39,7 +45,7 @@ export class DoubleAgentFormGroupBuilder {
    *
    * @memberOf FormGroupBuilder
    */
-  build(schemaName: string): DoubleAgentFormGroup | FormGroup {
+  build(schemaName: string, formGroupStates?: FormGroupStates): DoubleAgentFormGroup | FormGroup {
 
     // TODO validar se o esquema existe e retornar erro apropriado
     let jsonSchema: JsonSchema = this.doubleAgentValidator.getSchema(schemaName);
@@ -55,9 +61,12 @@ export class DoubleAgentFormGroupBuilder {
     // validadores para cada campo no objeto formGroupConfig
     _.each(jsonSchema.properties, (property, propertyName) => {
       if (!_.has('$ref', property) || property['type'] === 'object') { // Igore the property if refer another object or is an object
-        // TODO get state value from property default
+        let formState: string | FormControlState = '';
+        if (formGroupStates && formGroupStates[propertyName]) {
+          formState = formGroupStates[propertyName];
+        }
         let formControl: DoubleAgentFormControl =
-          <DoubleAgentFormControl>new FormControl('', this.formControlValidatorBuilder.build(jsonSchema, propertyName));
+          <DoubleAgentFormControl>new FormControl(formState, this.formControlValidatorBuilder.build(jsonSchema, propertyName));
         formControl.jsonSchemaProperty = jsonSchema.properties[propertyName];
         formGroupConfig[propertyName] = formControl;
       }
