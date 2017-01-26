@@ -1,4 +1,4 @@
-import { Injector, ModuleWithProviders, OpaqueToken, NgModule, APP_INITIALIZER, Injectable } from '@angular/core';
+import { Injector, ModuleWithProviders, OpaqueToken, NgModule, APP_INITIALIZER } from '@angular/core';
 import { DoubleAgentValidator } from './validator.service';
 import { DoubleAgentValidatorNg2Factory } from './ng2-factory.service';
 import { DoubleAgentFormGroupBuilder, DoubleAgentFormControlValidatorBuilder } from './form';
