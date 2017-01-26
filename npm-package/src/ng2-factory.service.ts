@@ -1,7 +1,6 @@
 import { DoubleAgentValidator } from './validator.service';
 import { ValidatorDefinitionsLoader } from './definitions-loader.service';
 import { Injectable, Injector } from '@angular/core';
-
 import { DOUBLE_AGENT_VALIDATOR_SCHEMA_URL } from './validator.module';
 import { RemoteLoader } from './models/remote-loader';
 
@@ -28,7 +27,6 @@ export class DoubleAgentValidatorNg2Factory {
    * @memberOf DoubleAgentValidatorNg2Factory
    */
   static factoryFn(injector: Injector, factory: DoubleAgentValidatorNg2Factory) {
-    // return (): Promise<void> => {
     let url: string = injector.get(DOUBLE_AGENT_VALIDATOR_SCHEMA_URL);
     return new Promise<void>((resolve, reject) => {
       let errors = null;
@@ -82,7 +80,7 @@ export class DoubleAgentValidatorNg2Factory {
       validationsLoader.load(window, url).then(() => {
         this.doubleAgentValidator['scriptContext'] = window;
         window['DoubleAgentValidator'] = this.doubleAgentValidator;
-        this.doubleAgentValidator['_notifyReady']();
+        // this.doubleAgentValidator['_notifyReady']();
         resolve(null);
       },
         (e) => {

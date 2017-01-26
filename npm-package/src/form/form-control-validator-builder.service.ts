@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, Validators, ValidatorFn, FormControlName, FormControl, FormGroup } from '@angular/forms';
+import { AbstractControl, Validators, ValidatorFn } from '@angular/forms';
 import { JsonSchema } from '../models/schema/json-schema';
 import { DoubleAgentValidator } from '../validator.service';
 import * as _ from 'lodash';

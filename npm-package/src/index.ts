@@ -1,7 +1,8 @@
 import './polyfills';
 export { DoubleAgentValidator } from './validator.service';
 export { ValidatorDefinitionsLoader } from './definitions-loader.service';
-export { DoubleAgentValidatorModule } from './validator.module';
+export { DoubleAgentValidatorModule, DOUBLE_AGENT_VALIDATOR_SCHEMA_URL } from './validator.module';
+
 export { DoubleAgentFormGroupBuilder, FormGroupStates, FormControlState } from './form';
 export { ValidationResult, RemoteLoader,  } from './models';
 export { JsonSchemaProperty, JsonSchema } from './models/schema';

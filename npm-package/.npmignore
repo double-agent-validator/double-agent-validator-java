@@ -1,0 +1,12 @@
+dist/node_modules
+src/
+npm-debug.log*
+tslint.json
+config
+webpack.config.js
+test
+coverage
+.vscode
+.tmp
+.nyc_output
+*.tgz

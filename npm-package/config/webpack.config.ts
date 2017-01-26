@@ -15,7 +15,7 @@ if (argv.test) {
   config = getTestConfig();
 } else {
   // get webpack config for build the project
-  config = getBuildConfig('double-agent-validator.js', 'DoubleAgentValidator');
+  config = getBuildConfig('double-agent-validator.umd.js', 'DoubleAgentValidator');
 }
 
 export default config;

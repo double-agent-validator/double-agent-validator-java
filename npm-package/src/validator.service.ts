@@ -1,6 +1,5 @@
 import { ValidationResult } from './models';
 import * as ajvNsAndConstructor from 'ajv';
-import * as _ from 'lodash';
 import { JsonSchema } from './models/schema/json-schema';
 import { Injectable } from '@angular/core';
 
@@ -23,7 +22,6 @@ export class DoubleAgentValidator {
    * @type {ValidationResult}
    * @memberOf DoubleAgentValidator
    */
-  private noErrorResult: ValidationResult = { hasErrors: false, errors: null };
 
   isReady: ReplaySubject<void> = new ReplaySubject<void>(1);
 
@@ -36,9 +34,6 @@ export class DoubleAgentValidator {
   constructor() {
   }
 
-  private _notifyReady() {
-    this.isReady.next(null);
-  }
 
   /**
    *

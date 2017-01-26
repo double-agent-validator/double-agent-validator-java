@@ -1,9 +1,7 @@
 import { DoubleAgentValidator } from './validator.service';
-import Ajv = require('ajv');
 import { expect } from 'chai';
 import * as jsdomNS from 'jsdom';
 
-import * as _ from 'lodash';
 import { getDoubleAgentMockedScriptContent } from './directives/test-helpers';
 
 describe('DoubleAgentValidator', () => {
@@ -22,7 +20,7 @@ describe('DoubleAgentValidator', () => {
       subject = new DoubleAgentValidator();
       subject['scriptContext'] = window;
       done();
-    }
+    };
   });
 
 

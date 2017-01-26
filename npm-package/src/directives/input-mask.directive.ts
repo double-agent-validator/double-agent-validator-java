@@ -1,8 +1,7 @@
-import { Directive, HostListener, Renderer, ElementRef, Injector } from '@angular/core';
+import { Directive, HostListener, Injector } from '@angular/core';
 import { FormControlName } from '@angular/forms';
 
 import * as VMasker from 'vanilla-masker';
-import { DoubleAgentValidator } from '../validator.service';
 import { DoubleAgentFormControl } from '../form/form-control';
 import { findInArray } from '../helpers';
 
@@ -20,9 +19,6 @@ import { findInArray } from '../helpers';
 export class InputMaskDirective {
 
   constructor(
-    private renderer: Renderer,
-    private elementRef: ElementRef,
-    private doubleAgentValidator: DoubleAgentValidator,
     private injector: Injector
   ) {
 

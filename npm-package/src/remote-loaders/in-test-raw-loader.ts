@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
+import { Injectable, Inject } from '@angular/core';
 import { RemoteLoader } from '../models/remote-loader';
 import { DoubleAgentValidator } from '../validator.service';
 import { DoubleAgentValidatorNg2Factory } from '../ng2-factory.service';

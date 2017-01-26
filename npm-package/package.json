@@ -1,6 +1,6 @@
 {
   "name": "double-agent-validator",
-  "version": "1.0.33",
+  "version": "1.0.34",
   "description": "Double Agent Validator Angular 2 Library",
   "author": "Abner Oliveira",
   "repository": {
@@ -8,8 +8,8 @@
     "url": "git@gitlab.com:serpro/double-agent-validator.git"
   },
   "license": "MIT",
-  "main": "dist/double-agent-validator.js",
-  "typings": "dist/src/index.d.ts",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
   "files": [
     "dist"
   ],
@@ -18,7 +18,7 @@
     "mocha-webpack:ci": "mocha-webpack -G",
     "test": "TS_NODE_PROJECT=./src nyc mocha  --require ts-node/register --opts ./mocha.opts",
     "test:single": "TS_NODE_PROJECT=./src nyc mocha --require ts-node/register --opts ./mocha.ci.opts",
-    "compile": "webpack",
+    "compile": "rimraf dist && ngc -p src/tsconfig.aot.json && rimraf dist/node_modules && webpack",
     "ic": "npm run test:single && npm run compile",
     "clean-dist": "rimraf dist/*",
     "prepublish": "npm run compile"
@@ -27,6 +27,7 @@
   "devDependencies": {
     "@angular/common": "2.4.1",
     "@angular/compiler": "2.4.1",
+    "@angular/compiler-cli": "2.4.1",
     "@angular/core": "2.4.1",
     "@angular/forms": "2.4.1",
     "@angular/http": "2.4.1",
@@ -66,7 +67,7 @@
     "ts-node": "^1.7.0",
     "tslint": "^3.15.1",
     "tslint-loader": "^2.1.5",
-    "typescript": "2.1.1",
+    "typescript": "~2.0.3",
     "vanilla-masker": "^1.0.9",
     "webpack": "^2.1.0-beta.25",
     "webpack-merge": "^2.0.0",

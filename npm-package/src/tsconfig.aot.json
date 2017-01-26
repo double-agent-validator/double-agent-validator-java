@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "noUnusedLocals": true,
+    "declaration": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "lib": ["dom", "es2015", "es5"],
+    "inlineSources": true,
+    "sourceMap": true,
+    "module": "es2015",
+    "moduleResolution": "node",
+    "outDir": "../dist",
+    "target": "es5",
+    "typeRoots": [
+      "../node_modules/@types"
+    ]
+  },
+  "angularCompilerOptions": {
+    "genDir": "../dist",
+    "skipMetadataEmit" : false,
+    "strictMetadataEmit": true
+  }
+}

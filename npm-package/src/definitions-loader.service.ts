@@ -1,9 +1,6 @@
 
 import { Injectable } from '@angular/core';
 import { RemoteLoader } from './models/remote-loader';
-import * as _ from 'lodash';
-import * as ajvNsAndConstructor from 'ajv';
-import { ValidationResult } from './models/validation-result';
 
 /**
  *

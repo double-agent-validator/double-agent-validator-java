@@ -1,9 +1,6 @@
 import { ValidatorDefinitionsLoader } from './definitions-loader.service';
 import { DoubleAgentValidator } from './validator.service';
-import * as nock from 'nock';
-import { NodeRemoteLoader } from './remote-loaders/node-remote-loader';
 // import * as fs from 'fs';
-import * as path from 'path';
 import * as jsdomNS from 'jsdom';
 
 
