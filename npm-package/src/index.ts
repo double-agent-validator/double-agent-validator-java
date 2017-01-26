@@ -1,4 +1,7 @@
 import './polyfills';
+export { DoubleAgentFormGroup } from './form/form-group';
+export { DoubleAgentFormControl } from './form/form-control';
+export { DoubleAgentFormControlValidatorBuilder } from './form/form-control-validator-builder.service';
 export { DoubleAgentValidator } from './validator.service';
 export { ValidatorDefinitionsLoader } from './definitions-loader.service';
 export { DoubleAgentValidatorModule, DOUBLE_AGENT_VALIDATOR_SCHEMA_URL } from './validator.module';
