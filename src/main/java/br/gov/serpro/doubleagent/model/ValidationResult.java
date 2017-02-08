@@ -14,13 +14,14 @@ import java.util.Map;
 public class ValidationResult {
 	private ArrayList<ItemValidationResult> errors = new ArrayList<ItemValidationResult>();
 
-	private static final String[] OBJ_RESULT_PROPERTIES = { "keyword", "dataPath", "schemaPath", "params", "message" };
+	private static final String[] OBJ_RESULT_PROPERTIES = { "keyword", "dataPath", "schemaPath", "params", "message" , "data"};
 
 	private static final int KEYWORD_INDEX = 0;
 	private static final int DATA_PAH_INDEX = 1;
 	private static final int SCHEMA_PATH_INDEX = 2;
 	private static final int PARAMS_INDEX = 3;
 	private static final int MESSAGE_INDEX = 4;
+    private static final int DATA_INDEX = 5;
 
 	public ValidationResult() {
 
@@ -63,6 +64,9 @@ public class ValidationResult {
 					case MESSAGE_INDEX:
 						itemResult.setMessage((String) resultData.get(key).get(propKey));
 						break;
+                    case DATA_INDEX:
+                            itemResult.setData((Map<String, String>) resultData.get(key).get(propKey));
+                            break;
 					default:
 						break;
 					}

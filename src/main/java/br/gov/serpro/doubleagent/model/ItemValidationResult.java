@@ -1,11 +1,14 @@
 package br.gov.serpro.doubleagent.model;
 
+import org.apache.commons.lang3.builder.EqualsBuilder;
+
 import java.io.Serializable;
 import java.util.Map;
 
 /**
  * Item do resulvado de validacao
  * Compoe a coleçao @Link ValidationResult.errors
+ *
  * @author: abner.oliveira
  */
 public class ItemValidationResult implements Serializable {
@@ -19,11 +22,24 @@ public class ItemValidationResult implements Serializable {
     private String schemaPath;
     private Map<String, String> params;
     private String message;
+    private Map<String, String> data;
+
 
     public ItemValidationResult() {
     }
 
-   public String getKeyword() {
+    // Add a new constructor with "keyword" passed by param
+    public ItemValidationResult(String keyword, String dataPath) {
+        this.keyword = keyword;
+        this.dataPath = dataPath;
+    }
+
+    //And/Or create a new static method to return a object of this class
+    public static ItemValidationResult build(String keyword, String dataPath) {
+        return new ItemValidationResult(keyword, dataPath);
+    }
+
+    public String getKeyword() {
         return keyword;
     }
 
@@ -32,7 +48,11 @@ public class ItemValidationResult implements Serializable {
     }
 
     public String getDataPath() {
-        return dataPath;
+        if(this.getData() != null && this.getData().get("customDataPath") != null) {
+            return this.getData().get("customDataPath");
+        } else {
+            return dataPath;
+        }
     }
 
     public void setDataPath(String dataPath) {
@@ -63,5 +83,34 @@ public class ItemValidationResult implements Serializable {
         this.message = message;
     }
 
+    public Map<String, String> getData() {
+        return data;
+    }
 
+    public void setData(Map<String, String> data) {
+        this.data = data;
+    }
+
+    public String getCustomDataPath() {
+        if (this.getData() != null) {
+            return this.getData().get("customDataPath");
+        }
+        return null;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        boolean isSame = false;
+
+        if (object != null && object instanceof ItemValidationResult) {
+            ItemValidationResult objectToCompare = (ItemValidationResult) object;
+
+            isSame = new EqualsBuilder()
+                .append(this.getDataPath(), objectToCompare.getDataPath())
+                .append(this.getKeyword(), objectToCompare.getKeyword())
+                .isEquals();
+        }
+
+        return isSame;
+    }
 }
