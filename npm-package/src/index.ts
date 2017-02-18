@@ -8,7 +8,7 @@ export { DoubleAgentValidatorModule, DOUBLE_AGENT_VALIDATOR_SCHEMA_URL } from '.
 
 export { DoubleAgentFormGroupBuilder, FormGroupStates, FormControlState } from './form';
 export { ValidationResult, RemoteLoader,  } from './models';
-export { JsonSchemaProperty, JsonSchema } from './models/schema';
+export { JsonSchemaProperty, JsonSchema, PropertiesCollection } from './models/schema';
 export { DoubleAgentValueVerifier } from './value-verifier.service';
 export { NodeRemoteLoader, InTestRawLoader, Angular2RemoteLoader } from './remote-loaders';
 export { DoubleAgentValidatorNg2Factory } from './ng2-factory.service';
