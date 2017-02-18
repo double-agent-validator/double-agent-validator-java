@@ -1,7 +1,24 @@
+function removeEmptyStrings(obj) {
+    return _.transform(obj, function (o, v, k) {
+        if (v && typeof v === 'object') {
+            o[k] = _.removeEmptyStrings(v);
+        }
+        else if ((!_.isString(v) || (_.isString(v) && !_.isEmpty(v)))) {
+            o[k] = v;
+        }
+    });
+}
+;
+_.mixin({ 'removeEmptyStrings': removeEmptyStrings });
 var DoubleAgent;
 (function (DoubleAgent) {
     var JsonSchemaValidator;
     (function (JsonSchemaValidator) {
+        JsonSchemaValidator.removeEmptyStrings = true;
+        function setNotRemoveEmptyStrings() {
+            DoubleAgent.JsonSchemaValidator.removeEmptyStrings = false;
+        }
+        JsonSchemaValidator.setNotRemoveEmptyStrings = setNotRemoveEmptyStrings;
         function loadFormats(formats, _ajv) {
             if (_ajv === void 0) { _ajv = null; }
             var ajvInstance = (_ajv ? _ajv : ajv);
@@ -63,7 +80,13 @@ var DoubleAgent;
             var validate = ajv.compile({
                 "$ref": schemaName
             });
-            var result = validate(value);
+            var result = null;
+            if (DoubleAgent.JsonSchemaValidator.removeEmptyStrings) {
+                result = validate(_.removeEmptyStrings(value));
+            }
+            else {
+                result = validate(value);
+            }
             // if the validation failed then get the ajv.errors list as the result
             if (result) {
                 return { hasErrors: false, errors: null };

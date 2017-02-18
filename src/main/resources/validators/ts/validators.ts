@@ -3,8 +3,32 @@ declare var ajv: any;
 declare var load: Function;
 declare var Java;
 
-namespace DoubleAgent.JsonSchemaValidator {
+declare module _ {
+interface LoDashStatic {
+removeEmptyStrings(obj: any);
+    }
+}
 
+
+function removeEmptyStrings(obj: any) {
+  return _.transform(obj, function (o, v, k) {
+    if (v && typeof v === 'object') {
+      o[k] = _.removeEmptyStrings(v);
+    } else if ((!_.isString(v) || (_.isString(v) && !_.isEmpty(v)))) {
+      o[k] = v;
+    }
+  });
+};
+
+
+_.mixin({ 'removeEmptyStrings': removeEmptyStrings });
+
+
+namespace DoubleAgent.JsonSchemaValidator {
+    export var removeEmptyStrings = true;
+    export function setNotRemoveEmptyStrings() {
+        DoubleAgent.JsonSchemaValidator.removeEmptyStrings = false;
+    }
     export function loadFormats(formats, _ajv: any = null) {
         let ajvInstance = (_ajv ? _ajv : ajv);
         _.each(formats, (item) => {
@@ -65,7 +89,14 @@ namespace DoubleAgent.JsonSchemaValidator {
                 "$ref": schemaName
             }
         );
-        var result = validate(value);
+
+        var result = null;
+
+        if (DoubleAgent.JsonSchemaValidator.removeEmptyStrings) {
+            result = validate(_.removeEmptyStrings(value));
+        } else {
+            result = validate(value);
+        }
 
         // if the validation failed then get the ajv.errors list as the result
         if (result) {

@@ -108,7 +108,7 @@ public class JsonSchemaValidatorTest {
         InputStream is = this.getClass().getResourceAsStream("/validators/js/rfb.js");
         cut.loadSchemaData(is, "RFB.JsonSchemaValidator", "RFB.JsonSchemaValidator.Common", "RFB.JsonSchemaValidator.Common.TipoCredito", "RFB.JsonSchemaValidator.Documento");
         String vendorScript = cut.getScriptFileWithDependencies();
-        System.out.println("VENDOR SCRIPT: " + vendorScript);
+        // System.out.println("VENDOR SCRIPT: " + vendorScript);
         assertThat(vendorScript.contains("var ajv = new Ajv")).isTrue();
     }
 
