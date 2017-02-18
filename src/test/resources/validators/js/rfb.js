@@ -161,7 +161,8 @@ var RFB;
                                     return true;
                                 }
                                 else {
-                                    tipoCreditoValidator.errors = [{ dataPath: '.descricao', keyword: 'tipoCredito', message: 'TipoCredito descricao não pode ser "descricao".' }];
+                                    tipoCreditoValidator.errors = [ { data: { customDataPath: '.descricao'} , keyword: 'tipoCredito', message: 'TipoCredito descricao não pode ser "descricao".' }];
+                                    return false;
                                 }
                             };
                             return tipoCreditoValidator;

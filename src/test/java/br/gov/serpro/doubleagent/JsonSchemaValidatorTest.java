@@ -1,5 +1,6 @@
 package br.gov.serpro.doubleagent;
 
+import br.gov.serpro.doubleagent.model.ItemValidationResult;
 import br.gov.serpro.doubleagent.model.ValidationResult;
 import com.fitbur.testify.Cut;
 import com.fitbur.testify.junit.UnitTest;
@@ -70,11 +71,27 @@ public class JsonSchemaValidatorTest {
         ValidationResult result1 = cut.validate("tipoCredito-v1", "{ id: 1, descricao: null}");
 
         softly.assertThat(result1.getErrors()).isNotNull();
+
+        softly.assertThat(result1.getErrors().contains(ItemValidationResult.build("type", ".descricao"))).isTrue();
+        /*
         softly.assertThat(result1.getErrors().get(0).getMessage()).isEqualTo("should be string");
         softly.assertThat(result1.getErrors().get(0).getKeyword()).isEqualTo("type");
         softly.assertThat(result1.getErrors().get(0).getDataPath()).isEqualTo(".descricao");
         softly.assertThat(result1.getErrors().get(0).getSchemaPath()).isEqualTo("tipoCredito-v1/properties/descricao/type");
         softly.assertThat(result1.getErrors().get(0).getParams().get("type")).isEqualTo("string");
+        */
+    }
+
+    @Test
+    public void returnErrorsWhenCustomValidationFails() throws Exception {
+        InputStream is = this.getClass().getResourceAsStream("/validators/js/rfb.js");
+        cut.loadSchemaData(is, "RFB.JsonSchemaValidator", "RFB.JsonSchemaValidator.Common", "RFB.JsonSchemaValidator.Common.TipoCredito", "RFB.JsonSchemaValidator.Documento");
+
+        ValidationResult result1 = cut.validate("tipoCredito-v1", "{ id: 1, descricao: 'descricao' }");
+
+        softly.assertThat(result1.getErrors()).isNotNull();
+
+        softly.assertThat(result1.getErrors().contains(ItemValidationResult.build("tipoCredito", ".descricao"))).isTrue();
     }
 
 
@@ -91,7 +108,7 @@ public class JsonSchemaValidatorTest {
         InputStream is = this.getClass().getResourceAsStream("/validators/js/rfb.js");
         cut.loadSchemaData(is, "RFB.JsonSchemaValidator", "RFB.JsonSchemaValidator.Common", "RFB.JsonSchemaValidator.Common.TipoCredito", "RFB.JsonSchemaValidator.Documento");
         String vendorScript = cut.getScriptFileWithDependencies();
-        System.out.println("VENDOR SCRIPT: " + vendorScript );
+        System.out.println("VENDOR SCRIPT: " + vendorScript);
         assertThat(vendorScript.contains("var ajv = new Ajv")).isTrue();
     }
 
